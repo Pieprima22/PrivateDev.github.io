@@ -63,36 +63,40 @@ main {
     margin-bottom: 20px; /* Adjust this value */
 }
 
-
 /* Alphabetical Header */
 .alphabetical-header {
-    display: grid;
-    grid-template-columns: repeat(26, 1fr);
-    gap: 10px;
-    width: 100%;
-    text-align: center;
-    font-weight: bold;
+    display: flex;
+    justify-content: center;
+    width: 85%;
     margin-bottom: 5px;
 }
+
+.alphabetic-projects {
+    display: grid;
+    grid-template-columns: repeat(26, 1fr);
+    gap: 5px; /* Horizontal gap */
+    text-align: center;
+}
+
 
 .alphabet-label {
     display: flex;
     font-weight: 800;
-    color: black;
-    font-size: .8rem;
+    color: rgb(18, 18, 18);
+    font-size: 0.8rem;
     flex-direction: column-reverse;
     align-items: center;
-    gap: 20px;
-    padding: 10px 0;
-    min-height: 120px;
+    gap: 1px; /* This is the gap between items inside the label */
+    padding: 20px 0; /* Adjust the top and bottom padding for vertical spacing */
     box-sizing: border-box;
+    margin-bottom: 10px; /* Add spacing between each label vertically */
 }
 
 .programmatic-header {
     display: flex;
     flex-direction: column; /* Stack projects and labels vertically */
     gap: 10px;
-    padding: 10px;
+    padding: 20px;
 }
 
 .programmatic-projects {
@@ -106,10 +110,10 @@ main {
     display: grid;
     align-self: flex-end;
     grid-template-columns: repeat(3, 1fr); /* Three subcolumns per category */
-    gap: 10px;
+    gap: 5px;
     font-weight: bold;
     justify-content: center;
-    padding: 10px;
+    padding: 2px;
 
 }
 
@@ -144,30 +148,30 @@ main {
 .scale-header {
     display: flex;
     flex-direction: column; /* Stack the projects and labels vertically */
-    gap: 10px;
-    padding: 10px;
+    gap: 5px;
+    padding: 20px;
 }
 
 .scale-projects {
     display: grid;
     grid-template-columns: repeat(4, 1fr); /* One column per scale (S, M, L, XL) */
-    gap: 20px;
+
     justify-content: center;
 }
 
 .scale-label {
     display: grid;
     grid-template-columns: repeat(3, 1fr); /* Three subcolumns per scale */
-    gap: 10px;
+    gap: 5px;
     justify-content: center;
-    padding: 10px;
+    padding: 3px;
 
 }
 
 .scale-label-container {
     display: grid;
     grid-template-columns: repeat(4, 1fr); /* One column per scale label */
-    gap: 30px;
+    gap: 10px;
     justify-content: center;
     text-align: center;
     font-weight: 800;
@@ -191,45 +195,47 @@ main {
 }
 
 .project-box {
-    width: 50px;
-    height: 50px;
-    margin-bottom: 30px;
+    width: 40px;
+    height: 40px;
+    margin-bottom: 5px; /* Reduce this value for closer alignment */
     position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Center-align items vertically */
+    justify-content: center; /* Center-align items horizontally */
+    gap: 0; /* Remove any additional spacing */
 }
 .epoch-header {
     display: flex;
     flex-direction: column; /* Stack the projects and labels vertically */
     gap: 10px;
-    padding: 10px;
+    padding: 20px;
 }
 
 .epoch-projects {
     display: grid;
     grid-template-columns: repeat(3, 1fr); /* One column per epoch */
-    gap: 20px;
     justify-content: center;
 }
 
 .epoch-label {
     display: grid;
     grid-template-columns: repeat(3, 1fr); /* Three subcolumns per epoch */
-    gap: 10px;
+    gap: 5px;
     justify-content: center;
-
-    padding: 10px;
+    padding: 3px;
 }
 
 .epoch-label-container {
     display: grid;
     grid-template-columns: repeat(3, 1fr); /* One column per epoch label */
-    gap: 30px;
     justify-content: center;
     text-align: center;
     font-weight: bold;
     font-weight: 800;
     color: black;
     font-size: .8rem;    
-    padding: 5px;
+    padding: 1px;
 }
 
 .epoch-label-text {
@@ -241,7 +247,7 @@ main {
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-bottom: 10px;
+    margin-bottom: 5px;
     position: relative;
     top: -10px;
 }
@@ -258,14 +264,14 @@ main {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     justify-content: center;
-    margin-right: -2px;
-    gap: 10px; /*Space between sub-columns */
+    margin-left: -2px;    
+    gap: 5px; /*Space between sub-columns */
 }
 
 .sub-column {
     display: flex;
     flex-direction: column-reverse; /* Stack projects vertically */
-    gap: 15px; /* Space between projects */
+    gap: 1px; /* Space between projects */
     align-items: start; /* Align projects to the start of the column */
     max-height: none; /* Remove height limit */
 }
@@ -309,16 +315,10 @@ main {
 }
 
 .symbol-name {
-    margin-top: 5px;
-    font-size: 0.6rem;
-    font-weight: 400; /* Keeps .title-wrapper text bold */
-    text-align: center;
-    width: 100%; /* Ensure it spans the full width of the parent */
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    display: none; /* Ensure it is not taking up space */
+    margin: 0; /* Reset margin to ensure no extra space */
+    padding: 0; /* Reset padding */
 }
-
 
 /* Sorting Bar */
 .sorting-bar {
