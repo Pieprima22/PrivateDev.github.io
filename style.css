@@ -549,7 +549,7 @@ main {
     transform: rotate(45deg); /* Rotate the element */
     transform-origin: top left; /* Ensure rotation starts from top-left corner */
     font-weight: bold;
-    font-size: 0.9rem;
+    font-size: 1.1rem;
     display: inline-block; /* Maintain proper dimensions */
     color: black; /* Set text color */
     text-decoration: none; /* Remove underline */

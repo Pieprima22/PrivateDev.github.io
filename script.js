@@ -479,14 +479,13 @@ function sortProjects(criteria) {
         controls.minDistance = 15; // Set this to a value slightly closer than the initial camera distance
         controls.maxDistance = 20; // Set this to a value slightly farther than the initial camera distance
             
-        // Step 6: Reset window.locations and reassign projects
         window.locations = [
             { name: "KSA, SAUDI ARABIA", lat: 23.8859, lon: 45.0792, projects: [] },
-            { name: "NEOM, SAUDI ARABIA", lat: 28.2156, lon: 35.2376, projects: [] },
             { name: "DUBAI, UAE", lat: 25.276987, lon: 55.296249, projects: [] },
             { name: "ABU DHABI, UAE", lat: 24.453884, lon: 54.377343, projects: [] },
             { name: "QATAR", lat: 25.276987, lon: 51.520008, projects: [] },
-            { name: "MOROCCO", lat: 31.7917, lon: -7.0926, projects: [] }
+            { name: "MOROCCO", lat: 31.7917, lon: -7.0926, projects: [] },
+            { name: "BAHRAIN", lat: 26.0667, lon: 50.5577, projects: [] } // Added Bahrain
         ];
     
       // Create a Set to track processed projects
