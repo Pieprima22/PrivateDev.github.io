@@ -64,33 +64,33 @@ document.querySelectorAll('.project-box').forEach((box) => {
             ];
 
            // Append links in the specified order to their respective containers
-    links.forEach(({ url, icon, action, isHome }) => {
-    if (url || action === "close") {
-        const linkElement = document.createElement('a');
-        linkElement.href = url || 'javascript:void(0)';
-        linkElement.target = action === "close" ? "" : "_blank";
+        links.forEach(({ url, icon, action, isHome }) => {
+        if (url || action === "close") {
+            const linkElement = document.createElement('a');
+            linkElement.href = url || 'javascript:void(0)';
+            linkElement.target = action === "close" ? "" : "_blank";
 
-        if (isHome) {
-            // Display text for the homepage link
-            linkElement.textContent = 'PROJECTS'; // Set text content for the homepage link
-            linkElement.onclick = closeProjectDetail; // Add click event for the homepage link
-            linkElement.classList.add('home-link'); // Use the same class as in your CSS
-            homeLinkContainer.appendChild(linkElement); // Add to the home link container
-        } else {
-            // Display icon for other links
-            linkElement.innerHTML = `<img src="${icon}" alt="Link Icon">`;
-            otherLinksContainer.appendChild(linkElement); // Add to the other links container
+            if (isHome) {
+                // Display text for the homepage link
+                linkElement.textContent = 'HOME'; // Set text content for the homepage link
+                linkElement.onclick = closeProjectDetail; // Add click event for the homepage link
+                linkElement.classList.add('home-link'); // Use the same class as in your CSS
+                homeLinkContainer.appendChild(linkElement); // Add to the home link container
+            } else {
+                // Display icon for other links
+                linkElement.innerHTML = `<img src="${icon}" alt="Link Icon">`;
+                otherLinksContainer.appendChild(linkElement); // Add to the other links container
+            }
+            
         }
-        
-    }
-});
+    });
 
-// Append the containers to the main project links container
-projectLinksContainer.appendChild(homeLinkContainer);
-projectLinksContainer.appendChild(otherLinksContainer);
+        // Append the containers to the main project links container
+        projectLinksContainer.appendChild(homeLinkContainer);
+        projectLinksContainer.appendChild(otherLinksContainer);
 
-// Show or hide the project links container based on available links
-projectLinksContainer.style.display = projectLinksContainer.childElementCount > 0 ? 'flex' : 'none';
+        // Show or hide the project links container based on available links
+        projectLinksContainer.style.display = projectLinksContainer.childElementCount > 0 ? 'flex' : 'none';
 
 
         // Load gallery images
@@ -144,15 +144,18 @@ projectLinksContainer.style.display = projectLinksContainer.childElementCount > 
     });
     
 });
-
 window.closeProjectDetail = function() {
     const projectDetailModal = document.getElementById("projectDetailModal");
     if (projectDetailModal) {
+        // Reset the scroll position to the top
+        projectDetailModal.scrollTop = 0;
         projectDetailModal.style.display = "none";
     } else {
         console.error("Project Detail Modal not found.");
     }
 };
+
+
 
 function addClickEventToProjectBox(projectBox) {
     projectBox.addEventListener('click', function () {
