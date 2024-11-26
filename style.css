@@ -505,11 +505,11 @@ main {
     position: fixed;
     z-index: 10;
     top: 50px; /* Adjust this for initial position */
-    left: 50px;
+    left: 20px;
     transform: rotate(270deg) translate(-100%, 0); /* Rotate and then shift it to fit inside */
     transform-origin: top left; /* Rotation starts from the top-left corner */
     flex-direction: row-reverse;
-    width: max-content;
+    width: 620px;
     height: max-content;
     font-size: 1rem;
 
@@ -530,9 +530,34 @@ main {
     align-items: flex-start; /* Align links to the top */
     gap: 10px; /* Adds consistent spacing between links */
     margin-top: 10px;
+    height: 80px;
     position: relative; /* Allows alignment with .more-info-text */
 }
 
+/* Home Link */
+.home-link {
+    position: absolute; /* Position independently of other links */
+    top: 0; /* Align to the top border */
+    left: 2%; /* Align to the left border */
+    transform: rotate(45deg); /* Rotate the element */
+    transform-origin: top left; /* Ensure rotation starts from top-left corner */
+    font-weight: bold;
+    font-size: 0.9rem;
+    display: inline-block; /* Maintain proper dimensions */
+    color: black; /* Set text color */
+    text-decoration: none; /* Remove underline */
+    margin: 0; /* Ensure no additional margins */
+}
+.home-link:hover {
+    color: rgb(255, 0, 0); /* Keep text black on hover */
+    text-decoration: none; /* Prevent underline on hover */
+}
+
+.other-links {
+    display: flex;
+    gap: 10px; /* Space between the other links */
+    justify-content: flex-end; /* Align other links to the right */
+}
 /* Individual Project Link */
 .project-links a {
     text-align: center;
@@ -697,14 +722,23 @@ main {
 }
 
 .modal .close {
-    position: absolute;
-    top: 20px;
-    right: 30px;
-    font-size: 35px;
-    color: black;
-    cursor: pointer;
-    z-index: 1001;
+    position: fixed; /* Keeps the close button in a fixed position relative to the viewport */
+    top: 20px; /* Distance from the top of the viewport */
+    right: 30px; /* Distance from the right of the viewport */
+    font-size: 35px; /* Adjust the font size */
+    color: black; /* Button color */
+    cursor: pointer; /* Indicates the button is clickable */
+    z-index: 1001; /* Ensures it stays above other elements */
+    padding: 10px; /* Optional: Add padding for better clickability */
+    transition: transform 0.2s ease-in-out; /* Optional: Smooth hover effect */
 }
+
+/* Hover Effect */
+.modal .close:hover {
+    transform: scale(1.1); /* Slightly enlarge on hover */
+    background: #ffffff; /* Optional: Change background color on hover */
+}
+
 .project-box:hover .symbol-name {
     display: block;
 }

@@ -18,6 +18,8 @@ var presentationLink = document.getElementById("presentationLink");
 var visualsLink = document.getElementById("visualsLink");
 var animationLink = document.getElementById("animationLink");
 var drawingsLink = document.getElementById("drawingsLink");
+var threeDModelLink = document.getElementById("3DModelLink");
+var homePageLink = document.getElementById("homePageLink");
 
 document.querySelectorAll('.project-box').forEach((box) => {
     box.addEventListener('click', function () {
@@ -45,28 +47,51 @@ document.querySelectorAll('.project-box').forEach((box) => {
         const projectLinksContainer = document.querySelector('.project-links');
         projectLinksContainer.innerHTML = ''; // Clear any previous links
 
-        // Define an array of link details
-        const links = [
-            { url: this.getAttribute('data-drawings-link'), icon: this.getAttribute('data-drawings-icon') || 'default-drawings-icon.png' },
-            { url: this.getAttribute('data-animation-link'), icon: this.getAttribute('data-animation-icon') || 'default-animation-icon.png' },
-            { url: this.getAttribute('data-visuals-link'), icon: this.getAttribute('data-visuals-icon') || 'default-visuals-icon.png' },
-            { url: this.getAttribute('data-presentation-link'), icon: this.getAttribute('data-presentation-icon') || 'default-presentation-icon.png' }
-        ];
+         // Create separate containers for the Home Page link and other links
+            const homeLinkContainer = document.createElement('div');
+            homeLinkContainer.className = 'home-link';
+            const otherLinksContainer = document.createElement('div');
+            otherLinksContainer.className = 'other-links';
+
+            // Define the links array in the desired order
+            const links = [
+                { url: "javascript:void(0)", icon: "images.png", action: "close", isHome: true }, // Homepage
+                { url: this.getAttribute('data-3dmodel-link'), icon: this.getAttribute('data-3dmodel-icon') || 'default-3dmodel-icon.png', isHome: false }, // 3D Model
+                { url: this.getAttribute('data-drawings-link'), icon: this.getAttribute('data-drawings-icon') || 'default-drawings-icon.png', isHome: false }, // Drawings
+                { url: this.getAttribute('data-animation-link'), icon: this.getAttribute('data-animation-icon') || 'default-animation-icon.png', isHome: false }, // Animation
+                { url: this.getAttribute('data-visuals-link'), icon: this.getAttribute('data-visuals-icon') || 'default-visuals-icon.png', isHome: false }, // Visuals
+                { url: this.getAttribute('data-presentation-link'), icon: this.getAttribute('data-presentation-icon') || 'default-presentation-icon.png', isHome: false } // Presentation
+            ];
+
+           // Append links in the specified order to their respective containers
+    links.forEach(({ url, icon, action, isHome }) => {
+    if (url || action === "close") {
+        const linkElement = document.createElement('a');
+        linkElement.href = url || 'javascript:void(0)';
+        linkElement.target = action === "close" ? "" : "_blank";
+
+        if (isHome) {
+            // Display text for the homepage link
+            linkElement.textContent = 'PROJECTS'; // Set text content for the homepage link
+            linkElement.onclick = closeProjectDetail; // Add click event for the homepage link
+            linkElement.classList.add('home-link'); // Use the same class as in your CSS
+            homeLinkContainer.appendChild(linkElement); // Add to the home link container
+        } else {
+            // Display icon for other links
+            linkElement.innerHTML = `<img src="${icon}" alt="Link Icon">`;
+            otherLinksContainer.appendChild(linkElement); // Add to the other links container
+        }
         
+    }
+});
 
-        // Loop through the links and append only the ones with URLs
-        links.forEach(({ url, icon }) => {
-            if (url) {
-                const linkElement = document.createElement('a');
-                linkElement.href = url;
-                linkElement.target = '_blank'; // Open in a new tab
-                linkElement.innerHTML = `<img src="${icon}" alt="Link Icon">`;
-                projectLinksContainer.appendChild(linkElement);
-            }
-        });
+// Append the containers to the main project links container
+projectLinksContainer.appendChild(homeLinkContainer);
+projectLinksContainer.appendChild(otherLinksContainer);
 
-        // Show or hide the project links container based on available links
-        projectLinksContainer.style.display = projectLinksContainer.childElementCount > 0 ? 'flex' : 'none';
+// Show or hide the project links container based on available links
+projectLinksContainer.style.display = projectLinksContainer.childElementCount > 0 ? 'flex' : 'none';
+
 
         // Load gallery images
         const imageGallery = document.getElementById('imageGallery');
@@ -202,24 +227,32 @@ function addClickEventToProjectBox(projectBox) {
             console.error('Team Section element not found.');
         }
 
-        // **Project Links with Images**
+        /// Project Links with Images
         const links = [
-            { id: 'presentationLink', attr: 'data-presentation-link', iconAttr: 'data-presentation-icon' },
-            { id: 'visualsLink', attr: 'data-visuals-link', iconAttr: 'data-visuals-icon' },
-            { id: 'animationLink', attr: 'data-animation-link', iconAttr: 'data-animation-icon' },
-            { id: 'drawingsLink', attr: 'data-drawings-link', iconAttr: 'data-drawings-icon' },
+            { id: 'homePageLink', attr: null, iconAttr: 'homepage-icon.png', action: 'close' }, // Homepage
+            { id: '3DModelLink', attr: 'data-3dmodel-link', iconAttr: 'data-3dmodel-icon' }, // 3D Model
+            { id: 'drawingsLink', attr: 'data-drawings-link', iconAttr: 'data-drawings-icon' }, // Drawings
+            { id: 'animationLink', attr: 'data-animation-link', iconAttr: 'data-animation-icon' }, // Animation
+            { id: 'visualsLink', attr: 'data-visuals-link', iconAttr: 'data-visuals-icon' }, // Visuals
+            { id: 'presentationLink', attr: 'data-presentation-link', iconAttr: 'data-presentation-icon' } // Presentation
         ];
-
+   
         links.forEach(link => {
             const linkElement = document.getElementById(link.id);
-            const iconURL = this.getAttribute(link.iconAttr) || 'default-link-icon.png';
-            const url = this.getAttribute(link.attr);
+            const iconURL = link.iconAttr === 'homepage-icon.png' 
+                ? link.iconAttr 
+                : this.getAttribute(link.iconAttr) || 'default-link-icon.png';
+            const url = link.attr ? this.getAttribute(link.attr) : null;
 
             if (linkElement) {
-                if (url) {
-                    linkElement.href = url;
+                if (url || link.action === 'close') {
+                    linkElement.href = url || 'javascript:void(0)';
                     linkElement.style.display = 'inline'; // Show the link
                     linkElement.innerHTML = `<img src="${iconURL}" alt="Link Icon">`;
+
+                    if (link.action === 'close') {
+                        linkElement.onclick = closeProjectDetail;
+                    }
                 } else {
                     linkElement.style.display = 'none'; // Hide if no URL
                 }
