@@ -68,7 +68,6 @@ main {
     display: flex;
     justify-content: center;
     width: 85%;
-    margin-bottom: 5px;
 }
 
 .alphabetic-projects {
@@ -76,9 +75,17 @@ main {
     grid-template-columns: repeat(26, 1fr);
     gap: 5px; /* Horizontal gap */
     text-align: center;
+    
 }
 
-
+.alphabet-label .project-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 5px;
+    position: relative;
+    top: -10px;
+}
 .alphabet-label {
     display: flex;
     font-weight: 800;
@@ -87,7 +94,7 @@ main {
     flex-direction: column-reverse;
     align-items: center;
     gap: 1px; /* This is the gap between items inside the label */
-    padding: 20px 0; /* Adjust the top and bottom padding for vertical spacing */
+    padding: 10px 0; /* Adjust the top and bottom padding for vertical spacing */
     box-sizing: border-box;
     margin-bottom: 10px; /* Add spacing between each label vertically */
 }
@@ -209,7 +216,7 @@ main {
     display: flex;
     flex-direction: column; /* Stack the projects and labels vertically */
     gap: 10px;
-    padding: 20px;
+    padding: 25px;
 }
 
 .epoch-projects {
