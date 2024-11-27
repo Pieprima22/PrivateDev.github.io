@@ -843,55 +843,6 @@ function setActiveButton(button) {
     button.classList.add('active'); // Add 'active' to the clicked button
 }
 
-document.addEventListener("DOMContentLoaded", function () {
-    // Show preloader initially
-    const preloader = document.getElementById("preloader");
-    document.body.classList.add("loading"); // Prevent scrolling during load
-
-    // Select all sorting buttons
-    const buttons = document.querySelectorAll(".sorting-bar button");
-
-    // Ensure the chronological button is active by default
-    const chronologicalButton = document.querySelector(".sorting-bar button:nth-child(1)");
-    if (chronologicalButton) {
-        setActiveButton(chronologicalButton);
-        sortProjects('chronological'); // Initialize with chronological sorting
-
-        // Hide other headers explicitly
-        const alphabeticalHeader = document.querySelector('.alphabetical-header');
-        const programmaticHeader = document.querySelector('.programmatic-header');
-        const scaleHeader = document.querySelector('.scale-header');
-        const epochHeader = document.getElementById('epochTimeline');
-        const globeContainer = document.getElementById('globe-container');
-
-        if (alphabeticalHeader) alphabeticalHeader.style.display = 'none';
-        if (programmaticHeader) programmaticHeader.style.display = 'none';
-        if (scaleHeader) scaleHeader.style.display = 'none';
-        if (epochHeader) epochHeader.style.display = 'none';
-        if (globeContainer) globeContainer.style.display = 'none';
-    } else {
-        console.error("Chronological button not found.");
-    }
-
-    // Add click event listeners to all sorting buttons
-    buttons.forEach((button) => {
-        button.addEventListener("click", function () {
-            const criteria = this.textContent.toLowerCase(); // Derive criteria from button text
-            setActiveButton(this); // Highlight the active button
-            sortProjects(criteria); // Sort projects based on the clicked button
-        });
-    });
-
-    // Automatically hide the preloader and fade in the page
-    setTimeout(() => {
-        if (preloader) {
-            preloader.style.display = "none";
-        }
-        document.body.classList.add("loaded"); // Trigger fade-in effect
-        document.body.classList.remove("loading"); // Allow scrolling after load
-    }, 200); // 2 seconds delay
-});
-
 
 
 // Create the tooltip element
@@ -947,6 +898,7 @@ function updateModal(projectBox) {
 }
 document.addEventListener("DOMContentLoaded", function () {
     // Get tab and content elements
+    
     const infoSectionLink = document.getElementById("infoSectionLink"); // Main INFO button
     const newsTabLink = document.getElementById("newsTabLink"); // Modal NEWS tab
     const aboutTabLink = document.getElementById("aboutTabLink"); // Modal ABOUT tab
@@ -986,5 +938,152 @@ document.addEventListener("DOMContentLoaded", function () {
     // Close modal logic
     closeInfoModal.addEventListener("click", function () {
         infoSectionModal.style.display = "none";
+    });
+});
+
+document.addEventListener("DOMContentLoaded", function () {
+    
+    // Show preloader initially
+    const preloader = document.getElementById("preloader");
+    document.body.classList.add("loading"); // Prevent scrolling during load
+
+    // Select all sorting buttons
+    const buttons = document.querySelectorAll(".sorting-bar button");
+
+    // Ensure the chronological button is active by default
+    const chronologicalButton = document.querySelector(".sorting-bar button:nth-child(1)");
+    if (chronologicalButton) {
+        setActiveButton(chronologicalButton);
+        sortProjects('chronological'); // Initialize with chronological sorting
+
+        // Hide other headers explicitly
+        const alphabeticalHeader = document.querySelector('.alphabetical-header');
+        const programmaticHeader = document.querySelector('.programmatic-header');
+        const scaleHeader = document.querySelector('.scale-header');
+        const epochHeader = document.getElementById('epochTimeline');
+        const globeContainer = document.getElementById('globe-container');
+
+        if (alphabeticalHeader) alphabeticalHeader.style.display = 'none';
+        if (programmaticHeader) programmaticHeader.style.display = 'none';
+        if (scaleHeader) scaleHeader.style.display = 'none';
+        if (epochHeader) epochHeader.style.display = 'none';
+        if (globeContainer) globeContainer.style.display = 'none';
+    } else {
+        console.error("Chronological button not found.");
+    }
+
+    // Add click event listeners to all sorting buttons
+    buttons.forEach((button) => {
+        button.addEventListener("click", function () {
+            const criteria = this.textContent.toLowerCase(); // Derive criteria from button text
+            setActiveButton(this); // Highlight the active button
+            sortProjects(criteria); // Sort projects based on the clicked button
+        });
+    });
+
+    // Automatically hide the preloader and fade in the page
+    setTimeout(() => {
+        if (preloader) {
+            preloader.style.display = "none";
+        }
+        document.body.classList.add("loaded"); // Trigger fade-in effect
+        document.body.classList.remove("loading"); // Allow scrolling after load
+    }, 200); // 2 seconds delay
+});
+
+function distributeProjectsAcrossSubcolumns() {
+    // Select all year columns
+    const yearColumns = document.querySelectorAll('.year-column');
+    const yearLabels = document.querySelectorAll('.timeline-header .year-label');
+    
+    // Calculate spacing based on content
+    const adjustColumnSpacing = () => {
+        yearColumns.forEach((yearColumn, index) => {
+            const projectCount = yearColumn.querySelectorAll('.project-box').length;
+            const yearLabel = yearLabels[index];
+            
+            // Adjust column width and spacing based on number of projects
+            if (projectCount <= 2) {
+                yearColumn.style.width = '80px';
+                yearColumn.style.marginRight = '10px';
+                if (yearLabel) {
+                    yearLabel.style.width = '80px';
+                    yearLabel.style.marginRight = '10px';
+                }
+            } else {
+                yearColumn.style.width = '100px';
+                yearColumn.style.marginRight = '25px';
+                if (yearLabel) {
+                    yearLabel.style.width = '100px';
+                    yearLabel.style.marginRight = '25px';
+                }
+            }
+        });
+    };
+
+    yearColumns.forEach((yearColumn) => {
+        // Get or create subcolumns
+        let subColumns = yearColumn.querySelectorAll('.sub-column');
+        
+        // Create two subcolumns if they don't exist
+        if (subColumns.length === 0) {
+            for (let i = 0; i < 2; i++) {
+                const subColumn = document.createElement('div');
+                subColumn.className = 'sub-column';
+                yearColumn.appendChild(subColumn);
+            }
+            subColumns = yearColumn.querySelectorAll('.sub-column');
+        }
+
+        // Clear existing content
+        subColumns.forEach(subColumn => subColumn.innerHTML = '');
+
+        // Get all project boxes
+        const projects = Array.from(yearColumn.querySelectorAll('.project-box'));
+
+        // Handle single project case
+        if (projects.length === 1) {
+            // Center single project
+            const centerOffset = document.createElement('div');
+            centerOffset.style.gridColumn = '1 / span 2';
+            centerOffset.style.display = 'flex';
+            centerOffset.style.justifyContent = 'center';
+            centerOffset.appendChild(projects[0]);
+            yearColumn.appendChild(centerOffset);
+            return;
+        }
+
+        // Distribute projects between two columns
+        projects.forEach((project, index) => {
+            const targetColumnIndex = index % 2;
+            subColumns[targetColumnIndex].appendChild(project);
+        });
+    });
+
+    // Apply spacing adjustments
+    adjustColumnSpacing();
+}
+
+// Add resize observer to handle window size changes
+const resizeObserver = new ResizeObserver(() => {
+    distributeProjectsAcrossSubcolumns();
+});
+document.head.appendChild(styleSheet);
+
+document.addEventListener('DOMContentLoaded', () => {
+    distributeProjectsAcrossSubcolumns();
+    
+    // Observe the container for size changes
+    const container = document.querySelector('.symbol-grid');
+    if (container) {
+        resizeObserver.observe(container);
+    }
+    
+    // Handle sorting events
+    const sortingButtons = document.querySelectorAll('.sorting-bar button');
+    sortingButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            setTimeout(distributeProjectsAcrossSubcolumns, 100);
+        });
     });
 });
