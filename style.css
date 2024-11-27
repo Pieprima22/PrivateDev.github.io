@@ -470,6 +470,8 @@ main {
     width: 45px;
     height: 45px;
     margin-bottom: 20px;
+    border-radius: 6px; /* Adjust the value to control the fillet size */
+
 }
 
 #projectTitle {
@@ -600,6 +602,8 @@ main {
     width: 35px;
     height: 35px;
     cursor: pointer;
+    border-radius: 4px; /* Adjust the value to control the fillet size */
+
 }
 
 /* Adjust for Alignment */

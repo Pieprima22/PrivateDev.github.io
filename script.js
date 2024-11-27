@@ -695,65 +695,73 @@ function sortProjects(criteria) {
     }
   
     else if (criteria === 'programmatic') {
-            // Show the programmatic header and hide others
-            timelineHeader.style.display = 'none';
-            alphabeticalHeader.style.display = 'none';
-            scaleHeader.style.display = 'none';
-            epochHeader.style.display = 'none';
-            programmaticHeader.style.display = 'flex';
-                      // Hide or remove the globe container
-            const globeContainer = document.getElementById('globe-container');
-            if (globeContainer) {
-                globeContainer.style.display = 'none'; // Hide the globe
+        // Show the programmatic header and hide others
+        timelineHeader.style.display = 'none';
+        alphabeticalHeader.style.display = 'none';
+        scaleHeader.style.display = 'none';
+        epochHeader.style.display = 'none';
+        programmaticHeader.style.display = 'flex';
+    
+        // Hide or remove the globe container
+        const globeContainer = document.getElementById('globe-container');
+        if (globeContainer) {
+            globeContainer.style.display = 'none'; // Hide the globe
+        }
+    
+        // Hide the year columns
+        const yearColumns = document.querySelectorAll('.year-column');
+        yearColumns.forEach(yearColumn => {
+            yearColumn.style.display = 'none'; // Hide the year columns completely
+        });
+    
+        // Clear all content in the programmatic section
+        const programmaticProjects = document.querySelector('.programmatic-projects');
+        programmaticProjects.querySelectorAll('.programmatic-label').forEach(label => {
+            label.querySelectorAll('.sub-column').forEach(subColumn => {
+                subColumn.innerHTML = ''; // Clear existing content
+            });
+        });
+    
+        // Use a Set to track added projects
+        const addedProjects = new Set();
+    
+        // Group projects by category and epoch
+        document.querySelectorAll('.project-box').forEach(projectBox => {
+            const projectId = projectBox.getAttribute('data-project'); // Unique identifier
+            const projectCategory = projectBox.getAttribute('data-tags');
+            const projectEpoch = projectBox.getAttribute('data-epoch');
+            const categoryLabel = programmaticProjects.querySelector(`.programmatic-label[data-category="${projectCategory}"]`);
+    
+            if (!categoryLabel || addedProjects.has(projectId)) return; // Skip duplicates
+    
+            let targetSubColumn;
+    
+            // Assign projects to sub-columns based on epoch
+            if (projectEpoch === 'Past') {
+                targetSubColumn = categoryLabel.querySelector('.sub-column[data-category-sub="1"]');
+            } else if (projectEpoch === 'Present') {
+                targetSubColumn = categoryLabel.querySelector('.sub-column[data-category-sub="2"]');
+            } else if (projectEpoch === 'Future') {
+                targetSubColumn = categoryLabel.querySelector('.sub-column[data-category-sub="3"]');
             }
-            // Hide the year columns
-            const yearColumns = document.querySelectorAll('.year-column');
-            yearColumns.forEach(yearColumn => {
-                yearColumn.style.display = 'none';  // Hide the year columns completely
-            });
-        
-            // Clear all content in the programmatic section
-            const programmaticProjects = document.querySelector('.programmatic-projects');
-            programmaticProjects.querySelectorAll('.programmatic-label').forEach(label => {
-                label.querySelectorAll('.sub-column').forEach(subColumn => {
-                    subColumn.innerHTML = ''; // Clear existing content
-                });
-            });
-
-            // Use a Set to track added projects
-            const addedProjects = new Set();
-
-            // Group projects by category
-            document.querySelectorAll('.project-box').forEach(projectBox => {
-                const projectId = projectBox.getAttribute('data-project'); // Unique identifier
-                const projectCategory = projectBox.getAttribute('data-tags');
-                const categoryLabel = programmaticProjects.querySelector(`.programmatic-label[data-category="${projectCategory}"]`);
-
-                if (!categoryLabel || addedProjects.has(projectId)) return; // Skip duplicates
-
-                const subColumns = categoryLabel.querySelectorAll('.sub-column');
-                const projectsInColumns = Array.from(subColumns).map(subColumn => subColumn.children.length);
-
-                // Find the sub-column with the fewest projects
-                const targetSubColumn = subColumns[projectsInColumns.indexOf(Math.min(...projectsInColumns))];
-
-                if (targetSubColumn) {
-                    // Clone the project box and append it
-                    const clonedProject = projectBox.cloneNode(true);
-                    targetSubColumn.appendChild(clonedProject);
-
-                    // Add to Set to prevent duplication
-                    addedProjects.add(projectId);
-
-                    // Reattach hover and click events
-                    addClickEventToProjectBox(clonedProject);
-                }
-            });
-
+    
+            if (targetSubColumn) {
+                // Clone the project box and append it
+                const clonedProject = projectBox.cloneNode(true);
+                targetSubColumn.appendChild(clonedProject);
+    
+                // Add to Set to prevent duplication
+                addedProjects.add(projectId);
+    
+                // Reattach hover and click events
+                addClickEventToProjectBox(clonedProject);
+            }
+        });
+    
         // Reattach tooltips or any additional events
         reattachTooltipEvents();
-
     }
+    
         
      else if (criteria === 'scale') {
         // Hide other headers
