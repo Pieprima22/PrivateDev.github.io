@@ -215,8 +215,8 @@ function addClickEventToProjectBox(projectBox) {
         
         // Set Project Title and Details
         document.getElementById('projectTitle').textContent = title;
-        document.getElementById('projectLocation').textContent = `Location: ${location}`;
-        document.getElementById('projectDate').textContent = `Date: ${date}`;
+        document.getElementById('projectLocation').textContent = location;
+        document.getElementById('projectDate').textContent = date;
         document.getElementById('projectClient').textContent = client;
         document.getElementById('projectTypology').textContent = typology;
 
@@ -702,10 +702,10 @@ function sortProjects(criteria) {
             epochHeader.style.display = 'none';
             programmaticHeader.style.display = 'flex';
                       // Hide or remove the globe container
-    const globeContainer = document.getElementById('globe-container');
-    if (globeContainer) {
-        globeContainer.style.display = 'none'; // Hide the globe
-    }
+            const globeContainer = document.getElementById('globe-container');
+            if (globeContainer) {
+                globeContainer.style.display = 'none'; // Hide the globe
+            }
             // Hide the year columns
             const yearColumns = document.querySelectorAll('.year-column');
             yearColumns.forEach(yearColumn => {
@@ -719,43 +719,40 @@ function sortProjects(criteria) {
                     subColumn.innerHTML = ''; // Clear existing content
                 });
             });
-        
+
             // Use a Set to track added projects
             const addedProjects = new Set();
-        
-            // Group projects by category and epoch
+
+            // Group projects by category
             document.querySelectorAll('.project-box').forEach(projectBox => {
                 const projectId = projectBox.getAttribute('data-project'); // Unique identifier
                 const projectCategory = projectBox.getAttribute('data-tags');
-                const projectEpoch = projectBox.getAttribute('data-epoch');
                 const categoryLabel = programmaticProjects.querySelector(`.programmatic-label[data-category="${projectCategory}"]`);
-        
+
                 if (!categoryLabel || addedProjects.has(projectId)) return; // Skip duplicates
-        
-                let targetSubColumn;
-                if (projectEpoch === 'Past') {
-                    targetSubColumn = categoryLabel.querySelector('.sub-column[data-category-sub="1"]');
-                } else if (projectEpoch === 'Present') {
-                    targetSubColumn = categoryLabel.querySelector('.sub-column[data-category-sub="2"]');
-                } else if (projectEpoch === 'Future') {
-                    targetSubColumn = categoryLabel.querySelector('.sub-column[data-category-sub="3"]');
-                }
-        
+
+                const subColumns = categoryLabel.querySelectorAll('.sub-column');
+                const projectsInColumns = Array.from(subColumns).map(subColumn => subColumn.children.length);
+
+                // Find the sub-column with the fewest projects
+                const targetSubColumn = subColumns[projectsInColumns.indexOf(Math.min(...projectsInColumns))];
+
                 if (targetSubColumn) {
                     // Clone the project box and append it
                     const clonedProject = projectBox.cloneNode(true);
                     targetSubColumn.appendChild(clonedProject);
-        
+
                     // Add to Set to prevent duplication
                     addedProjects.add(projectId);
-        
+
                     // Reattach hover and click events
                     addClickEventToProjectBox(clonedProject);
                 }
             });
-        
-            // Reattach tooltips or any additional events
-            reattachTooltipEvents();
+
+        // Reattach tooltips or any additional events
+        reattachTooltipEvents();
+
     }
         
      else if (criteria === 'scale') {
