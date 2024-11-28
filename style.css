@@ -86,8 +86,8 @@ v
     gap: 7px; /* This is the gap between items inside the label */
     padding: 15px 0; /* Adjust the top and bottom padding for vertical spacing */
     box-sizing: border-box;
-    margin-bottom: 18px; /* Add spacing between each label vertically */
-        font-weight: bold;
+    margin-bottom: 13px; /* Add spacing between each label vertically */
+    font-weight: bold;
     color: black;
     font-size: .8rem;
 }
@@ -176,7 +176,7 @@ v
     font-weight: 800;
     color: black;
     font-size: .8rem;
-    margin-bottom: 8px;
+    margin-bottom: 10px;
 
     padding: 5px;
 }
@@ -187,7 +187,7 @@ v
     font-weight: 800;
     color: black;
     font-size: .8rem;    
-    margin-bottom: 3px;
+    margin-bottom: 5px;
 
 
 }
@@ -218,7 +218,7 @@ v
     flex-direction: column; /* Stack the projects and labels vertically */
     gap: 5px;
     padding: 20px;
-    margin-bottom: 5px;
+    margin-bottom: 9px;
 }
 
 .epoch-projects {
