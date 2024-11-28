@@ -71,9 +71,9 @@ v
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-bottom: 5px;
+    margin-bottom: 3px;
     position: relative;
-    top: -10px;
+    top: -15px;
     
 }
 .alphabet-label {
@@ -197,7 +197,7 @@ v
     flex-direction: column;
     align-items: center;
     position: relative;
-    top: -3px;
+    top: -1px;
 
     
 }
@@ -218,7 +218,7 @@ v
     flex-direction: column; /* Stack the projects and labels vertically */
     gap: 5px;
     padding: 20px;
-    margin-bottom: 5px;
+    margin-bottom: 8px;
 }
 
 .epoch-projects {
@@ -260,7 +260,7 @@ v
     flex-direction: column;
     align-items: center;
     position: relative;
-    top: -5px;
+    top: -7px;
 
 }
 /* Timeline Header */
@@ -285,7 +285,7 @@ v
     /* Add padding to match the spacing of symbols below */
     padding: 0 27px;
     box-sizing: border-box;
-    margin-bottom: 6px;
+    margin-bottom: 5px;
 }
 
 /* Main Grid Container */
@@ -294,7 +294,7 @@ v
     grid-template-columns: repeat(10, minmax(80px, auto));
     align-items: end;
     width: max-content;
-    margin-bottom: 20px;
+    margin-bottom: 23px;
     gap: 15px;
 }
 
