@@ -952,3 +952,11 @@ body.loading {
     /* If using an image */
     object-fit: contain;
 }
+.project-globe-marker {
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    background-size: cover;
+    cursor: pointer;
+    border-radius: 6px; /* Adds a rounded corner */
+}
