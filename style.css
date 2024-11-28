@@ -211,6 +211,7 @@ main {
     flex-direction: column; /* Stack the projects and labels vertically */
     gap: 5px;
     padding: 20px;
+    margin-bottom: 5px;
 }
 
 .epoch-projects {
