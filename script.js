@@ -1052,12 +1052,6 @@ document.addEventListener('DOMContentLoaded', function () {
     sortAndDistributeProjects();
 });
 
-// Add resize observer to handle window size changes
-const resizeObserver = new ResizeObserver(() => {
-    distributeProjectsAcrossSubcolumns();
-});
-document.head.appendChild(styleSheet);
-
 document.addEventListener('DOMContentLoaded', () => {
     distributeProjectsAcrossSubcolumns();
     
@@ -1076,3 +1070,132 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
+// Add resize observer to handle window size changes
+const resizeObserver = new ResizeObserver(() => {
+    distributeProjectsAcrossSubcolumns();
+});
+document.head.appendChild(styleSheet);
+
+
+document.addEventListener('DOMContentLoaded', function () {
+    const programmaticOrder = [
+        "Masterplan",
+        "Hospitality",
+        "Others",
+        "Residential",
+        "Office",
+        "Transportation"
+    ];
+
+    const epochHeader = document.getElementById('epochTimeline');
+    const epochProjects = document.querySelector('.epoch-projects');
+
+    // Function to sort and distribute projects in the Epoch Tab
+    function sortAndDistributeEpochProjects() {
+        const epochLabels = epochProjects.querySelectorAll('.epoch-label');
+
+        epochLabels.forEach((epochLabel) => {
+            const projects = Array.from(epochLabel.querySelectorAll('.project-box'));
+
+            // Sort projects based on programmatic order
+            projects.sort((a, b) => {
+                const tagA = a.getAttribute('data-tags');
+                const tagB = b.getAttribute('data-tags');
+                return programmaticOrder.indexOf(tagA) - programmaticOrder.indexOf(tagB);
+            });
+
+            // Get sub-columns or create them
+            let subColumns = epochLabel.querySelectorAll('.sub-column');
+            if (subColumns.length === 0) {
+                for (let i = 0; i < 2; i++) { // Two sub-columns for each epoch
+                    const subColumn = document.createElement('div');
+                    subColumn.className = 'sub-column';
+                    epochLabel.appendChild(subColumn);
+                }
+                subColumns = epochLabel.querySelectorAll('.sub-column');
+            }
+
+            // Clear sub-columns
+            subColumns.forEach((subColumn) => {
+                subColumn.innerHTML = '';
+            });
+
+            // Distribute projects evenly across sub-columns
+            projects.forEach((project, index) => {
+                const targetColumn = index % subColumns.length;
+                subColumns[targetColumn].appendChild(project);
+            });
+        });
+    }
+
+    // Add event listener to trigger sorting when Epoch Tab is active
+    document.querySelector('.sorting-bar button:nth-child(4)').addEventListener('click', function () {
+        epochHeader.style.display = 'flex'; // Ensure the Epoch Tab is visible
+        sortAndDistributeEpochProjects(); // Trigger sorting and distribution
+    });
+
+    // Initial sort and distribution when the DOM is loaded
+    sortAndDistributeEpochProjects();
+});
+document.addEventListener('DOMContentLoaded', function () {
+    const programmaticOrder = [
+        "Masterplan",
+        "Hospitality",
+        "Others",
+        "Residential",
+        "Office",
+        "Transportation"
+    ];
+
+    const epochHeader = document.getElementById('epochTimeline');
+    const epochProjects = document.querySelector('.epoch-projects');
+
+    function sortAndDistributeEpochProjects() {
+        const epochLabels = epochProjects.querySelectorAll('.epoch-label');
+
+        epochLabels.forEach((epochLabel) => {
+            // Get all project boxes in this epoch
+            const projects = Array.from(epochLabel.querySelectorAll('.project-box'));
+
+            // Sort projects based on programmatic order
+            projects.sort((a, b) => {
+                const tagA = a.getAttribute('data-tags');
+                const tagB = b.getAttribute('data-tags');
+                return programmaticOrder.indexOf(tagA) - programmaticOrder.indexOf(tagB);
+            });
+
+            // Get or create sub-columns
+            let subColumns = epochLabel.querySelectorAll('.sub-column');
+            if (subColumns.length < 3) {
+                // Remove existing columns if not enough
+                epochLabel.innerHTML = '';
+                for (let i = 0; i < 3; i++) { // Create three sub-columns
+                    const subColumn = document.createElement('div');
+                    subColumn.className = 'sub-column';
+                    epochLabel.appendChild(subColumn);
+                }
+                subColumns = epochLabel.querySelectorAll('.sub-column');
+            }
+
+            // Clear sub-columns
+            subColumns.forEach((subColumn) => {
+                subColumn.innerHTML = '';
+            });
+
+            // Distribute projects across three sub-columns
+            projects.forEach((project, index) => {
+                const targetColumn = index % 3; // Cycle through 0, 1, 2
+                subColumns[targetColumn].appendChild(project);
+            });
+        });
+    }
+
+    // Add an event listener to trigger sorting when Epoch Tab is active
+    document.querySelector('.sorting-bar button:nth-child(4)').addEventListener('click', function () {
+        epochHeader.style.display = 'flex'; // Ensure the Epoch Tab is visible
+        sortAndDistributeEpochProjects(); // Trigger sorting and distribution
+    });
+
+    // Initial sort and distribution when the DOM is loaded
+    sortAndDistributeEpochProjects();
+});

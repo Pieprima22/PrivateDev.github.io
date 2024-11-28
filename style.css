@@ -216,10 +216,9 @@ main {
 
 .epoch-label {
     display: grid;
-    grid-template-columns: repeat(3, 1fr); /* Three subcolumns per epoch */
-    gap: 14px;
-    justify-content: center;
-    padding: 7px;
+    grid-template-columns: repeat(3, 1fr); /* Three equal-width columns */
+    gap: 15px; /* Spacing between columns */
+    padding: 10px;
 }
 
 .epoch-label-container {
