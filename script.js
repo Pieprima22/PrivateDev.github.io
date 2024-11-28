@@ -361,63 +361,70 @@ function sortProjects(criteria) {
             }
         }
             
-    if (criteria === 'alphabetical') {
-        // Hide the timeline header and show the alphabetical header
-        timelineHeader.style.display = 'none';
-        alphabeticalHeader.style.display = 'grid';
-        programmaticHeader.style.display = 'none';
-        scaleHeader.style.display = 'none';
-        epochHeader.style.display = 'none';  // Hide epoch
-        // Hide or remove the globe container
-        const globeContainer = document.getElementById('globe-container');
-        if (globeContainer) {
-            globeContainer.style.display = 'none'; // Hide the globe
-        }
-
-
-        // Hide the year columns but keep them in the DOM for later restoration
-        yearColumns.forEach(yearColumn => yearColumn.style.display = 'none');
-
-        // Clear previous content in each alphabetical section
-        alphabeticalHeader.querySelectorAll('.alphabet-label').forEach(label => {
-            label.innerHTML = label.getAttribute('data-letter'); // Reset to just the letter
-        });
-
-        // Collect and sort all project boxes by alphabetical order of the symbol name
-        let projectBoxes = [];
-        yearColumns.forEach(yearColumn => {
-            yearColumn.querySelectorAll('.project-box').forEach(projectBox => {
-                const clonedProject = projectBox.cloneNode(true);
-                projectBoxes.push(clonedProject); // Clone each project box for alphabetical
-                addClickEventToProjectBox(clonedProject); // Attach click event to each cloned project box
-            });
-        });
-
-        // Sort project boxes alphabetically by symbol name
-        projectBoxes.sort((a, b) => {
-            const nameA = a.querySelector('.symbol-name')?.textContent.trim().toUpperCase();
-            const nameB = b.querySelector('.symbol-name')?.textContent.trim().toUpperCase();
-            return nameA.localeCompare(nameB);
-        });
-        projectBoxes.forEach(projectBox => {
-            const symbolName = projectBox.querySelector('.symbol-name')?.textContent.trim();
-            const firstChar = symbolName?.charAt(0);
-            const firstLetter = isNaN(firstChar) ? firstChar.toUpperCase() : '#';
-            const alphabetSection = alphabeticalHeader.querySelector(`.alphabet-label[data-letter="${firstLetter}"]`);
-            if (alphabetSection) {
-                const clonedProject = projectBox.cloneNode(true);
-            
-                // Copy all data attributes explicitly
-                Array.from(projectBox.attributes).forEach(attr => {
-                    clonedProject.setAttribute(attr.name, attr.value);
-                });
-            
-                addClickEventToProjectBox(clonedProject); // Attach click event
-                alphabetSection.appendChild(clonedProject);
+        if (criteria === 'alphabetical') {
+            // Hide the timeline header and show the alphabetical header
+            timelineHeader.style.display = 'none';
+            alphabeticalHeader.style.display = 'grid';
+            programmaticHeader.style.display = 'none';
+            scaleHeader.style.display = 'none';
+            epochHeader.style.display = 'none'; // Hide epoch
+        
+            // Hide or remove the globe container
+            const globeContainer = document.getElementById('globe-container');
+            if (globeContainer) {
+                globeContainer.style.display = 'none'; // Hide the globe
             }
-        });
-
-        reattachTooltipEvents(); // Ensure tooltips and other events are correctly reattached
+        
+            // Hide the year columns but keep them in the DOM for later restoration
+            yearColumns.forEach(yearColumn => yearColumn.style.display = 'none');
+        
+            // Clear previous content in each alphabetical section
+            alphabeticalHeader.querySelectorAll('.alphabet-label').forEach(label => {
+                label.innerHTML = label.getAttribute('data-letter'); // Reset to just the letter
+            });
+        
+            // Collect and sort all project boxes by alphabetical order of the symbol name
+            let projectBoxes = [];
+            yearColumns.forEach(yearColumn => {
+                yearColumn.querySelectorAll('.project-box').forEach(projectBox => {
+                    const clonedProject = projectBox.cloneNode(true);
+                    projectBoxes.push(clonedProject); // Clone each project box for alphabetical
+                    addClickEventToProjectBox(clonedProject); // Attach click event to each cloned project box
+                });
+            });
+        
+            projectBoxes.sort((a, b) => {
+                const nameA = a.querySelector('.symbol-name')?.textContent.trim().toUpperCase();
+                const nameB = b.querySelector('.symbol-name')?.textContent.trim().toUpperCase();
+                return nameA.localeCompare(nameB);
+            });
+        
+            projectBoxes.forEach(projectBox => {
+                const symbolName = projectBox.querySelector('.symbol-name')?.textContent.trim();
+                const firstChar = symbolName?.charAt(0); // Get the first character
+                
+                // Determine the section: # for numbers, else the uppercase letter
+                const firstLetter = isNaN(firstChar) || /[^\w]/.test(firstChar) ? '#' : firstChar?.toUpperCase();
+            
+                // Find the corresponding alphabetical section
+                const alphabetSection = alphabeticalHeader.querySelector(`.alphabet-label[data-letter="${firstLetter}"]`);
+                if (alphabetSection) {
+                    const clonedProject = projectBox.cloneNode(true);
+                    
+                    // Copy all data attributes explicitly
+                    Array.from(projectBox.attributes).forEach(attr => {
+                        clonedProject.setAttribute(attr.name, attr.value);
+                    });
+            
+                    addClickEventToProjectBox(clonedProject); // Attach click event
+                    alphabetSection.appendChild(clonedProject);
+                }
+            });
+            
+        
+            reattachTooltipEvents(); // Ensure tooltips and other events are correctly reattached
+        
+        
         sortAndDistributeAlphabeticalProjects();
 
 
