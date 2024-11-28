@@ -51,7 +51,7 @@ main {
 .info-tab .info-link:focus {
     color: red; /* Change text color to red when clicked */
 }
-
+v
 /* Alphabetical Header */
 .alphabetical-header {
     display: flex;
@@ -61,8 +61,8 @@ main {
 
 .alphabetic-projects {
     display: grid;
-    grid-template-columns: repeat(25, 1fr);
-    gap: 19px; /* Horizontal gap */
+    grid-template-columns: repeat(24, 1fr);
+    gap: 15px; /* Horizontal gap */
     text-align: center;
     
 }
@@ -82,7 +82,7 @@ main {
     font-size: 0.8rem;
     flex-direction: column-reverse;
     align-items: center;
-    gap: 10px; /* This is the gap between items inside the label */
+    gap: 7px; /* This is the gap between items inside the label */
     padding: 15px 0; /* Adjust the top and bottom padding for vertical spacing */
     box-sizing: border-box;
     margin-bottom: 10px; /* Add spacing between each label vertically */
@@ -97,7 +97,7 @@ main {
 .programmatic-projects {
     display: grid;
     grid-template-columns: repeat(6, 1fr); /* One column per programmatic category */
-    gap: 15px;
+    gap: 14px;
     justify-content: center;
 }
 
@@ -109,17 +109,17 @@ main {
     text-align: center;
     font-weight: bold;
     font-size: 1rem;
-    padding: 5px;
+    padding: 10px;
 }
 
 .programmatic-label {
     display: grid;
     align-self: flex-end;
     grid-template-columns: repeat(3, 1fr); /* Three subcolumns per category */
-    gap: 19px;
+    gap: 15px;
     font-weight: bold;
     justify-content: center;
-    padding: 2px;
+    padding: 1px;
 
 }
 
@@ -137,7 +137,7 @@ main {
     flex-direction: column;
     align-items: center;
     position: relative;
-    top: -1px;
+    top: 5px;
 }
 
 .scale-header {
@@ -157,7 +157,7 @@ main {
 .scale-label {
     display: grid;
     grid-template-columns: repeat(3, 1fr); /* Three subcolumns per scale */
-    gap: 20px;
+    gap: 15px;
     
     justify-content: center;
     padding: 10px;
@@ -226,7 +226,7 @@ main {
 .epoch-label {
     display: grid;
     grid-template-columns: repeat(3, 1fr); /* Three equal-width columns */
-    gap: 20px; /* Spacing between columns */
+    gap: 15px; /* Spacing between columns */
     padding: 10px;
 }
 
@@ -276,7 +276,7 @@ main {
     /* Ensure year label spans full width of its grid cell */
     grid-column: span 1;
     /* Add padding to match the spacing of symbols below */
-    padding: 0 32px;
+    padding: 0 27px;
     box-sizing: border-box;
     margin-bottom: 5px;
 }
@@ -288,20 +288,20 @@ main {
     align-items: end;
     width: max-content;
     margin-bottom: 20px;
-    gap: 20px;
+    gap: 15px;
 }
 
 .year-column {
     display: grid;
     grid-template-columns: 1fr 1fr; /* Two equal-width columns */
-    gap: 20px; /* Spacing between columns */
+    gap: 15px; /* Spacing between columns */
 }
 
 /* Sub-column Layout */
 .sub-column {
     display: flex;
     flex-direction: column-reverse;
-    gap: 13px;
+    gap: 9px;
     align-items: center;
     width: 100%;
 }
@@ -319,8 +319,8 @@ main {
 
 .symbol-image {
     display: block;
-    width: 128%;
-    height: 128%;
+    width: 120%;
+    height: 120%;
     object-fit: cover;
     border-radius: 6px; /* Adjust the value to control the fillet size */
 }

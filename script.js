@@ -1197,6 +1197,8 @@ function sortAndDistributeEpochProjects() {
         });
     });
 }
+
+// Trigger Epoch sorting on Epoch Tab selection
 document.querySelector('.sorting-bar button:nth-child(4)').addEventListener('click', function () {
     const epochHeader = document.getElementById('epochTimeline');
     epochHeader.style.display = 'flex'; // Show Epoch Tab
@@ -1211,6 +1213,12 @@ function sortAndDistributeAlphabeticalProjects() {
         Residential: 4,
         Office: 5,
         Transportation: 6,
+    };
+
+    // Define the special group and its characters
+    const xyzGroup = {
+        label: "XYZ#",
+        characters: ["X", "Y", "Z", "#", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]
     };
 
     // Clear all existing projects first
@@ -1230,14 +1238,23 @@ function sortAndDistributeAlphabeticalProjects() {
 
     // Process each project only once
     document.querySelectorAll(".project-box").forEach((projectBox) => {
-        const projectId = projectBox.getAttribute('data-project'); // Unique identifier
+        const projectId = projectBox.getAttribute('data-project');
         if (processedProjects.has(projectId)) return;
 
         const symbolName = projectBox.querySelector(".symbol-name")?.textContent.trim() || "";
-        const firstLetter = symbolName.charAt(0).toUpperCase();
-        const alphabetLabel = alphabeticalHeader.querySelector(`.alphabet-label[data-letter="${firstLetter}"]`);
+        const firstChar = symbolName.charAt(0).toUpperCase();
 
-        if (alphabetLabel) {
+        // Determine target label
+        let targetLabel;
+        if (xyzGroup.characters.includes(firstChar)) {
+            // If the first character is in the XYZ# group, use the combined label
+            targetLabel = alphabeticalHeader.querySelector(`.alphabet-label[data-letter="${xyzGroup.label}"]`);
+        } else {
+            // Otherwise, use the regular letter label
+            targetLabel = alphabeticalHeader.querySelector(`.alphabet-label[data-letter="${firstChar}"]`);
+        }
+
+        if (targetLabel) {
             const clonedProject = projectBox.cloneNode(true);
             
             // Reattach hover events
@@ -1268,7 +1285,7 @@ function sortAndDistributeAlphabeticalProjects() {
             addClickEventToProjectBox(clonedProject);
             
             // Append to label
-            alphabetLabel.appendChild(clonedProject);
+            targetLabel.appendChild(clonedProject);
             
             // Mark as processed
             processedProjects.add(projectId);
@@ -1293,6 +1310,7 @@ function sortAndDistributeAlphabeticalProjects() {
         projects.forEach(project => label.appendChild(project));
     });
 }
+
 function sortAndDistributeScaleProjects() {
     const programmaticOrder = [
         "Masterplan",
