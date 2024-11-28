@@ -824,6 +824,8 @@ function sortProjects(criteria) {
         });
     
         reattachTooltipEvents(); // Reattach tooltips after sorting
+        sortAndDistributeScaleProjects();
+
     
     }
     
@@ -1195,9 +1197,8 @@ document.querySelector('.sorting-bar button:nth-child(4)').addEventListener('cli
     epochHeader.style.display = 'flex'; // Show Epoch Tab
     sortAndDistributeEpochProjects(); // Trigger sorting and distribution
 });
-
-document.addEventListener("DOMContentLoaded", function () {
-    // Define the desired order based on the programmatic label
+function sortAndDistributeAlphabeticalProjects() {
+    const alphabeticalHeader = document.querySelector(".alphabetical-header");
     const programmaticOrder = {
         Masterplan: 1,
         Hospitality: 2,
@@ -1207,20 +1208,217 @@ document.addEventListener("DOMContentLoaded", function () {
         Transportation: 6,
     };
 
-    // Iterate over each alphabet-label
-    document.querySelectorAll(".alphabet-label").forEach((label) => {
-        const subColumns = Array.from(label.querySelectorAll(".sub-column"));
+    // Clear all existing projects first
+    alphabeticalHeader.querySelectorAll(".alphabet-label").forEach((label) => {
+        const letter = label.getAttribute("data-letter");
+        label.innerHTML = ''; // Clear completely
+        
+        // Recreate the letter display
+        const letterDisplay = document.createElement('div');
+        letterDisplay.className = 'letter-display';
+        letterDisplay.textContent = letter;
+        label.appendChild(letterDisplay);
+    });
 
-        // Sort sub-columns based on programmaticOrder
-        subColumns.sort((a, b) => {
-            const aLabel = a.dataset.labelProgrammatic || ""; // Replace with your programmatic data source
-            const bLabel = b.dataset.labelProgrammatic || ""; // Replace with your programmatic data source
-            const aOrder = programmaticOrder[aLabel] || Infinity; // Default to Infinity if not found
-            const bOrder = programmaticOrder[bLabel] || Infinity; // Default to Infinity if not found
+    // Create a Set to track processed projects
+    const processedProjects = new Set();
+
+    // Process each project only once
+    document.querySelectorAll(".project-box").forEach((projectBox) => {
+        const projectId = projectBox.getAttribute('data-project'); // Unique identifier
+        if (processedProjects.has(projectId)) return;
+
+        const symbolName = projectBox.querySelector(".symbol-name")?.textContent.trim() || "";
+        const firstLetter = symbolName.charAt(0).toUpperCase();
+        const alphabetLabel = alphabeticalHeader.querySelector(`.alphabet-label[data-letter="${firstLetter}"]`);
+
+        if (alphabetLabel) {
+            const clonedProject = projectBox.cloneNode(true);
+            
+            // Reattach hover events
+            clonedProject.addEventListener('mouseenter', function(e) {
+                const tooltip = document.querySelector('.tooltip');
+                if (tooltip) {
+                    tooltip.textContent = this.getAttribute('data-title') || 'Untitled Project';
+                    tooltip.style.display = "block";
+                }
+            });
+
+            clonedProject.addEventListener('mousemove', function(e) {
+                const tooltip = document.querySelector('.tooltip');
+                if (tooltip) {
+                    tooltip.style.left = `${e.pageX + 10}px`;
+                    tooltip.style.top = `${e.pageY + 10}px`;
+                }
+            });
+
+            clonedProject.addEventListener('mouseleave', function() {
+                const tooltip = document.querySelector('.tooltip');
+                if (tooltip) {
+                    tooltip.style.display = "none";
+                }
+            });
+
+            // Add click event
+            addClickEventToProjectBox(clonedProject);
+            
+            // Append to label
+            alphabetLabel.appendChild(clonedProject);
+            
+            // Mark as processed
+            processedProjects.add(projectId);
+        }
+    });
+
+    // Sort projects within each label by programmatic order
+    alphabeticalHeader.querySelectorAll(".alphabet-label").forEach((label) => {
+        const projects = Array.from(label.querySelectorAll(".project-box"));
+        projects.sort((a, b) => {
+            const aTag = a.getAttribute("data-tags");
+            const bTag = b.getAttribute("data-tags");
+            const aOrder = programmaticOrder[aTag] || Infinity;
+            const bOrder = programmaticOrder[bTag] || Infinity;
             return aOrder - bOrder;
         });
 
-        // Clear existing sub-columns and append sorted ones
-        subColumns.forEach((subColumn) => label.appendChild(subColumn));
+        // Clear and reappend in sorted order
+        const letterDisplay = label.querySelector('.letter-display');
+        label.innerHTML = '';
+        label.appendChild(letterDisplay);
+        projects.forEach(project => label.appendChild(project));
     });
+}
+function sortAndDistributeScaleProjects() {
+    const programmaticOrder = [
+        "Masterplan",
+        "Hospitality",
+        "Others",
+        "Residential",
+        "Office",
+        "Transportation"
+    ];
+
+    const scaleHeader = document.querySelector('.scale-header');
+    const scaleProjects = document.querySelector('.scale-projects');
+
+    // Guard clause if elements don't exist
+    if (!scaleHeader || !scaleProjects) return;
+
+    // Clear existing content and reset scale labels
+    scaleProjects.querySelectorAll('.scale-label').forEach((label) => {
+        const scale = label.getAttribute('data-scale');
+        
+        // Clear subcolumns while preserving the structure
+        label.querySelectorAll('.sub-column').forEach(subColumn => {
+            subColumn.innerHTML = '';
+        });
+    });
+
+    // Create a Set to track processed projects
+    const processedProjects = new Set();
+
+    // Process each project box
+    document.querySelectorAll('.project-box').forEach(projectBox => {
+        const projectId = projectBox.getAttribute('data-project');
+        const projectScale = projectBox.getAttribute('data-scale');
+        
+        // Skip if already processed
+        if (processedProjects.has(projectId)) return;
+
+        const scaleLabel = scaleProjects.querySelector(`.scale-label[data-scale="${projectScale}"]`);
+        if (!scaleLabel) return;
+
+        // Clone the project and prepare it
+        const clonedProject = projectBox.cloneNode(true);
+        
+        // Attach events to cloned project
+        clonedProject.addEventListener('mouseenter', function(e) {
+            const tooltip = document.querySelector('.tooltip');
+            if (tooltip) {
+                tooltip.textContent = this.getAttribute('data-title') || 'Untitled Project';
+                tooltip.style.display = "block";
+            }
+        });
+
+        clonedProject.addEventListener('mousemove', function(e) {
+            const tooltip = document.querySelector('.tooltip');
+            if (tooltip) {
+                tooltip.style.left = `${e.pageX + 10}px`;
+                tooltip.style.top = `${e.pageY + 10}px`;
+            }
+        });
+
+        clonedProject.addEventListener('mouseleave', function() {
+            const tooltip = document.querySelector('.tooltip');
+            if (tooltip) {
+                tooltip.style.display = "none";
+            }
+        });
+
+        // Add click event
+        addClickEventToProjectBox(clonedProject);
+
+        // Find least filled subcolumn in this scale label
+        const subColumns = Array.from(scaleLabel.querySelectorAll('.sub-column'));
+        const targetColumn = subColumns.reduce((min, curr) => 
+            curr.children.length < min.children.length ? curr : min, 
+            subColumns[0]
+        );
+
+        // Add to appropriate subcolumn
+        targetColumn.appendChild(clonedProject);
+        
+        // Mark as processed
+        processedProjects.add(projectId);
+    });
+
+    // Sort projects within each subcolumn by programmatic order
+    scaleProjects.querySelectorAll('.sub-column').forEach(subColumn => {
+        const projects = Array.from(subColumn.querySelectorAll('.project-box'));
+        
+        // Sort by programmatic order
+        projects.sort((a, b) => {
+            const tagA = a.getAttribute('data-tags');
+            const tagB = b.getAttribute('data-tags');
+            return programmaticOrder.indexOf(tagA) - programmaticOrder.indexOf(tagB);
+        });
+
+        // Clear and re-append in sorted order
+        subColumn.innerHTML = '';
+        projects.forEach(project => subColumn.appendChild(project));
+    });
+}
+
+// Update the scale section of the sortProjects function
+function handleScaleSort() {
+    const timelineHeader = document.querySelector('.timeline-header');
+    const alphabeticalHeader = document.querySelector('.alphabetical-header');
+    const programmaticHeader = document.querySelector('.programmatic-header');
+    const epochHeader = document.getElementById('epochTimeline');
+    const scaleHeader = document.querySelector('.scale-header');
+    const globeContainer = document.getElementById('globe-container');
+    
+    // Hide other views
+    timelineHeader.style.display = 'none';
+    alphabeticalHeader.style.display = 'none';
+    programmaticHeader.style.display = 'none';
+    epochHeader.style.display = 'none';
+    if (globeContainer) globeContainer.style.display = 'none';
+
+    // Show scale view
+    scaleHeader.style.display = 'flex';
+    
+    // Hide year columns
+    document.querySelectorAll('.year-column').forEach(col => col.style.display = 'none');
+    
+    // Sort and distribute projects
+    sortAndDistributeScaleProjects();
+}
+
+// Add the scale button event listener
+document.addEventListener('DOMContentLoaded', function() {
+    const scaleButton = document.querySelector('.sorting-bar button:nth-child(3)');
+    if (scaleButton) {
+        scaleButton.addEventListener('click', handleScaleSort);
+    }
 });
