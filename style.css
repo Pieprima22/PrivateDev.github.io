@@ -74,6 +74,7 @@ v
     margin-bottom: 5px;
     position: relative;
     top: -10px;
+    
 }
 .alphabet-label {
     display: flex;
@@ -85,7 +86,10 @@ v
     gap: 7px; /* This is the gap between items inside the label */
     padding: 15px 0; /* Adjust the top and bottom padding for vertical spacing */
     box-sizing: border-box;
-    margin-bottom: 10px; /* Add spacing between each label vertically */
+    margin-bottom: 18px; /* Add spacing between each label vertically */
+        font-weight: bold;
+    color: black;
+    font-size: .8rem;
 }
 
 .programmatic-header {
@@ -172,7 +176,7 @@ v
     font-weight: 800;
     color: black;
     font-size: .8rem;
-    margin-bottom: 10px;
+    margin-bottom: 8px;
 
     padding: 5px;
 }
@@ -228,6 +232,7 @@ v
     grid-template-columns: repeat(3, 1fr); /* Three equal-width columns */
     gap: 15px; /* Spacing between columns */
     padding: 10px;
+    
 }
 
 .epoch-label-container {
@@ -245,7 +250,9 @@ v
 
 .epoch-label-text {
     text-transform: uppercase;
-    color: #333;
+    font-weight: 800;
+    color: black;
+    font-size: .8rem;
 }
 
 .epoch-label .project-box {
@@ -278,7 +285,7 @@ v
     /* Add padding to match the spacing of symbols below */
     padding: 0 27px;
     box-sizing: border-box;
-    margin-bottom: 5px;
+    margin-bottom: 10px;
 }
 
 /* Main Grid Container */
