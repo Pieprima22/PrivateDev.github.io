@@ -1196,55 +1196,31 @@ document.querySelector('.sorting-bar button:nth-child(4)').addEventListener('cli
     sortAndDistributeEpochProjects(); // Trigger sorting and distribution
 });
 
-document.addEventListener('DOMContentLoaded', function () {
-    const programmaticOrder = [
-        "Masterplan",
-        "Hospitality", 
-        "Others",
-        "Residential",
-        "Office",
-        "Transportation"
-    ];
+document.addEventListener("DOMContentLoaded", function () {
+    // Define the desired order based on the programmatic label
+    const programmaticOrder = {
+        Masterplan: 1,
+        Hospitality: 2,
+        Others: 3,
+        Residential: 4,
+        Office: 5,
+        Transportation: 6,
+    };
 
-    const alphabetHeader = document.getElementById('alphabetTimeline');
-    const alphabeticProjects = document.querySelector('.alphabetic-projects');
+    // Iterate over each alphabet-label
+    document.querySelectorAll(".alphabet-label").forEach((label) => {
+        const subColumns = Array.from(label.querySelectorAll(".sub-column"));
 
-    // Function to sort and distribute projects in the Alphabetical Tab
-    function sortAndDistributeAlphabeticalProjects() {
-        const alphabetLabels = alphabeticProjects.querySelectorAll('.alphabet-label');
-
-        alphabetLabels.forEach((alphabetLabel) => {
-            const projects = Array.from(alphabetLabel.querySelectorAll('.project-box'));
-
-            // Sort projects based on programmatic order
-            projects.sort((a, b) => {
-                const tagA = a.getAttribute('data-tags');
-                const tagB = b.getAttribute('data-tags');
-                return programmaticOrder.indexOf(tagA) - programmaticOrder.indexOf(tagB);
-            });
-
-            // Get sub-columns (they should already exist in the HTML structure)
-            const subColumns = alphabetLabel.querySelectorAll('.sub-column');
-
-            // Clear existing content in sub-columns
-            subColumns.forEach((subColumn) => {
-                subColumn.innerHTML = '';
-            });
-
-            // Distribute projects across two sub-columns
-            projects.forEach((project, index) => {
-                const targetColumn = index % 2; // Cycle through 0, 1
-                subColumns[targetColumn].appendChild(project);
-            });
+        // Sort sub-columns based on programmaticOrder
+        subColumns.sort((a, b) => {
+            const aLabel = a.dataset.labelProgrammatic || ""; // Replace with your programmatic data source
+            const bLabel = b.dataset.labelProgrammatic || ""; // Replace with your programmatic data source
+            const aOrder = programmaticOrder[aLabel] || Infinity; // Default to Infinity if not found
+            const bOrder = programmaticOrder[bLabel] || Infinity; // Default to Infinity if not found
+            return aOrder - bOrder;
         });
-    }
 
-    // Add event listener to trigger sorting when Alphabetical Tab is active
-    document.querySelector('.sorting-bar button:nth-child(1)').addEventListener('click', function () {
-        alphabetHeader.style.display = 'flex'; // Show Alphabetical Tab
-        sortAndDistributeAlphabeticalProjects(); // Trigger sorting and distribution
+        // Clear existing sub-columns and append sorted ones
+        subColumns.forEach((subColumn) => label.appendChild(subColumn));
     });
-
-    // Initial sort and distribution when the DOM is loaded
-    sortAndDistributeAlphabeticalProjects();
 });
