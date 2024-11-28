@@ -179,7 +179,10 @@ main {
 
 .scale-label-text {
     text-transform: uppercase;
-    color: #333;
+    font-weight: bold;
+    font-weight: 800;
+    color: black;
+    font-size: .8rem;    
     margin-bottom: 3px;
 
 
@@ -275,6 +278,7 @@ main {
     /* Add padding to match the spacing of symbols below */
     padding: 0 32px;
     box-sizing: border-box;
+    margin-bottom: 5px;
 }
 
 /* Main Grid Container */
