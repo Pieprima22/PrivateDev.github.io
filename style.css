@@ -149,9 +149,9 @@ main {
 
 .scale-projects {
     display: grid;
-    grid-template-columns: repeat(4, 1fr); /* One column per scale (S, M, L, XL) */
-
+    grid-template-columns: repeat(4, 1fr); /* Columns for S, M, L, XL */
     justify-content: center;
+    flex-direction: column; /* Reverse the column stacking */
 }
 
 .scale-label {

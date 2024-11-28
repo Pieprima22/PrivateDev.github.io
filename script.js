@@ -1303,98 +1303,98 @@ function sortAndDistributeScaleProjects() {
         "Residential",
         "Office",
         "Transportation"
-    ];
+    ]; // Bottom-to-top order
 
-    const scaleHeader = document.querySelector('.scale-header');
     const scaleProjects = document.querySelector('.scale-projects');
+    if (!scaleProjects) return;
 
-    // Guard clause if elements don't exist
-    if (!scaleHeader || !scaleProjects) return;
-
-    // Clear existing content and reset scale labels
+    // Clear existing sub-columns
     scaleProjects.querySelectorAll('.scale-label').forEach((label) => {
-        const scale = label.getAttribute('data-scale');
-        
-        // Clear subcolumns while preserving the structure
         label.querySelectorAll('.sub-column').forEach(subColumn => {
             subColumn.innerHTML = '';
         });
     });
 
-    // Create a Set to track processed projects
-    const processedProjects = new Set();
-
-    // Process each project box
+    // Collect projects by their programmatic tags
+    const projectGroups = {};
     document.querySelectorAll('.project-box').forEach(projectBox => {
-        const projectId = projectBox.getAttribute('data-project');
-        const projectScale = projectBox.getAttribute('data-scale');
-        
-        // Skip if already processed
-        if (processedProjects.has(projectId)) return;
+        const scale = projectBox.getAttribute('data-scale');
+        const tag = projectBox.getAttribute('data-tags');
+        if (!programmaticOrder.includes(tag)) return;
 
-        const scaleLabel = scaleProjects.querySelector(`.scale-label[data-scale="${projectScale}"]`);
+        if (!projectGroups[scale]) projectGroups[scale] = {};
+        if (!projectGroups[scale][tag]) projectGroups[scale][tag] = [];
+
+        projectGroups[scale][tag].push(projectBox);
+    });
+
+    // Distribute projects across sub-columns
+    Object.entries(projectGroups).forEach(([scale, tags]) => {
+        const scaleLabel = scaleProjects.querySelector(`.scale-label[data-scale="${scale}"]`);
         if (!scaleLabel) return;
 
-        // Clone the project and prepare it
-        const clonedProject = projectBox.cloneNode(true);
-        
-        // Attach events to cloned project
-        clonedProject.addEventListener('mouseenter', function(e) {
-            const tooltip = document.querySelector('.tooltip');
-            if (tooltip) {
-                tooltip.textContent = this.getAttribute('data-title') || 'Untitled Project';
-                tooltip.style.display = "block";
-            }
-        });
-
-        clonedProject.addEventListener('mousemove', function(e) {
-            const tooltip = document.querySelector('.tooltip');
-            if (tooltip) {
-                tooltip.style.left = `${e.pageX + 10}px`;
-                tooltip.style.top = `${e.pageY + 10}px`;
-            }
-        });
-
-        clonedProject.addEventListener('mouseleave', function() {
-            const tooltip = document.querySelector('.tooltip');
-            if (tooltip) {
-                tooltip.style.display = "none";
-            }
-        });
-
-        // Add click event
-        addClickEventToProjectBox(clonedProject);
-
-        // Find least filled subcolumn in this scale label
         const subColumns = Array.from(scaleLabel.querySelectorAll('.sub-column'));
-        const targetColumn = subColumns.reduce((min, curr) => 
-            curr.children.length < min.children.length ? curr : min, 
-            subColumns[0]
-        );
 
-        // Add to appropriate subcolumn
-        targetColumn.appendChild(clonedProject);
-        
-        // Mark as processed
-        processedProjects.add(projectId);
-    });
-
-    // Sort projects within each subcolumn by programmatic order
-    scaleProjects.querySelectorAll('.sub-column').forEach(subColumn => {
-        const projects = Array.from(subColumn.querySelectorAll('.project-box'));
-        
-        // Sort by programmatic order
-        projects.sort((a, b) => {
-            const tagA = a.getAttribute('data-tags');
-            const tagB = b.getAttribute('data-tags');
-            return programmaticOrder.indexOf(tagA) - programmaticOrder.indexOf(tagB);
+        let currentRow = [];
+        programmaticOrder.forEach(tag => {
+            const projects = tags[tag] || [];
+            projects.forEach(project => {
+                currentRow.push(project);
+                if (currentRow.length === 3) {
+                    // Distribute to sub-columns when the row is complete
+                    distributeRowToColumns(currentRow, subColumns);
+                    currentRow = [];
+                }
+            });
         });
 
-        // Clear and re-append in sorted order
-        subColumn.innerHTML = '';
-        projects.forEach(project => subColumn.appendChild(project));
+        // Distribute any remaining projects in the last row
+        if (currentRow.length > 0) {
+            distributeRowToColumns(currentRow, subColumns);
+        }
     });
+
+    // Helper function to distribute a row across columns
+    function distributeRowToColumns(row, columns) {
+        row.forEach((project, index) => {
+            const targetColumn = columns[index % columns.length];
+            if (targetColumn) {
+                const clonedProject = project.cloneNode(true);
+                targetColumn.appendChild(clonedProject);
+            }
+        });
+    }
 }
+
+
+
+function attachHoverAndClickEvents(project) {
+    project.addEventListener('mouseenter', function(e) {
+        const tooltip = document.querySelector('.tooltip');
+        if (tooltip) {
+            tooltip.textContent = this.getAttribute('data-title') || 'Untitled Project';
+            tooltip.style.display = "block";
+        }
+    });
+
+    project.addEventListener('mousemove', function(e) {
+        const tooltip = document.querySelector('.tooltip');
+        if (tooltip) {
+            tooltip.style.left = `${e.pageX + 10}px`;
+            tooltip.style.top = `${e.pageY + 10}px`;
+        }
+    });
+
+    project.addEventListener('mouseleave', function() {
+        const tooltip = document.querySelector('.tooltip');
+        if (tooltip) {
+            tooltip.style.display = "none";
+        }
+    });
+
+    addClickEventToProjectBox(project);
+}
+
 
 // Update the scale section of the sortProjects function
 function handleScaleSort() {
