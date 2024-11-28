@@ -1197,8 +1197,6 @@ function sortAndDistributeEpochProjects() {
         });
     });
 }
-
-// Trigger Epoch sorting on Epoch Tab selection
 document.querySelector('.sorting-bar button:nth-child(4)').addEventListener('click', function () {
     const epochHeader = document.getElementById('epochTimeline');
     epochHeader.style.display = 'flex'; // Show Epoch Tab
@@ -1436,7 +1434,6 @@ function attachHoverAndClickEvents(project) {
 
     addClickEventToProjectBox(project);
 }
-
 
 // Update the scale section of the sortProjects function
 function handleScaleSort() {
