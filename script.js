@@ -418,6 +418,8 @@ function sortProjects(criteria) {
         });
 
         reattachTooltipEvents(); // Ensure tooltips and other events are correctly reattached
+        sortAndDistributeAlphabeticalProjects();
+
 
     } else if (criteria === 'location') {
         // Clear everything first
@@ -694,6 +696,8 @@ function sortProjects(criteria) {
             
         
             reattachTooltipEvents(); // Reattach tooltips after sorting
+            sortAndDistributeEpochProjects();
+
     }
   
     else if (criteria === 'programmatic') {
@@ -1137,7 +1141,7 @@ document.addEventListener('DOMContentLoaded', function () {
     // Initial sort and distribution when the DOM is loaded
     sortAndDistributeEpochProjects();
 });
-document.addEventListener('DOMContentLoaded', function () {
+function sortAndDistributeEpochProjects() {
     const programmaticOrder = [
         "Masterplan",
         "Hospitality",
@@ -1147,15 +1151,70 @@ document.addEventListener('DOMContentLoaded', function () {
         "Transportation"
     ];
 
-    const epochHeader = document.getElementById('epochTimeline');
     const epochProjects = document.querySelector('.epoch-projects');
+    const epochLabels = epochProjects.querySelectorAll('.epoch-label');
 
-    function sortAndDistributeEpochProjects() {
-        const epochLabels = epochProjects.querySelectorAll('.epoch-label');
+    epochLabels.forEach((epochLabel) => {
+        const projects = Array.from(epochLabel.querySelectorAll('.project-box'));
 
-        epochLabels.forEach((epochLabel) => {
-            // Get all project boxes in this epoch
-            const projects = Array.from(epochLabel.querySelectorAll('.project-box'));
+        // Sort projects based on programmatic order
+        projects.sort((a, b) => {
+            const tagA = a.getAttribute('data-tags');
+            const tagB = b.getAttribute('data-tags');
+            return programmaticOrder.indexOf(tagA) - programmaticOrder.indexOf(tagB);
+        });
+
+        // Ensure each epoch label has three sub-columns
+        let subColumns = epochLabel.querySelectorAll('.sub-column');
+        if (subColumns.length < 3) {
+            epochLabel.innerHTML = ''; // Clear existing sub-columns
+            for (let i = 0; i < 3; i++) {
+                const subColumn = document.createElement('div');
+                subColumn.className = 'sub-column';
+                epochLabel.appendChild(subColumn);
+            }
+            subColumns = epochLabel.querySelectorAll('.sub-column');
+        }
+
+        // Clear existing content in sub-columns
+        subColumns.forEach((subColumn) => {
+            subColumn.innerHTML = '';
+        });
+
+        // Distribute projects across three sub-columns
+        projects.forEach((project, index) => {
+            const targetColumn = index % 3; // Cycle through 0, 1, 2
+            subColumns[targetColumn].appendChild(project);
+        });
+    });
+}
+
+// Trigger Epoch sorting on Epoch Tab selection
+document.querySelector('.sorting-bar button:nth-child(4)').addEventListener('click', function () {
+    const epochHeader = document.getElementById('epochTimeline');
+    epochHeader.style.display = 'flex'; // Show Epoch Tab
+    sortAndDistributeEpochProjects(); // Trigger sorting and distribution
+});
+
+document.addEventListener('DOMContentLoaded', function () {
+    const programmaticOrder = [
+        "Masterplan",
+        "Hospitality", 
+        "Others",
+        "Residential",
+        "Office",
+        "Transportation"
+    ];
+
+    const alphabetHeader = document.getElementById('alphabetTimeline');
+    const alphabeticProjects = document.querySelector('.alphabetic-projects');
+
+    // Function to sort and distribute projects in the Alphabetical Tab
+    function sortAndDistributeAlphabeticalProjects() {
+        const alphabetLabels = alphabeticProjects.querySelectorAll('.alphabet-label');
+
+        alphabetLabels.forEach((alphabetLabel) => {
+            const projects = Array.from(alphabetLabel.querySelectorAll('.project-box'));
 
             // Sort projects based on programmatic order
             projects.sort((a, b) => {
@@ -1164,38 +1223,28 @@ document.addEventListener('DOMContentLoaded', function () {
                 return programmaticOrder.indexOf(tagA) - programmaticOrder.indexOf(tagB);
             });
 
-            // Get or create sub-columns
-            let subColumns = epochLabel.querySelectorAll('.sub-column');
-            if (subColumns.length < 3) {
-                // Remove existing columns if not enough
-                epochLabel.innerHTML = '';
-                for (let i = 0; i < 3; i++) { // Create three sub-columns
-                    const subColumn = document.createElement('div');
-                    subColumn.className = 'sub-column';
-                    epochLabel.appendChild(subColumn);
-                }
-                subColumns = epochLabel.querySelectorAll('.sub-column');
-            }
+            // Get sub-columns (they should already exist in the HTML structure)
+            const subColumns = alphabetLabel.querySelectorAll('.sub-column');
 
-            // Clear sub-columns
+            // Clear existing content in sub-columns
             subColumns.forEach((subColumn) => {
                 subColumn.innerHTML = '';
             });
 
-            // Distribute projects across three sub-columns
+            // Distribute projects across two sub-columns
             projects.forEach((project, index) => {
-                const targetColumn = index % 3; // Cycle through 0, 1, 2
+                const targetColumn = index % 2; // Cycle through 0, 1
                 subColumns[targetColumn].appendChild(project);
             });
         });
     }
 
-    // Add an event listener to trigger sorting when Epoch Tab is active
-    document.querySelector('.sorting-bar button:nth-child(4)').addEventListener('click', function () {
-        epochHeader.style.display = 'flex'; // Ensure the Epoch Tab is visible
-        sortAndDistributeEpochProjects(); // Trigger sorting and distribution
+    // Add event listener to trigger sorting when Alphabetical Tab is active
+    document.querySelector('.sorting-bar button:nth-child(1)').addEventListener('click', function () {
+        alphabetHeader.style.display = 'flex'; // Show Alphabetical Tab
+        sortAndDistributeAlphabeticalProjects(); // Trigger sorting and distribution
     });
 
     // Initial sort and distribution when the DOM is loaded
-    sortAndDistributeEpochProjects();
+    sortAndDistributeAlphabeticalProjects();
 });
