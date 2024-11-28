@@ -1308,7 +1308,10 @@ function sortAndDistributeScaleProjects() {
     const scaleProjects = document.querySelector('.scale-projects');
     if (!scaleProjects) return;
 
-    // Clear existing sub-columns
+    // Create a Set to track processed projects
+    const processedProjects = new Set();
+
+    // First, clear ALL existing projects from sub-columns
     scaleProjects.querySelectorAll('.scale-label').forEach((label) => {
         label.querySelectorAll('.sub-column').forEach(subColumn => {
             subColumn.innerHTML = '';
@@ -1318,6 +1321,11 @@ function sortAndDistributeScaleProjects() {
     // Collect projects by their programmatic tags
     const projectGroups = {};
     document.querySelectorAll('.project-box').forEach(projectBox => {
+        const projectId = projectBox.getAttribute('data-project');
+        
+        // Skip if already processed
+        if (processedProjects.has(projectId)) return;
+        
         const scale = projectBox.getAttribute('data-scale');
         const tag = projectBox.getAttribute('data-tags');
         if (!programmaticOrder.includes(tag)) return;
@@ -1326,6 +1334,7 @@ function sortAndDistributeScaleProjects() {
         if (!projectGroups[scale][tag]) projectGroups[scale][tag] = [];
 
         projectGroups[scale][tag].push(projectBox);
+        processedProjects.add(projectId);
     });
 
     // Distribute projects across sub-columns
@@ -1360,13 +1369,46 @@ function sortAndDistributeScaleProjects() {
             const targetColumn = columns[index % columns.length];
             if (targetColumn) {
                 const clonedProject = project.cloneNode(true);
+                
+                // Re-attach event listeners to cloned project
+                addEventListeners(clonedProject);
+                
                 targetColumn.appendChild(clonedProject);
             }
         });
     }
+
+    // Helper function to add event listeners
+    function addEventListeners(projectBox) {
+        projectBox.addEventListener('mouseenter', function(e) {
+            const tooltip = document.querySelector('.tooltip');
+            if (tooltip) {
+                tooltip.textContent = this.getAttribute('data-title') || 'Untitled Project';
+                tooltip.style.display = "block";
+            }
+        });
+
+        projectBox.addEventListener('mousemove', function(e) {
+            const tooltip = document.querySelector('.tooltip');
+            if (tooltip) {
+                tooltip.style.left = `${e.pageX + 10}px`;
+                tooltip.style.top = `${e.pageY + 10}px`;
+            }
+        });
+
+        projectBox.addEventListener('mouseleave', function() {
+            const tooltip = document.querySelector('.tooltip');
+            if (tooltip) {
+                tooltip.style.display = "none";
+            }
+        });
+
+        // Add click event if it exists
+        if (typeof addClickEventToProjectBox === 'function') {
+            addClickEventToProjectBox(projectBox);
+        }
+    }
 }
-
-
 
 function attachHoverAndClickEvents(project) {
     project.addEventListener('mouseenter', function(e) {
