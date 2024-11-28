@@ -280,17 +280,10 @@ main {
     gap: 15px;
 }
 
-/* Year Column Layout */
 .year-column {
     display: grid;
-    grid-template-columns: repeat(2, 45px);
-    justify-content: center;
-    gap: 12px;
-    min-width: 80px;
-    box-sizing: border-box;
-    margin: 0;
-    /* Ensure column content is centered */
-    justify-self: center;
+    grid-template-columns: 1fr 1fr; /* Two equal-width columns */
+    gap: 10px; /* Spacing between columns */
 }
 
 /* Sub-column Layout */

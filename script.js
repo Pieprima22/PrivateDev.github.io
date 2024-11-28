@@ -1001,78 +1001,56 @@ document.addEventListener("DOMContentLoaded", function () {
     }, 200); // 2 seconds delay
 });
 
-function distributeProjectsAcrossSubcolumns() {
-    // Select all year columns
+document.addEventListener('DOMContentLoaded', function () {
+    const programmaticOrder = [
+        "Masterplan",
+        "Hospitality",
+        "Others",
+        "Residential",
+        "Office",
+        "Transportation"
+    ];
+
     const yearColumns = document.querySelectorAll('.year-column');
-    const yearLabels = document.querySelectorAll('.timeline-header .year-label');
-    
-    // Calculate spacing based on content
-    const adjustColumnSpacing = () => {
-        yearColumns.forEach((yearColumn, index) => {
-            const projectCount = yearColumn.querySelectorAll('.project-box').length;
-            const yearLabel = yearLabels[index];
-            
-            // Adjust column width and spacing based on number of projects
-            if (projectCount <= 2) {
-                yearColumn.style.width = '80px';
-                yearColumn.style.marginRight = '10px';
-                if (yearLabel) {
-                    yearLabel.style.width = '80px';
-                    yearLabel.style.marginRight = '10px';
+
+    function sortAndDistributeProjects() {
+        yearColumns.forEach((yearColumn) => {
+            const projects = Array.from(yearColumn.querySelectorAll('.project-box'));
+
+            // Sort projects based on programmaticOrder
+            projects.sort((a, b) => {
+                const tagA = a.getAttribute('data-tags');
+                const tagB = b.getAttribute('data-tags');
+                return programmaticOrder.indexOf(tagA) - programmaticOrder.indexOf(tagB);
+            });
+
+            // Get or create sub-columns
+            let subColumns = yearColumn.querySelectorAll('.sub-column');
+            if (subColumns.length === 0) {
+                for (let i = 0; i < 2; i++) {
+                    const subColumn = document.createElement('div');
+                    subColumn.className = 'sub-column';
+                    yearColumn.appendChild(subColumn);
                 }
-            } else {
-                yearColumn.style.width = '100px';
-                yearColumn.style.marginRight = '25px';
-                if (yearLabel) {
-                    yearLabel.style.width = '100px';
-                    yearLabel.style.marginRight = '25px';
-                }
+                subColumns = yearColumn.querySelectorAll('.sub-column');
             }
+
+            // Clear sub-columns
+            subColumns.forEach((subColumn) => {
+                subColumn.innerHTML = '';
+            });
+
+            // Distribute projects evenly between sub-columns
+            projects.forEach((project, index) => {
+                const targetColumn = index % 2; // Alternate between 0 and 1
+                subColumns[targetColumn].appendChild(project);
+            });
         });
-    };
+    }
 
-    yearColumns.forEach((yearColumn) => {
-        // Get or create subcolumns
-        let subColumns = yearColumn.querySelectorAll('.sub-column');
-        
-        // Create two subcolumns if they don't exist
-        if (subColumns.length === 0) {
-            for (let i = 0; i < 2; i++) {
-                const subColumn = document.createElement('div');
-                subColumn.className = 'sub-column';
-                yearColumn.appendChild(subColumn);
-            }
-            subColumns = yearColumn.querySelectorAll('.sub-column');
-        }
-
-        // Clear existing content
-        subColumns.forEach(subColumn => subColumn.innerHTML = '');
-
-        // Get all project boxes
-        const projects = Array.from(yearColumn.querySelectorAll('.project-box'));
-
-        // Handle single project case
-        if (projects.length === 1) {
-            // Center single project
-            const centerOffset = document.createElement('div');
-            centerOffset.style.gridColumn = '1 / span 2';
-            centerOffset.style.display = 'flex';
-            centerOffset.style.justifyContent = 'center';
-            centerOffset.appendChild(projects[0]);
-            yearColumn.appendChild(centerOffset);
-            return;
-        }
-
-        // Distribute projects between two columns
-        projects.forEach((project, index) => {
-            const targetColumnIndex = index % 2;
-            subColumns[targetColumnIndex].appendChild(project);
-        });
-    });
-
-    // Apply spacing adjustments
-    adjustColumnSpacing();
-}
+    // Run sorting and distribution
+    sortAndDistributeProjects();
+});
 
 // Add resize observer to handle window size changes
 const resizeObserver = new ResizeObserver(() => {
@@ -1097,3 +1075,4 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 });
+
