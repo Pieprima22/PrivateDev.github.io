@@ -86,7 +86,7 @@ v
     gap: 7px; /* This is the gap between items inside the label */
     padding: 15px 0; /* Adjust the top and bottom padding for vertical spacing */
     box-sizing: border-box;
-    margin-bottom: 13px; /* Add spacing between each label vertically */
+    margin-bottom: 15px; /* Add spacing between each label vertically */
     font-weight: bold;
     color: black;
     font-size: .8rem;
@@ -197,7 +197,7 @@ v
     flex-direction: column;
     align-items: center;
     position: relative;
-    top: -5px;
+    top: -3px;
 
     
 }
@@ -218,7 +218,7 @@ v
     flex-direction: column; /* Stack the projects and labels vertically */
     gap: 5px;
     padding: 20px;
-    margin-bottom: 9px;
+    margin-bottom: 5px;
 }
 
 .epoch-projects {
@@ -245,7 +245,7 @@ v
     color: black;
     font-size: .8rem;    
     padding: 1px;
-    top: -20px;
+    top: -10px;
 }
 
 .epoch-label-text {
@@ -260,7 +260,7 @@ v
     flex-direction: column;
     align-items: center;
     position: relative;
-    top: -10px;
+    top: -5px;
 
 }
 /* Timeline Header */
