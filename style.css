@@ -61,7 +61,7 @@ main {
 
 .alphabetic-projects {
     display: grid;
-    grid-template-columns: repeat(26, 1fr);
+    grid-template-columns: repeat(27, 1fr);
     gap: 14px; /* Horizontal gap */
     text-align: center;
     

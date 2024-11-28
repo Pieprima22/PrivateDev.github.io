@@ -400,16 +400,18 @@ function sortProjects(criteria) {
             return nameA.localeCompare(nameB);
         });
         projectBoxes.forEach(projectBox => {
-            const firstLetter = projectBox.querySelector('.symbol-name')?.textContent.trim().charAt(0).toUpperCase();
+            const symbolName = projectBox.querySelector('.symbol-name')?.textContent.trim();
+            const firstChar = symbolName?.charAt(0);
+            const firstLetter = isNaN(firstChar) ? firstChar.toUpperCase() : '#';
             const alphabetSection = alphabeticalHeader.querySelector(`.alphabet-label[data-letter="${firstLetter}"]`);
             if (alphabetSection) {
                 const clonedProject = projectBox.cloneNode(true);
-        
+            
                 // Copy all data attributes explicitly
                 Array.from(projectBox.attributes).forEach(attr => {
                     clonedProject.setAttribute(attr.name, attr.value);
                 });
-        
+            
                 addClickEventToProjectBox(clonedProject); // Attach click event
                 alphabetSection.appendChild(clonedProject);
             }
