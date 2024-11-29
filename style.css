@@ -16,6 +16,7 @@ main {
     flex-direction: column;
     align-items: center;
     width: 90vw;
+    
     padding-bottom: 20px;
 }
 .tooltip {
@@ -39,19 +40,21 @@ main {
     padding: 10px 20px;
     z-index: 1000;
     cursor: pointer;
+    
 }
 
 .info-tab .info-link {
     text-decoration: none;
     color: black;
-    font-size: 0.98rem;
+    font-size: 1rem;
     font-weight: bold;
+    font
 }
 
 .info-tab .info-link:focus {
     color: red; /* Change text color to red when clicked */
 }
-v
+
 /* Alphabetical Header */
 .alphabetical-header {
     display: flex;
@@ -253,6 +256,7 @@ v
     font-weight: 800;
     color: black;
     font-size: .8rem;
+    
 }
 
 .epoch-label .project-box {
@@ -413,6 +417,7 @@ v
     color: white;
     font-size: 1.2rem;
     margin-top: 15px;
+    
 }
 
 .close {
@@ -586,7 +591,7 @@ v
     transform: rotate(45deg); /* Rotate the element */
     transform-origin: top left; /* Ensure rotation starts from top-left corner */
     font-weight: bold;
-    font-size: 0.95rem;
+    font-size: 1rem;
     display: inline-block; /* Maintain proper dimensions */
     color: black; /* Set text color */
     text-decoration: none; /* Remove underline */
@@ -901,7 +906,7 @@ body.loading {
     text-decoration: none;
     color: black;
     font-weight: bold;
-
+    font-family: 'AkkuratStd', sans-serif; /* Replace Arial with AkkuratStd */
     font-size: 1.1rem;
     margin-bottom: 5px;
     display: block;
