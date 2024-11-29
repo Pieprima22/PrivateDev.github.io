@@ -15,10 +15,10 @@ main {
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: 90vw;
-    
+    width: 90vw;   
     padding-bottom: 20px;
 }
+
 .tooltip {
     position: absolute;
     padding: 8px 12px;
@@ -30,17 +30,6 @@ main {
     pointer-events: none;
     white-space: nowrap;
     z-index: 1000;
-}
-
-.info-tab {
-    position: fixed;
-    bottom: 20px;
-    left: 20px;
-    background-color: #ffffff;
-    padding: 10px 20px;
-    z-index: 1000;
-    cursor: pointer;
-    
 }
 
 .info-tab .info-link {
@@ -983,4 +972,3 @@ body.loading {
     cursor: pointer;
     border-radius: 6px; /* Adds a rounded corner */
 }
-
