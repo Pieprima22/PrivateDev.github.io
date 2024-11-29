@@ -44,7 +44,7 @@ main {
 .info-tab .info-link {
     text-decoration: none;
     color: black;
-    font-size: 1.1rem;
+    font-size: 0.98rem;
     font-weight: bold;
 }
 
@@ -553,7 +553,7 @@ v
     transform: rotate(270deg) translate(-100%, 0); /* Rotate and then shift it to fit inside */
     transform-origin: top left; /* Rotation starts from the top-left corner */
     flex-direction: row-reverse;
-    width: 642px;
+    width: 646px;
     height: max-content;
     font-size: 1rem;
 
@@ -586,7 +586,7 @@ v
     transform: rotate(45deg); /* Rotate the element */
     transform-origin: top left; /* Ensure rotation starts from top-left corner */
     font-weight: bold;
-    font-size: 1.1rem;
+    font-size: 0.95rem;
     display: inline-block; /* Maintain proper dimensions */
     color: black; /* Set text color */
     text-decoration: none; /* Remove underline */
@@ -875,8 +875,9 @@ body.loading {
     position: fixed;
     bottom: 20px;
     left: 20px;
+    font-size: 1rem;
     background-color: #fff;
-    padding: 10px 22px;
+    padding: 8px 25px;
     z-index: 1000;
     cursor: pointer;
 }
