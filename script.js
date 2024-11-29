@@ -537,19 +537,24 @@ function sortProjects(criteria) {
             window.locations.forEach(location => {
                 const position = latLonToCartesian(location.lat, location.lon, 7);
                 
+               // Create a marker as a plane
                 const markerGeometry = new THREE.PlaneGeometry(0.4, 0.4);
                 const markerMaterial = new THREE.MeshBasicMaterial({ 
-                    color: 'red',
-                    side: THREE.DoubleSide 
+                    color: 'red', 
+                    side: THREE.DoubleSide // Ensures visibility from both sides
                 });
                 const marker = new THREE.Mesh(markerGeometry, markerMaterial);
+                // Position marker on the globe surface
                 marker.position.set(position.x, position.y, position.z);
                 
                 // Fix rotation to face outward
+                // Fix rotation to align perpendicular to the globe
                 const normal = new THREE.Vector3(position.x, position.y, position.z).normalize();
-                marker.lookAt(marker.position.clone().add(normal)); // Keeps the marker facing outward
-                marker.rotateX(Math.PI / 2); // Only use if a specific orientation adjustment is needed
-                
+                // Align marker to face outward perpendicular to the globe surface
+                const quaternion = new THREE.Quaternion().setFromUnitVectors(new THREE.Vector3(0, 0, 1), normal);
+                marker.quaternion.copy(quaternion);
+
+                // Add the marker to the globe
                 globe.add(marker);
 
                 location.projects.forEach((projectBox, index) => {
@@ -563,38 +568,96 @@ function sortProjects(criteria) {
                     iconDiv.style.backgroundSize = 'cover';
                     iconDiv.style.cursor = 'pointer';
                     iconDiv.style.zIndex = 1000 + index;
+                    iconDiv.classList.add('project-globe-marker');
+                        // Create hover image using the same class
+    const hoverImageDiv = document.createElement('div');
+    hoverImageDiv.classList.add('hover-image');
+    hoverImageDiv.style.backgroundImage = `url(${projectBox.getAttribute('data-hover-image')})`;
+
+    iconDiv.appendChild(hoverImageDiv);
+
+                    // Create a tooltip element
+                    const tooltip = document.createElement('div');
+                    tooltip.classList.add('tooltip');
+                    tooltip.textContent = projectBox.getAttribute('data-title') || 'Untitled Project'; // Add project title as tooltip text
+                    document.body.appendChild(tooltip);
+                
+                    // Show tooltip on hover
+                    iconDiv.addEventListener('mouseenter', (event) => {
+                        hoverImageDiv.style.display = 'block'; // Show hover image
+
+                        tooltip.style.display = 'block';
+                        hoverImageDiv.style.display = 'none'; // Hide hover image
+
+                        tooltip.style.left = `${event.pageX + 10}px`; // Position tooltip relative to mouse
+                        tooltip.style.top = `${event.pageY + 10}px`;
+                    });
+                
+                    // Move tooltip with the mouse
+                    iconDiv.addEventListener('mousemove', (event) => {
+                        hoverImageDiv.style.display = 'none'; // Hide hover image
+
+                        tooltip.style.left = `${event.pageX + 10}px`;
+                        tooltip.style.top = `${event.pageY + 10}px`;
+                    });
+                
+                    // Hide tooltip when not hovering
+                    iconDiv.addEventListener('mouseleave', () => {
+                        hoverImageDiv.style.display = 'none'; // Hide hover image
+
+                        tooltip.style.display = 'none';
+                    });
+                
                     iconDiv.addEventListener('click', () => projectBox.click());
                     globeContainer.appendChild(iconDiv);
+                
     
                     function updateIconPosition() {
+                        // Get the world position of the marker
                         const markerPosition = marker.getWorldPosition(new THREE.Vector3());
+                    
+                        // Calculate the normal vector (from the center of the globe to the marker position)
                         const markerNormal = markerPosition.clone().normalize();
+                    
+                        // Calculate the camera's view direction vector
                         const cameraVector = camera.position.clone().normalize();
+                    
+                        // Dot product to check if the marker is on the visible side of the globe
                         const dotProduct = markerNormal.dot(cameraVector);
-                        
+                    
                         if (dotProduct < 0) {
+                            // Icon is on the far side of the globe
                             iconDiv.style.display = 'none';
                             return;
                         }
-                        
+                    
+                        // Stacking icons: Offset each icon slightly along the normal vector
                         const stackedPosition = markerPosition.clone().add(markerNormal.multiplyScalar(index * 0.15));
+                    
+                        // Convert the stacked 3D position to 2D screen coordinates
                         const screenPosition = stackedPosition.project(camera);
-                        
-                        if (screenPosition.z < -1 || screenPosition.z > 1 ||
+                    
+                        // Check if the icon is within the visible screen bounds
+                        if (
+                            screenPosition.z < -1 || screenPosition.z > 1 ||
                             screenPosition.x < -1 || screenPosition.x > 1 ||
-                            screenPosition.y < -1 || screenPosition.y > 1) {
+                            screenPosition.y < -1 || screenPosition.y > 1
+                        ) {
                             iconDiv.style.display = 'none';
                             return;
                         }
-                        
+                    
+                        // Icon is visible: Calculate its position on the screen
                         iconDiv.style.display = 'block';
                         const x = (screenPosition.x * 0.5 + 0.5) * globeContainer.clientWidth;
                         const y = (-screenPosition.y * 0.5 + 0.5) * globeContainer.clientHeight;
-                        
+                    
+                        // Position the icon with a transform to center it
                         iconDiv.style.transform = `translate(-50%, -50%)`;
                         iconDiv.style.left = `${x}px`;
                         iconDiv.style.top = `${y}px`;
                     }
+                    
     
                 function animateIcons() {
                     requestAnimationFrame(animateIcons);
@@ -606,7 +669,7 @@ function sortProjects(criteria) {
     
         function animate() {
             requestAnimationFrame(animate);
-            globe.rotation.y -= 0.0005;
+            globe.rotation.y -= 0.0001;
             controls.update();
             renderer.render(scene, camera);
         }
