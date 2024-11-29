@@ -3,6 +3,7 @@ import * as THREE from "https://cdn.skypack.dev/three@0.136.0";
 import { OrbitControls } from "https://cdn.skypack.dev/three@0.136.0/examples/jsm/controls/OrbitControls";
 
 
+
 // Get modal elements
 var projectDetailModal = document.getElementById("projectDetailModal");
 var projectIcon = document.getElementById("projectIcon");
@@ -520,104 +521,80 @@ function sortProjects(criteria) {
           }
       });
     
-        // Convert latitude and longitude to Cartesian coordinates
-        function latLonToCartesian(lat, lon, radius) {
-            const phi = (90 - lat) * (Math.PI / 180);
-            const theta = (lon + 180) * (Math.PI / 180);    
-            const x = -(radius * Math.sin(phi) * Math.cos(theta));
-            const z = radius * Math.sin(phi) * Math.sin(theta);
-            const y = radius * Math.cos(phi);
+      function latLonToCartesian(lat, lon, radius) {
+        const phi = (90 - lat) * (Math.PI / 180);
+        const theta = (lon + 180) * (Math.PI / 180);    
+        const x = -(radius * Math.sin(phi) * Math.cos(theta));
+        const z = radius * Math.sin(phi) * Math.sin(theta);
+        const y = radius * Math.cos(phi);
     
-            return { x, y, z };
-        }
+        return { x, y, z };
+    }
     
             // Step 7: Add markers and icons for projects
             const markerGeometry = new THREE.SphereGeometry(0.1, 15, 15);
             const markerMaterial = new THREE.MeshBasicMaterial({ color: 'red' });
-        
             window.locations.forEach(location => {
-            const { x, y, z } = latLonToCartesian(location.lat, location.lon, 7);
-    
-            // Add a base marker for the location
-            const marker = new THREE.Mesh(markerGeometry, markerMaterial);
-            marker.position.set(x, y, z);
-            globe.add(marker);
-    
-            // Add icons for each project
-            location.projects.forEach((projectBox, index) => {
-                const iconDiv = document.createElement('div');
-                iconDiv.classList.add('project-globe-marker');
-                iconDiv.style.position = 'absolute';
-                iconDiv.style.width = '30px';
-                iconDiv.style.height = '30px';
-                iconDiv.style.backgroundImage = `url(${projectBox.getAttribute('data-icon')})`;
-                iconDiv.style.backgroundSize = 'cover';
-                iconDiv.style.cursor = 'pointer';
-    
-                // Offset icons slightly for stacking
-                iconDiv.style.zIndex = 1000 + index;
-                iconDiv.addEventListener('click', () => {
-                    projectBox.click();
+                const position = latLonToCartesian(location.lat, location.lon, 7);
+                
+                const markerGeometry = new THREE.PlaneGeometry(0.4, 0.4);
+                const markerMaterial = new THREE.MeshBasicMaterial({ 
+                    color: 'red',
+                    side: THREE.DoubleSide 
                 });
-                globeContainer.appendChild(iconDiv);
+                const marker = new THREE.Mesh(markerGeometry, markerMaterial);
+                marker.position.set(position.x, position.y, position.z);
+                
+                // Fix rotation to face outward
+                const normal = new THREE.Vector3(position.x, position.y, position.z).normalize();
+                marker.lookAt(marker.position.clone().add(normal));
+                marker.rotateX(Math.PI/2); // Rotate 90 degrees around X axis
+                
+                globe.add(marker);
+
+                location.projects.forEach((projectBox, index) => {
+                    // Original project icon code remains the same
+                    const iconDiv = document.createElement('div');
+                    iconDiv.classList.add('project-globe-marker');
+                    iconDiv.style.position = 'absolute';
+                    iconDiv.style.width = '30px';
+                    iconDiv.style.height = '30px';
+                    iconDiv.style.backgroundImage = `url(${projectBox.getAttribute('data-icon')})`;
+                    iconDiv.style.backgroundSize = 'cover';
+                    iconDiv.style.cursor = 'pointer';
+                    iconDiv.style.zIndex = 1000 + index;
+                    iconDiv.addEventListener('click', () => projectBox.click());
+                    globeContainer.appendChild(iconDiv);
     
-                function updateIconPosition() {
-                    // Get the marker's world position
-                    const markerPosition = marker.getWorldPosition(new THREE.Vector3());
-                    
-                    // Get the camera's position
-                    const cameraPosition = camera.position.clone();
-                    
-                    // Calculate the vector normal to the globe's surface (at the marker's position)
-                    const markerNormal = markerPosition.clone().normalize();
-                    
-                    // Calculate the vector from the globe center to the camera
-                    const cameraVector = cameraPosition.clone().normalize();
-                    
-                    // Calculate dot product to determine if marker is facing the camera
-                    const dotProduct = markerNormal.dot(cameraVector);
-                    
-                    // Hide the icon if it's on the far side of the globe (dot product < 0)
-                    if (dotProduct < 0) {
-                        iconDiv.style.display = 'none';
-                        return;
+                    function updateIconPosition() {
+                        const markerPosition = marker.getWorldPosition(new THREE.Vector3());
+                        const markerNormal = markerPosition.clone().normalize();
+                        const cameraVector = camera.position.clone().normalize();
+                        const dotProduct = markerNormal.dot(cameraVector);
+                        
+                        if (dotProduct < 0) {
+                            iconDiv.style.display = 'none';
+                            return;
+                        }
+                        
+                        const stackedPosition = markerPosition.clone().add(markerNormal.multiplyScalar(index * 0.15));
+                        const screenPosition = stackedPosition.project(camera);
+                        
+                        if (screenPosition.z < -1 || screenPosition.z > 1 ||
+                            screenPosition.x < -1 || screenPosition.x > 1 ||
+                            screenPosition.y < -1 || screenPosition.y > 1) {
+                            iconDiv.style.display = 'none';
+                            return;
+                        }
+                        
+                        iconDiv.style.display = 'block';
+                        const x = (screenPosition.x * 0.5 + 0.5) * globeContainer.clientWidth;
+                        const y = (-screenPosition.y * 0.5 + 0.5) * globeContainer.clientHeight;
+                        
+                        iconDiv.style.transform = `translate(-50%, -50%)`;
+                        iconDiv.style.left = `${x}px`;
+                        iconDiv.style.top = `${y}px`;
                     }
-                    
-                    // Apply stacking offset based on index
-                    const stackedPosition = markerPosition.clone().add(markerNormal.clone().multiplyScalar(index * 0.15)); // Adjust stacking distance as needed
-                    
-                    // Project the stacked position to screen coordinates
-                    const screenPosition = stackedPosition.project(camera);
-                    
-                    // Check if the icon is outside the view frustum
-                    if (screenPosition.z < -1 || screenPosition.z > 1 ||  // Behind the camera or too far
-                        screenPosition.x < -1 || screenPosition.x > 1 ||  // Outside left/right bounds
-                        screenPosition.y < -1 || screenPosition.y > 1) {  // Outside top/bottom bounds
-                        iconDiv.style.display = 'none';
-                        return;
-                    }
-                    
-                    // Show and position the icon
-                    iconDiv.style.display = 'block';
-                    
-                    // Convert normalized screen coordinates to pixel coordinates
-                    const x = (screenPosition.x * 0.5 + 0.5) * globeContainer.clientWidth;
-                    const y = (-screenPosition.y * 0.5 + 0.5) * globeContainer.clientHeight;
-                    
-                    // Base size for the icon
-                    const baseSize = 1;
-                    
-                    // Optional: Scale based on distance but maintain minimum size
-                    const distance = stackedPosition.distanceTo(cameraPosition);
-                    const scale = Math.max(baseSize, Math.min(baseSize * 1.5, baseSize / (distance * 0.1)));
-                    
-                    // Position and scale the icon
-                    iconDiv.style.transform = `translate(-50%, -50%) scale(${scale})`;
-                    iconDiv.style.left = `${x}px`;
-                    iconDiv.style.top = `${y}px`;
-                }
-                
-                
     
                 function animateIcons() {
                     requestAnimationFrame(animateIcons);
@@ -1486,3 +1463,151 @@ document.addEventListener('DOMContentLoaded', function() {
         scaleButton.addEventListener('click', handleScaleSort);
     }
 });
+// Create and append the stylesheet
+const styleSheet = document.createElement("style");
+styleSheet.textContent = searchStyles;
+document.head.appendChild(styleSheet);
+
+// Enhanced search functionality
+function initializeSearch() {
+    const searchInput = document.getElementById('searchInput');
+    const searchDropdown = document.getElementById('searchDropdown');
+    let currentFocus = -1;
+
+    function filterProjects(query) {
+        searchDropdown.innerHTML = '';
+        
+        if (!query.trim()) {
+            searchDropdown.style.display = 'none';
+            return;
+        }
+
+        const results = [];
+        const processedIds = new Set(); // To prevent duplicates
+
+        document.querySelectorAll('.project-box').forEach(box => {
+            const projectId = box.getAttribute('data-project');
+            
+            // Skip if already processed
+            if (processedIds.has(projectId)) return;
+
+            const searchFields = {
+                title: box.getAttribute('data-title')?.toLowerCase() || '',
+                client: box.getAttribute('data-client')?.toLowerCase() || '',
+                location: box.getAttribute('data-location')?.toLowerCase() || '',
+                date: box.getAttribute('data-date')?.toLowerCase() || '',
+                typology: box.getAttribute('data-typology')?.toLowerCase() || '',
+                epoch: box.getAttribute('data-epoch')?.toLowerCase() || '',
+                scale: box.getAttribute('data-scale')?.toLowerCase() || ''
+            };
+
+            const queryLower = query.toLowerCase();
+            let matches = false;
+            let matchType = '';
+            let matchText = '';
+
+            // Check each field for matches
+            for (const [field, value] of Object.entries(searchFields)) {
+                if (value.includes(queryLower)) {
+                    matches = true;
+                    matchType = field;
+                    matchText = value;
+                    break;
+                }
+            }
+
+            if (matches) {
+                results.push({
+                    box,
+                    title: searchFields.title,
+                    matchType,
+                    matchText
+                });
+                processedIds.add(projectId);
+            }
+        });
+
+        if (results.length === 0) {
+            const noResults = document.createElement('div');
+            noResults.className = 'search-item no-results';
+            noResults.textContent = 'No matching projects found';
+            searchDropdown.appendChild(noResults);
+        } else {
+            results.forEach(({ box, title, matchType }) => {
+                const item = document.createElement('div');
+                item.className = 'search-item';
+                
+                // Create main title text
+                const titleText = document.createElement('div');
+                titleText.style.fontWeight = 'bold';
+                titleText.textContent = title;
+                
+                // Create subtitle with match type
+                const subtitleText = document.createElement('div');
+                subtitleText.style.fontSize = '12px';
+                subtitleText.style.color = '#666';
+                subtitleText.textContent = `${matchType.charAt(0).toUpperCase() + matchType.slice(1)}`;
+                
+                item.appendChild(titleText);
+                item.appendChild(subtitleText);
+                
+                item.onclick = () => {
+                    box.click();
+                    searchDropdown.style.display = 'none';
+                    searchInput.value = '';
+                };
+                
+                searchDropdown.appendChild(item);
+            });
+        }
+
+        searchDropdown.style.display = 'block';
+    }
+
+    // Event listeners
+    searchInput.addEventListener('input', (e) => {
+        filterProjects(e.target.value);
+    });
+
+    searchInput.addEventListener('focus', () => {
+        if (searchInput.value.trim()) {
+            searchDropdown.style.display = 'block';
+        }
+    });
+
+    // Close dropdown when clicking outside
+    document.addEventListener('click', (e) => {
+        if (!searchInput.contains(e.target) && !searchDropdown.contains(e.target)) {
+            searchDropdown.style.display = 'none';
+        }
+    });
+
+    // Keyboard navigation
+    searchInput.addEventListener('keydown', (e) => {
+        const items = searchDropdown.getElementsByClassName('search-item');
+        
+        if (e.key === 'ArrowDown') {
+            currentFocus++;
+            if (currentFocus >= items.length) currentFocus = 0;
+            setActive(items);
+        } else if (e.key === 'ArrowUp') {
+            currentFocus--;
+            if (currentFocus < 0) currentFocus = items.length - 1;
+            setActive(items);
+        } else if (e.key === 'Enter') {
+            e.preventDefault();
+            if (currentFocus > -1) {
+                items[currentFocus].click();
+            }
+        }
+    });
+
+    function setActive(items) {
+        Array.from(items).forEach((item, index) => {
+            item.classList.toggle('search-highlight', index === currentFocus);
+        });
+    }
+}
+
+// Initialize search when DOM is loaded
+document.addEventListener('DOMContentLoaded', initializeSearch);
