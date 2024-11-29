@@ -1468,7 +1468,6 @@ const styleSheet = document.createElement("style");
 styleSheet.textContent = searchStyles;
 document.head.appendChild(styleSheet);
 
-// Enhanced search functionality
 function initializeSearch() {
     const searchInput = document.getElementById('searchInput');
     const searchDropdown = document.getElementById('searchDropdown');
@@ -1491,37 +1490,13 @@ function initializeSearch() {
             // Skip if already processed
             if (processedIds.has(projectId)) return;
 
-            const searchFields = {
-                title: box.getAttribute('data-title')?.toLowerCase() || '',
-                client: box.getAttribute('data-client')?.toLowerCase() || '',
-                location: box.getAttribute('data-location')?.toLowerCase() || '',
-                date: box.getAttribute('data-date')?.toLowerCase() || '',
-                typology: box.getAttribute('data-typology')?.toLowerCase() || '',
-                epoch: box.getAttribute('data-epoch')?.toLowerCase() || '',
-                scale: box.getAttribute('data-scale')?.toLowerCase() || ''
-            };
-
+            const title = box.getAttribute('data-title')?.toLowerCase() || '';
             const queryLower = query.toLowerCase();
-            let matches = false;
-            let matchType = '';
-            let matchText = '';
 
-            // Check each field for matches
-            for (const [field, value] of Object.entries(searchFields)) {
-                if (value.includes(queryLower)) {
-                    matches = true;
-                    matchType = field;
-                    matchText = value;
-                    break;
-                }
-            }
-
-            if (matches) {
+            if (title.includes(queryLower)) {
                 results.push({
                     box,
-                    title: searchFields.title,
-                    matchType,
-                    matchText
+                    title
                 });
                 processedIds.add(projectId);
             }
@@ -1533,28 +1508,15 @@ function initializeSearch() {
             noResults.textContent = 'No matching projects found';
             searchDropdown.appendChild(noResults);
         } else {
-            results.forEach(({ box, title, matchType }) => {
+            results.forEach(({ box, title }) => {
                 const item = document.createElement('div');
                 item.className = 'search-item';
-                
-                // Create main title text
-                const titleText = document.createElement('div');
-                titleText.style.fontWeight = 'bold';
-                titleText.textContent = title;
-                
-                // Create subtitle with match type
-                const subtitleText = document.createElement('div');
-                subtitleText.style.fontSize = '12px';
-                subtitleText.style.color = '#666';
-                subtitleText.textContent = `${matchType.charAt(0).toUpperCase() + matchType.slice(1)}`;
-                
-                item.appendChild(titleText);
-                item.appendChild(subtitleText);
-                
+                item.textContent = title;
+
                 item.onclick = () => {
-                    box.click();
+                    box.scrollIntoView({ behavior: "smooth", block: "center" });
                     searchDropdown.style.display = 'none';
-                    searchInput.value = '';
+                    searchInput.value = title;
                 };
                 
                 searchDropdown.appendChild(item);
@@ -1566,7 +1528,12 @@ function initializeSearch() {
 
     // Event listeners
     searchInput.addEventListener('input', (e) => {
-        filterProjects(e.target.value);
+        const query = e.target.value.trim();
+        if (query) {
+            filterProjects(query);
+        } else {
+            searchDropdown.style.display = 'none';
+        }
     });
 
     searchInput.addEventListener('focus', () => {
@@ -1609,5 +1576,4 @@ function initializeSearch() {
     }
 }
 
-// Initialize search when DOM is loaded
 document.addEventListener('DOMContentLoaded', initializeSearch);
