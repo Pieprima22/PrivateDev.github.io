@@ -35,6 +35,7 @@ main {
     position: fixed;
     bottom: 20px;
     left: 20px;
+    
     background-color: #ffffff;
     padding: 10px 20px;
     z-index: 1000;
@@ -44,8 +45,9 @@ main {
 .info-tab .info-link {
     text-decoration: none;
     color: black;
-    font-size: 1.1rem;
+    font-size: 1rem;   
     font-weight: bold;
+    font-weight: 800; 
 }
 
 .info-tab .info-link:focus {
@@ -586,7 +588,7 @@ v
     transform: rotate(45deg); /* Rotate the element */
     transform-origin: top left; /* Ensure rotation starts from top-left corner */
     font-weight: bold;
-    font-size: 1.1rem;
+    font-size: 1rem;
     display: inline-block; /* Maintain proper dimensions */
     color: black; /* Set text color */
     text-decoration: none; /* Remove underline */
@@ -874,7 +876,7 @@ body.loading {
 .info-tab {
     position: fixed;
     bottom: 20px;
-    left: 20px;
+    left: 22px;
     background-color: #fff;
     padding: 10px 22px;
     z-index: 1000;
