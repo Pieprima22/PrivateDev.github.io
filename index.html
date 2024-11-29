@@ -16,7 +16,14 @@
 
 
     <main>
-
+        <div class="search-container">
+            <input
+                type="text"
+                id="searchBar"
+                placeholder="Search for a project..."
+                onkeyup="filterProjects()"
+            />
+        </div>
         
 
         <!-- Symbol Grid with Columns for Each Year -->
@@ -183,6 +190,48 @@
                         <img src="https://aedasme.egnyte.com/opendocument.do?entryId=277c2ef0-929c-49e7-9dcc-9551828f1d85&forceDownload=false&thumbNail=true&w=1200&h=1200&type=proportional&preview=true&prefetch=true"
                             class="hover-image" alt="Expanded DDD">
                         <div class="symbol-name">NNN_NNN</div>
+                    </div>
+
+                    <div class="project-box" 
+                    data-project="projectJEBEL ALI VILLAGE P2"
+                        data-icon="https://aedasme.egnyte.com/opendocument.do?entryId=dbd1df79-9a79-49c4-8b98-c14d1875d23e&forceDownload=false&thumbNail=true&w=1200&h=1200&type=proportional&preview=true&prefetch=true"
+                        data-title="JEBEL ALI VILLAGE P2" 
+                        data-client="WASL" data-scale="M"
+                        data-new-image="https://aedasme.egnyte.com/opendocument.do?entryId=5b4a0885-a329-4369-a931-965bddb1bbfd&forceDownload=false&thumbNail=true&w=1200&h=1200&type=proportional&preview=true&prefetch=true"
+                        data-paragraph1="Nabr is a new type of consumer-first housing company. Founded by Roni Bahar, Bjarke Ingels, and Nick Chim - combining their experience in real estate, architecture, and technology, respectively - Nabr is the result of a shared vision for an improved way of urban living, defined by quality, sustainability, and attainability."
+                        data-paragraph2="Nabr uses technology and productization to increase the production of apartments available for sale in major cities, starting with SOFA One in San Jose which is co-designed by BIG and slated to break ground in late 2022."
+                        data-paragraph3="Located at 98 E San Salvador, residents will be at the heart of SOFA, downtown San Jose's arts district, in close proximity to dining and local entertainment. The development is roughly a mile from Diridon Caltrain Station, one block from San Jose State University, and centrally located near all major tech employers, offering residents abundant access to commuting options."
+                        data-tags="Residential"
+                        data-typology="RESIDENTIAL" 
+                        data-location="DUBAI, UAE"
+                        data-epoch="Present" 
+                        data-date="2016"
+                        data-presentation-link="https://aedasme.egnyte.com/navigate/file/06ed9c99-68c2-43e6-8e45-f97cbb9eadb2"
+                        data-visuals-link="https://aedasme.egnyte.com/navigate/file/de6dc567-a442-4e3a-8406-eb7b2cbfb4ef"
+                        data-drawings-link="https://aedasme.egnyte.com/app/index.do#storage/search/?type=file&location=%2FShared%2FDesign%20Index&metadata=W3sibmFtZXNwYWNlIjoibGlicmFyeSByZXNvdXJjZSIsImtleSI6InByb2plY3QgbmFtZSIsIm9wZXJhdG9yIjoiSU4iLCJ2YWx1ZXMiOlsiSmViZWwgQWxpIFZpbGxhZ2UgUDIiXX0seyJuYW1lc3BhY2UiOiJsaWJyYXJ5IHJlc291cmNlIiwia2V5IjoiZmlsdGUgdHlwZSIsIm9wZXJhdG9yIjoiSU4iLCJ2YWx1ZXMiOlsiLkRXRyJdfV0%3D"
+                        data-3dmodel-link="https://aedasme.egnyte.com/navigate/file/7a25a4ad-6dae-4953-8e89-d6ec329b707b" 
+                        data-3dmodel-icon="https://aedasme.egnyte.com/opendocument.do?entryId=73b9cc45-a7c6-422e-aa36-01b3744bb3f1&forceDownload=false&thumbNail=true&w=1200&h=1200&type=proportional&preview=true&prefetch=true"
+                        data-presentation-icon="https://aedasme.egnyte.com/opendocument.do?entryId=f339273d-0467-474d-a996-4e8b7360dc3e&forceDownload=false&thumbNail=true&w=1200&h=1200&type=proportional&preview=true&prefetch=true"
+                        data-visuals-icon="https://aedasme.egnyte.com/opendocument.do?entryId=d349d403-6b9e-474d-a14a-e224b80bd9e8&forceDownload=false&thumbNail=true&w=1200&h=1200&type=proportional&preview=true&prefetch=true"
+                        data-animation-icon="https://aedasme.egnyte.com/opendocument.do?entryId=02f7a926-55fc-429b-969c-6365bdc51f59&forceDownload=false&thumbNail=true&w=1200&h=1200&type=proportional&preview=true&prefetch=true"
+                        data-drawings-icon="https://aedasme.egnyte.com/opendocument.do?entryId=d235bc93-b53a-4741-9b80-56a46fdc50f2&forceDownload=false&thumbNail=true&w=1200&h=1200&type=proportional&preview=true&prefetch=true"
+
+                        data-images='[
+                        "https://aedasme.egnyte.com/opendocument.do?entryId=f4a0a15c-01ce-45a3-9bdb-3bc52ee9851b&forceDownload=false&w=1200&h=1200&type=proportional&preview=true&prefetch=true",
+                        "https://aedasme.egnyte.com/opendocument.do?entryId=de9166b7-efb9-4437-b90d-57d32a7db710&forceDownload=false&thumbNail=true&w=1200&h=1200&type=proportional&preview=true&prefetch=true",
+                        "https://aedasme.egnyte.com/opendocument.do?entryId=75166aa9-393a-4cad-9605-5806731704a4&forceDownload=false&thumbNail=true&w=1200&h=1200&type=proportional&preview=true&prefetch=true",
+                        "https://aedasme.egnyte.com/opendocument.do?entryId=3636893f-de17-4f3c-bd85-04554ac15402&forceDownload=false&thumbNail=true&w=1200&h=1200&type=proportional&preview=true&prefetch=true",
+                        "https://aedasme.egnyte.com/opendocument.do?entryId=b8b5c93f-d5e0-43c8-bb50-937d89c8041d&forceDownload=false&thumbNail=true&w=1200&h=1200&type=proportional&preview=true&prefetch=true"
+
+                    ]' data-team='[
+                    "Afdafdsfa", "afsdfadfsaf", "afsdfadsfafd", "bob smith", "Adrian smith", "bob smith", "ski village", "Afdafdsfa", "afsdfadfsaf", "Afdafdsfa", "afsdfadfsaf", "Afdafdsfa", "afsdfadfsaf", "afsdfadsfafd", "bob smith", "Adrian smith", "bob smith", "ski village"," Afdafdsfa", "afsdfadfsaf", "Afdafdsfa", "afsdfadfsaf"
+
+                    ]'>
+                        <img src="https://aedasme.egnyte.com/opendocument.do?entryId=dbd1df79-9a79-49c4-8b98-c14d1875d23e&forceDownload=false&thumbNail=true&w=1200&h=1200&type=proportional&preview=true&prefetch=true"
+                            class="symbol-image" alt="Symbol JEBEL ALI VILLAGE P2">
+                        <img src="https://aedasme.egnyte.com/opendocument.do?entryId=2f1ab495-83b0-4871-ab42-ed854f2d9f47&forceDownload=false&thumbNail=true&w=1200&h=1200&type=proportional&preview=true&prefetch=true"
+                            class="hover-image" alt="Expanded JEBEL ALI VILLAGE P2">
+                        <div class="symbol-name">JEBEL ALI VILLAGE P2</div>
                     </div>
                 </div>
                     <div class="sub-column">
@@ -1045,7 +1094,7 @@
                         class="symbol-image" alt="Symbol DGDA ORIENT EXPRESS">
                     <img src="https://aedasme.egnyte.com/opendocument.do?entryId=f7418820-dd45-4aa0-887c-1e400a683b20&forceDownload=false&thumbNail=true&w=1200&h=1200&type=proportional&preview=true&prefetch=true"
                         class="hover-image" alt="Expanded DGDA ORIENT EXPRESS">
-                    <div class="symbol-name">DGDA ORIENT EXPRESS</div>
+                    <div class="symbol-name">ORIENT EXPRESS</div>
                 </div>
                 <div class="project-box" data-project="project THE CUBE"
                 data-icon="https://aedasme.egnyte.com/opendocument.do?entryId=bfaa9c83-ffec-4244-bfd1-e926bad1296f&forceDownload=false&thumbNail=true&w=1200&h=1200&type=proportional&preview=true&prefetch=true"
@@ -1252,6 +1301,48 @@
 
                         <div class="symbol-name">XXX_XXX</div>
                         </div>
+                        <div class="project-box" data-project="projectDIFC 2.0 Master plan" data-title="DIFC 2.0 MASTER PLAN"
+                        data-icon="https://aedasme.egnyte.com/opendocument.do?entryId=9422a821-9922-47c7-9989-b3c83bf6ea1c&forceDownload=false&thumbNail=true&w=1200&h=1200&type=proportional&preview=true&prefetch=true"
+                        data-scale="XL"
+                        data-paragraph1="Nabr is a new type of consumer-first housing company. Founded by Roni Bahar, Bjarke Ingels, and Nick Chim - combining their experience in real estate, architecture, and technology, respectively - Nabr is the result of a shared vision for an improved way of urban living, defined by quality, sustainability, and attainability."
+                        data-paragraph2="Nabr uses technology and productization to increase the production of apartments available for sale in major cities, starting with SOFA One in San Jose which is co-designed by BIG and slated to break ground in late 2022."
+                        data-paragraph3="Located at 98 E San Salvador, residents will be at the heart of SOFA, downtown San Jose's arts district, in close proximity to dining and local entertainment. The development is roughly a mile from Diridon Caltrain Station, one block from San Jose State University, and centrally located near all major tech employers, offering residents abundant access to commuting options."
+                        data-new-image="https://aedasme.egnyte.com/opendocument.do?entryId=14afa883-e65d-4c44-a98f-308e5ed62ed7&forceDownload=false&thumbNail=true&w=1200&h=1200&type=proportional&preview=true&prefetch=true"
+                        data-client="DIFC" 
+                        data-typology="MASTERPLAN" 
+                        data-tags="Masterplan" 
+                        data-epoch="Present" 
+                        data-location="DUBAI, UAE"
+                        data-date="2022" 
+                        data-presentation-link="https://aedasme.egnyte.com/navigate/file/c5c5b3d9-07d8-4433-b056-9a72639ff162"
+                        data-visuals-link="https://aedasme.egnyte.com/navigate/folder/354b6b7b-2b28-429b-aa9a-714954c170b9"
+                        data-drawings-link="https://aedasme.egnyte.com/app/index.do#storage/search/?type=all&location=%2FShared%2FDesign%20Index&metadata=W3sibmFtZXNwYWNlIjoibGlicmFyeSByZXNvdXJjZSIsImtleSI6InByb2plY3QgbmFtZSIsIm9wZXJhdG9yIjoiSU4iLCJ2YWx1ZXMiOlsiRDMgUmVzaWRlbnRpYWwiXX0seyJuYW1lc3BhY2UiOiJsaWJyYXJ5IHJlc291cmNlIiwia2V5IjoiZmlsdGUgdHlwZSIsIm9wZXJhdG9yIjoiSU4iLCJ2YWx1ZXMiOlsiLkRXRyJdfV0%3D"
+                        data-3dmodel-link="https://aedasme.egnyte.com/navigate/file/3d-model-file-id" 
+                        data-3dmodel-icon="https://aedasme.egnyte.com/opendocument.do?entryId=73b9cc45-a7c6-422e-aa36-01b3744bb3f1&forceDownload=false&thumbNail=true&w=1200&h=1200&type=proportional&preview=true&prefetch=true"
+                        data-presentation-icon="https://aedasme.egnyte.com/opendocument.do?entryId=f339273d-0467-474d-a996-4e8b7360dc3e&forceDownload=false&thumbNail=true&w=1200&h=1200&type=proportional&preview=true&prefetch=true"
+                        data-visuals-icon="https://aedasme.egnyte.com/opendocument.do?entryId=d349d403-6b9e-474d-a14a-e224b80bd9e8&forceDownload=false&thumbNail=true&w=1200&h=1200&type=proportional&preview=true&prefetch=true"
+                        data-drawings-icon="https://aedasme.egnyte.com/opendocument.do?entryId=d235bc93-b53a-4741-9b80-56a46fdc50f2&forceDownload=false&thumbNail=true&w=1200&h=1200&type=proportional&preview=true&prefetch=true"
+                        data-images='[                                
+                        
+                                "https://aedasme.egnyte.com/opendocument.do?entryId=49f3985e-ffc4-4c49-93b5-49f897df2529&forceDownload=false&w=1200&h=1200&type=proportional&preview=true&prefetch=true",
+                                "https://aedasme.egnyte.com/opendocument.do?entryId=fa930548-4de7-4441-8817-09027ced9424&forceDownload=false&thumbNail=true&w=1200&h=1200&type=proportional&preview=true&prefetch=true",
+                                "https://aedasme.egnyte.com/opendocument.do?entryId=90269ee1-28fc-4233-a01d-4dacd5e8736d&forceDownload=false&thumbNail=true&w=1200&h=1200&type=proportional&preview=true&prefetch=true",
+                                "https://aedasme.egnyte.com/opendocument.do?entryId=7f50c73d-8c75-4d8d-b2ca-2c1747fa5237&forceDownload=false&thumbNail=true&w=1200&h=1200&type=proportional&preview=true&prefetch=true",
+                                "https://aedasme.egnyte.com/opendocument.do?entryId=ff1a5aa1-23ca-412a-b215-0de24edecb10&forceDownload=false&thumbNail=true&w=1200&h=1200&type=proportional&preview=true&prefetch=true",
+                                "https://aedasme.egnyte.com/opendocument.do?entryId=03b1f0d6-9bd6-4df2-8f8b-a03391ceca9c&forceDownload=false&thumbNail=true&w=1200&h=1200&type=proportional&preview=true&prefetch=true"
+                                
+                                
+                                ]' data-team='[
+                                "Afdafdsfa", "afsdfadfsaf", "afsdfadsfafd", "bob smith", "Adrian smith", "bob smith", "ski village", "Afdafdsfa", "afsdfadfsaf", "Afdafdsfa", "afsdfadfsaf", "Afdafdsfa", "afsdfadfsaf", "afsdfadsfafd", "bob smith", "Adrian smith", "bob smith", "ski village"," Afdafdsfa", "afsdfadfsaf", "Afdafdsfa", "afsdfadfsaf"
+    
+                                ]'>
+                        <img src="https://aedasme.egnyte.com/opendocument.do?entryId=9422a821-9922-47c7-9989-b3c83bf6ea1c&forceDownload=false&thumbNail=true&w=1200&h=1200&type=proportional&preview=true&prefetch=true"
+                            class="symbol-image" alt="Symbol DIFC 2.0 Master plan">
+                        <img src="https://aedasme.egnyte.com/opendocument.do?entryId=a08404da-a5fc-42aa-bb3f-eeaa18d4ad78&forceDownload=false&thumbNail=true&w=1200&h=1200&type=proportional&preview=true&prefetch=true"
+                            class="hover-image" alt="Expanded DIFC 2.0 Master plan">
+
+                        <div class="symbol-name">F_DIFC</div>
+                        </div>
                 </div>
                 <div class="sub-column">
                         <div class="project-box" data-project="projectKKK" data-title="KKK"
@@ -1455,6 +1546,7 @@
                                 class="hover-image" alt="Expanded THE POINTE DISTRICT">
                             <div class="symbol-name">POINTE DISTRICT</div>
                             </div>
+                            
                     </div>
             </div>
 

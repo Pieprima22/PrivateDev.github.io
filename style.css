@@ -972,3 +972,18 @@ body.loading {
     cursor: pointer;
     border-radius: 6px; /* Adds a rounded corner */
 }
+.search-container {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 1000;
+}
+
+#searchBar {
+    padding: 10px;
+    width: 250px;
+    height: 10px;
+    font-size: 16px;
+    border: 1px solid #ffffff;
+    border-radius: 5px;
+}
