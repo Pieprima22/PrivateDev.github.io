@@ -965,6 +965,7 @@ function updateModal(projectBox) {
         console.error('Missing data-new-image for project:', projectBox);
     }
 }
+
 document.addEventListener("DOMContentLoaded", function () {
     const searchTabLink = document.getElementById("searchTabLink");
     const searchSectionModal = document.getElementById("searchSectionModal");
