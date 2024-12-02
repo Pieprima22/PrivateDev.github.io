@@ -37,7 +37,6 @@ main {
     color: black;
     font-size: 1rem;
     font-weight: bold;
-    font
 }
 
 .info-tab .info-link:focus {
@@ -273,9 +272,7 @@ main {
     font-size: .8rem;   
     font-weight: bold;
     font-weight: 800; 
-    /* Ensure year label spans full width of its grid cell */
     grid-column: span 1;
-    /* Add padding to match the spacing of symbols below */
     padding: 0 27px;
     box-sizing: border-box;
     margin-bottom: 5px;
@@ -972,18 +969,61 @@ body.loading {
     cursor: pointer;
     border-radius: 6px; /* Adds a rounded corner */
 }
-.search-container {
+
+/* Position the search tab at the top-right corner */
+.search-tab {
     position: fixed;
-    top: 20px;
-    right: 20px;
-    z-index: 1000;
+    top: 20px; /* Adjust the top position as needed */
+    right: 20px; /* Adjust the right position as needed */
+    z-index: 1000; /* Ensure the search tab appears on top of other content */
+}
+/* Limit the size of the search image */
+.search-icon {
+    max-width: 30px; /* Adjust this value as needed */
+    max-height: 30px; /* Adjust this value as needed */
+    width: auto;
+    height: auto;
+}
+/* SEARCH Tab Link */
+.search-tab .search-link {
+    text-decoration: none;
+    color: black;
+    font-size: 1rem;
+    font-weight: bold;
 }
 
-#searchBar {
+/* Full-page Modal for Search */
+#searchSectionModal {
+    display: none;
+    position: fixed; /* Changed to fixed for better overlay */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgb(255, 255, 255); /* Semi-transparent background */
+    z-index: 1000;
+    overflow-y: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* SEARCH Modal Content */
+#searchContent {
+    text-align: center;
+    max-width: 600px; /* Optional: limit the width of the content */
+    width: 100%;
+    padding: 20px;
+    background-color: white; /* White background for the content */
+    border-radius: 8px; /* Optional: rounded corners */
+}
+
+/* Search Input Styling */
+#searchInput {
+    width: 80%;
     padding: 10px;
-    width: 250px;
-    height: 10px;
-    font-size: 16px;
-    border: 1px solid #ffffff;
-    border-radius: 5px;
+    font-size: 1rem;
+    margin-top: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
 }

@@ -16,15 +16,6 @@
 
 
     <main>
-        <div class="search-container">
-            <input
-                type="text"
-                id="searchBar"
-                placeholder="Search for a project..."
-                onkeyup="filterProjects()"
-            />
-        </div>
-        
 
         <!-- Symbol Grid with Columns for Each Year -->
         <section class="symbol-grid">
@@ -2557,7 +2548,25 @@
         </section>
 
     </main>
-<!-- Main Page NEWS Tab -->
+<!-- Main Page SEARCH Tab -->
+<div class="search-tab">
+    <a href="#" id="searchTabLink" class="search-link">
+        <img src="search-286.png" alt="Search Icon" class="search-icon" />
+    </a>
+</div>
+
+<!-- Full-page Modal for SEARCH Section -->
+<div id="searchSectionModal" class="full-page-modal">
+    <span id="closeSearchModal" class="close-button">&times;</span>
+    <div class="modal-content">
+        <!-- SEARCH Content -->
+        <div id="searchContent" class="info-main-content">
+            <h3>SEARCH</h3>
+            <input type="text" id="searchInput" placeholder="Enter project name" />
+        </div>
+    </div>
+</div>
+
 <!-- Main Page INFO Tab -->
 <div class="info-tab">
     <a href="#" id="infoSectionLink" class="info-link">INFO</a>

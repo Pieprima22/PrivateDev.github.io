@@ -570,11 +570,11 @@ function sortProjects(criteria) {
                     iconDiv.style.zIndex = 1000 + index;
                     iconDiv.classList.add('project-globe-marker');
                         // Create hover image using the same class
-    const hoverImageDiv = document.createElement('div');
-    hoverImageDiv.classList.add('hover-image');
-    hoverImageDiv.style.backgroundImage = `url(${projectBox.getAttribute('data-hover-image')})`;
+                    const hoverImageDiv = document.createElement('div');
+                    hoverImageDiv.classList.add('hover-image');
+                    hoverImageDiv.style.backgroundImage = `url(${projectBox.getAttribute('data-hover-image')})`;
 
-    iconDiv.appendChild(hoverImageDiv);
+                    iconDiv.appendChild(hoverImageDiv);
 
                     // Create a tooltip element
                     const tooltip = document.createElement('div');
@@ -907,7 +907,6 @@ function setActiveButton(button) {
 }
 
 
-
 // Create the tooltip element
 const tooltip = document.createElement("div");
 tooltip.className = "tooltip";
@@ -959,6 +958,37 @@ function updateModal(projectBox) {
         console.error('Missing data-new-image for project:', projectBox);
     }
 }
+//search tab
+// Search modal logic
+document.addEventListener("DOMContentLoaded", function () {
+    const searchTabLink = document.getElementById("searchTabLink");
+    const searchSectionModal = document.getElementById("searchSectionModal");
+    const closeSearchModal = document.getElementById("closeSearchModal");
+
+    // Initially hide the search modal
+    if (searchSectionModal) {
+        searchSectionModal.style.display = "none";
+    }
+
+    // Show search modal only when search tab is clicked
+    searchTabLink.addEventListener("click", function (event) {
+        event.preventDefault();
+        searchSectionModal.style.display = "block";
+    });
+
+    // Close modal when close button is clicked
+    closeSearchModal.addEventListener("click", function () {
+        searchSectionModal.style.display = "none";
+    });
+
+    // Close modal when clicking outside
+    window.addEventListener("click", function (event) {
+        if (event.target === searchSectionModal) {
+            searchSectionModal.style.display = "none";
+        }
+    });
+});
+
 document.addEventListener("DOMContentLoaded", function () {
     // Get tab and content elements
     
@@ -1525,60 +1555,4 @@ document.addEventListener('DOMContentLoaded', function() {
     if (scaleButton) {
         scaleButton.addEventListener('click', handleScaleSort);
     }
-});
-// Create and append the stylesheet
-const styleSheet = document.createElement("style");
-styleSheet.textContent = searchStyles;
-document.head.appendChild(styleSheet);
-
-document.addEventListener('DOMContentLoaded', () => {
-    const searchInput = document.getElementById('projectSearchInput');
-    const searchResultsDropdown = document.getElementById('searchResultsDropdown');
-
-    // Collect project data
-    const projects = Array.from(document.querySelectorAll('.project-box')).map(projectBox => ({
-        title: projectBox.getAttribute('data-title'),
-        element: projectBox
-    }));
-
-    searchInput.addEventListener('input', () => {
-        const query = searchInput.value.toLowerCase().trim();
-        console.log("Search Query:", query); // Log current query
-        searchResultsDropdown.innerHTML = ''; // Clear old results
-    
-        if (query === '') {
-            console.log("Empty query. Clearing results.");
-            searchResultsDropdown.style.display = 'none';
-            return;
-        }
-    
-        const filteredProjects = projects.filter(project =>
-            project.title && project.title.toLowerCase().includes(query)
-        );
-    
-        console.log("Filtered Projects:", filteredProjects); // Log matching projects
-    
-        if (filteredProjects.length > 0) {
-            searchResultsDropdown.style.display = 'block';
-            filteredProjects.forEach(project => {
-                const listItem = document.createElement('li');
-                listItem.textContent = project.title;
-                listItem.addEventListener('click', () => {
-                    searchResultsDropdown.style.display = 'none';
-                    project.element.click();
-                });
-                searchResultsDropdown.appendChild(listItem);
-            });
-        } else {
-            console.log("No matching projects found.");
-            searchResultsDropdown.style.display = 'none';
-        }
-    });
-    
-    
-    document.addEventListener('click', (event) => {
-        if (!searchResultsDropdown.contains(event.target) && event.target !== searchInput) {
-            searchResultsDropdown.style.display = 'none';
-        }
-    });
 });
