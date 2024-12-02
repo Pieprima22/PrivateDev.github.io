@@ -22,56 +22,6 @@ var drawingsLink = document.getElementById("drawingsLink");
 var threeDModelLink = document.getElementById("3DModelLink");
 var homePageLink = document.getElementById("homePageLink");
 // Function to update project links
-function updateProjectLinks(projectBox) {
-    // Get project links container
-    const projectLinksContainer = document.querySelector('.project-links');
-    if (!projectLinksContainer) return;
-
-    // Clear existing links
-    projectLinksContainer.innerHTML = '';
-
-    // Create containers for home link and other links
-    const homeLinkContainer = document.createElement('div');
-    homeLinkContainer.className = 'home-link';
-    const otherLinksContainer = document.createElement('div');
-    otherLinksContainer.className = 'other-links';
-
-    // Define the links array dynamically from the current project box
-    const links = [
-        { url: "javascript:void(0)", icon: "images.png", action: "close", isHome: true },
-        { url: projectBox.getAttribute('data-3dmodel-link'), icon: projectBox.getAttribute('data-3dmodel-icon') || 'default-3dmodel-icon.png', isHome: false },
-        { url: projectBox.getAttribute('data-drawings-link'), icon: projectBox.getAttribute('data-drawings-icon') || 'default-drawings-icon.png', isHome: false },
-        { url: projectBox.getAttribute('data-animation-link'), icon: projectBox.getAttribute('data-animation-icon') || 'default-animation-icon.png', isHome: false },
-        { url: projectBox.getAttribute('data-visuals-link'), icon: projectBox.getAttribute('data-visuals-icon') || 'default-visuals-icon.png', isHome: false },
-        { url: projectBox.getAttribute('data-presentation-link'), icon: projectBox.getAttribute('data-presentation-icon') || 'default-presentation-icon.png', isHome: false }
-    ];
-
-    // Create and append links
-    links.forEach(({ url, icon, action, isHome }) => {
-        if (url || action === "close") {
-            const linkElement = document.createElement('a');
-            linkElement.href = url || 'javascript:void(0)';
-            linkElement.target = action === "close" ? "" : "_blank";
-
-            if (isHome) {
-                linkElement.textContent = 'HOME';
-                linkElement.onclick = closeProjectDetail;
-                linkElement.classList.add('home-link');
-                homeLinkContainer.appendChild(linkElement);
-            } else {
-                if (url) {
-                    linkElement.innerHTML = `<img src="${icon}" alt="Link Icon">`;
-                    otherLinksContainer.appendChild(linkElement);
-                }
-            }
-        }
-    });
-
-    // Append containers
-    projectLinksContainer.appendChild(homeLinkContainer);
-    projectLinksContainer.appendChild(otherLinksContainer);
-    projectLinksContainer.style.display = projectLinksContainer.childElementCount > 0 ? 'flex' : 'none';
-}
 
 document.querySelectorAll('.project-box').forEach((box) => {
     box.addEventListener('click', function () {
@@ -192,17 +142,74 @@ document.querySelectorAll('.project-box').forEach((box) => {
     });
     
 });
-
-window.closeProjectDetail = function() {
+window.closeProjectDetail = function () {
     const projectDetailModal = document.getElementById("projectDetailModal");
     if (projectDetailModal) {
         // Reset the scroll position to the top
         projectDetailModal.scrollTop = 0;
+
+        // Optionally clear dynamic content if needed
+        document.getElementById("teamMemberNames").textContent = "";
+        document.getElementById("imageGallery").innerHTML = "";
+        document.querySelector('.text-container').innerHTML = "";
+
+        // Hide the modal
         projectDetailModal.style.display = "none";
     } else {
         console.error("Project Detail Modal not found.");
     }
 };
+
+function updateProjectLinks(projectBox) {
+    // Get project links container
+    const projectLinksContainer = document.querySelector('.project-links');
+    if (!projectLinksContainer) return;
+
+    // Clear existing links
+    projectLinksContainer.innerHTML = '';
+
+    // Create containers for home link and other links
+    const homeLinkContainer = document.createElement('div');
+    homeLinkContainer.className = 'home-link';
+    const otherLinksContainer = document.createElement('div');
+    otherLinksContainer.className = 'other-links';
+
+    // Define the links array dynamically from the current project box
+    const links = [
+        { url: "javascript:void(0)", icon: "images.png", action: "close", isHome: true },
+        { url: projectBox.getAttribute('data-3dmodel-link'), icon: projectBox.getAttribute('data-3dmodel-icon') || 'default-3dmodel-icon.png', isHome: false },
+        { url: projectBox.getAttribute('data-drawings-link'), icon: projectBox.getAttribute('data-drawings-icon') || 'default-drawings-icon.png', isHome: false },
+        { url: projectBox.getAttribute('data-animation-link'), icon: projectBox.getAttribute('data-animation-icon') || 'default-animation-icon.png', isHome: false },
+        { url: projectBox.getAttribute('data-visuals-link'), icon: projectBox.getAttribute('data-visuals-icon') || 'default-visuals-icon.png', isHome: false },
+        { url: projectBox.getAttribute('data-presentation-link'), icon: projectBox.getAttribute('data-presentation-icon') || 'default-presentation-icon.png', isHome: false }
+    ];
+
+    // Create and append links
+    links.forEach(({ url, icon, action, isHome }) => {
+        if (url || action === "close") {
+            const linkElement = document.createElement('a');
+            linkElement.href = url || 'javascript:void(0)';
+            linkElement.target = action === "close" ? "" : "_blank";
+
+            if (isHome) {
+                linkElement.textContent = 'HOME';
+                linkElement.onclick = closeProjectDetail;
+                linkElement.classList.add('home-link');
+                homeLinkContainer.appendChild(linkElement);
+            } else {
+                if (url) {
+                    linkElement.innerHTML = `<img src="${icon}" alt="Link Icon">`;
+                    otherLinksContainer.appendChild(linkElement);
+                }
+            }
+        }
+    });
+
+    // Append containers
+    projectLinksContainer.appendChild(homeLinkContainer);
+    projectLinksContainer.appendChild(otherLinksContainer);
+    projectLinksContainer.style.display = projectLinksContainer.childElementCount > 0 ? 'flex' : 'none';
+}
 
 
 function addClickEventToProjectBox(projectBox) {
@@ -958,22 +965,25 @@ function updateModal(projectBox) {
         console.error('Missing data-new-image for project:', projectBox);
     }
 }
-//search tab
-// Search modal logic
 document.addEventListener("DOMContentLoaded", function () {
     const searchTabLink = document.getElementById("searchTabLink");
     const searchSectionModal = document.getElementById("searchSectionModal");
     const closeSearchModal = document.getElementById("closeSearchModal");
+    const searchInput = document.getElementById("searchInput");
+    const searchContent = document.getElementById("searchContent");
+    const projectBoxes = document.querySelectorAll(".project-box");
 
     // Initially hide the search modal
     if (searchSectionModal) {
         searchSectionModal.style.display = "none";
     }
 
-    // Show search modal only when search tab is clicked
+    // Show search modal when search tab is clicked
     searchTabLink.addEventListener("click", function (event) {
         event.preventDefault();
         searchSectionModal.style.display = "block";
+        searchInput.value = ""; // Clear previous search input
+        updateSearchResults(""); // Clear previous results
     });
 
     // Close modal when close button is clicked
@@ -987,7 +997,189 @@ document.addEventListener("DOMContentLoaded", function () {
             searchSectionModal.style.display = "none";
         }
     });
+
+    // Filter projects based on search input
+    searchInput.addEventListener("input", function () {
+        const query = searchInput.value.toLowerCase();
+        updateSearchResults(query);
+    });
+
+    // Function to update search results
+    function updateSearchResults(query) {
+        const existingResults = searchContent.querySelectorAll(".search-result");
+        existingResults.forEach(result => result.remove());
+
+        if (!query) return;
+
+        projectBoxes.forEach(box => {
+            const title = box.getAttribute("data-title").toLowerCase();
+            if (title.includes(query)) {
+                const result = createSearchResult(box);
+                searchContent.appendChild(result);
+            }
+        });
+    }
+
+    // Function to create a search result element
+    function createSearchResult(box) {
+        const result = document.createElement("div");
+        result.classList.add("search-result");
+        result.textContent = box.getAttribute("data-title");
+
+        result.addEventListener("click", function () {
+            openProjectModal(box);
+        });
+
+        return result;
+    }
+
+    // Function to open and populate the project detail modal
+    function openProjectModal(box) {
+        const modal = document.getElementById("projectDetailModal");
+        
+        // Update modal content
+        document.getElementById("projectTitle").textContent = box.getAttribute("data-title") || 'Untitled Project';
+        document.getElementById("projectClient").textContent = box.getAttribute("data-client") || 'No Client Specified';
+        document.getElementById("projectTypology").textContent = box.getAttribute("data-typology") || 'Unknown Typology';
+        document.getElementById("projectLocation").textContent = box.getAttribute("data-location") || 'Unknown Location';
+        document.getElementById("projectDate").textContent = box.getAttribute("data-date") || 'No Date Provided';
+        
+        // Set the main project image
+        const projectIcon = document.getElementById("projectIcon");
+        const iconURL = box.getAttribute("data-icon") || 'default-icon.png';
+        projectIcon.src = iconURL;
+        projectIcon.classList.add("symbol-image");
+        
+        // Project Image in Description
+        const hoverImage = box.querySelector('.hover-image');
+        const projectImageSection = document.getElementById('projectImage');
+        if (hoverImage && projectImageSection) {
+            projectImageSection.src = hoverImage.src;
+            projectImageSection.style.display = 'block';
+        }
+        
+        // New Page Image
+        const newImage = box.getAttribute('data-new-image') || 'default-new-image.png';
+        const newPageImage = document.querySelector('.new-page-image');
+        if (newPageImage) {
+            newPageImage.src = newImage;
+            newPageImage.style.display = 'block';
+        }
+        
+        // Update new-page text
+        const paragraphs = [
+            box.getAttribute('data-paragraph1') || '',
+            box.getAttribute('data-paragraph2') || '',
+            box.getAttribute('data-paragraph3') || ''
+        ];
+        const newPageText = document.querySelector('.text-container');
+        if (newPageText) {
+            newPageText.innerHTML = paragraphs.map(p => `<p>${p}</p>`).join('');
+        }
+        
+        // Update project links with HOME and CLOSE functionality
+        const projectLinksContainer = document.querySelector('.project-links');
+        if (projectLinksContainer) {
+            projectLinksContainer.innerHTML = ''; // Clear existing links
+        
+            const homeLinkContainer = document.createElement('div');
+            homeLinkContainer.className = 'home-link';
+            const otherLinksContainer = document.createElement('div');
+            otherLinksContainer.className = 'other-links';
+        
+            const links = [
+                { url: "javascript:void(0)", icon: "images.png", action: "close", isHome: true },
+                { url: box.getAttribute('data-3dmodel-link'), icon: box.getAttribute('data-3dmodel-icon') || 'default-3dmodel-icon.png', isHome: false },
+                { url: box.getAttribute('data-drawings-link'), icon: box.getAttribute('data-drawings-icon') || 'default-drawings-icon.png', isHome: false },
+                { url: box.getAttribute('data-animation-link'), icon: box.getAttribute('data-animation-icon') || 'default-animation-icon.png', isHome: false },
+                { url: box.getAttribute('data-visuals-link'), icon: box.getAttribute('data-visuals-icon') || 'default-visuals-icon.png', isHome: false },
+                { url: box.getAttribute('data-presentation-link'), icon: box.getAttribute('data-presentation-icon') || 'default-presentation-icon.png', isHome: false }
+            ];
+        
+            links.forEach(({ url, icon, action, isHome }) => {
+                if (url || action === "close") {
+                    const linkElement = document.createElement('a');
+                    linkElement.href = url || 'javascript:void(0)';
+                    linkElement.target = action === "close" ? "" : "_blank";
+        
+                    if (isHome) {
+                        linkElement.textContent = 'HOME';
+                        linkElement.onclick = closeProjectDetail;
+                        linkElement.classList.add('home-link');
+                        homeLinkContainer.appendChild(linkElement);
+                    } else if (url) {
+                        linkElement.innerHTML = `<img src="${icon}" alt="Link Icon">`;
+                        otherLinksContainer.appendChild(linkElement);
+                    }
+                }
+            });
+        
+            projectLinksContainer.appendChild(homeLinkContainer);
+            projectLinksContainer.appendChild(otherLinksContainer);
+        }
+        
+        // Update team members
+        const teamData = JSON.parse(box.getAttribute("data-team") || '[]');
+        const teamSection = document.getElementById("teamMemberNames");
+        teamSection.textContent = teamData.length ? teamData.join(', ') : 'No team members available.';
+        
+        // Load gallery images
+        const imageGallery = document.getElementById("imageGallery");
+        imageGallery.innerHTML = ''; // Clear previous images
+        const images = JSON.parse(box.getAttribute("data-images") || '[]');
+        images.forEach(imageUrl => {
+            const img = document.createElement('img');
+            img.src = imageUrl;
+            img.alt = "Gallery Image";
+            imageGallery.appendChild(img);
+        });
+        
+        // Show the modal
+        modal.style.display = "block";
+        
+        // Close the search modal
+        const searchSectionModal = document.getElementById("searchSectionModal");
+        if (searchSectionModal) {
+            searchSectionModal.style.display = "none";
+        }
+    }
+    
+    // Function to update links conditionally
+    function updateLink(linkId, linkUrl, iconUrl) {
+        const linkElement = document.getElementById(linkId);
+        if (linkUrl) {
+            linkElement.style.display = "inline-block";
+            linkElement.href = linkUrl;
+            if (iconUrl) {
+                const iconElement = linkElement.querySelector("img");
+                if (iconElement) {
+                    iconElement.src = iconUrl;
+                }
+            }
+        } else {
+            linkElement.style.display = "none";
+        }
+    }
+
+    const projectDetailModal = document.getElementById("projectDetailModal");
+    if (projectDetailModal) {
+        // Reset the scroll position to the top
+        projectDetailModal.scrollTop = 0;
+
+        // Optionally clear dynamic content if needed
+        document.getElementById("teamMemberNames").textContent = "";
+        document.getElementById("imageGallery").innerHTML = "";
+        document.querySelector('.text-container').innerHTML = "";
+
+        // Hide the modal
+        projectDetailModal.style.display = "none";
+    } else {
+        console.error("Project Detail Modal not found.");
+    }
+
 });
+
+
 
 document.addEventListener("DOMContentLoaded", function () {
     // Get tab and content elements
