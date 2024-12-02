@@ -1013,7 +1013,8 @@ body.loading {
     text-align: center;
     max-width: 600px; /* Optional: limit the width of the content */
     width: 100%;
-    padding: 20px;
+    font-size: 0.9rem;
+    padding: 40px;
     background-color: white; /* White background for the content */
     border-radius: 8px; /* Optional: rounded corners */
 }
