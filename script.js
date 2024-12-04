@@ -1168,6 +1168,11 @@ document.addEventListener("DOMContentLoaded", function () {
     const aboutContent = document.getElementById("aboutContent");
     const closeInfoModal = document.getElementById("closeInfoSectionModal");
     const infoSectionModal = document.getElementById("infoSectionModal");
+    const homeTabLink = document.getElementById("homeTabLink");
+    homeTabLink.addEventListener("click", function (event) {
+        event.preventDefault();
+        infoSectionModal.style.display = "none";
+    });
 
     // Main INFO button click handler
     infoSectionLink.addEventListener("click", function (event) {
