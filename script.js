@@ -971,39 +971,55 @@ document.addEventListener("DOMContentLoaded", function () {
     const projectBoxes = document.querySelectorAll(".project-box");
 
     // Filter projects and display results when typing in the input
+    // Filter projects and display results when typing in the input
     mainSearchInput.addEventListener("input", function () {
         const query = mainSearchInput.value.toLowerCase();
         updateSearchResults(query);
     });
 
+        // Function to update search results
+        function updateSearchResults(query) {
+            searchContent.innerHTML = ""; // Clear previous results
+            searchContent.style.display = query ? "block" : "none"; // Show/hide results
 
-    // Function to update search results
-    function updateSearchResults(query) {
-        searchContent.innerHTML = ""; // Clear previous results
-        searchContent.style.display = query ? "block" : "none"; // Show/hide results
-
-        if (!query) return; // Exit if query is empty
-
-        projectBoxes.forEach(box => {
-            const title = box.getAttribute("data-title").toLowerCase();
-            if (title.includes(query)) {
-                const result = createSearchResult(box);
-                searchContent.appendChild(result);
+            if (!query) {
+                projectBoxes.forEach(box => {
+                    box.style.display = ""; // Show all projects
+                });
+                return; // Exit if query is empty
             }
-        });
-    }
-          // Function to create a result item
-    function createSearchResult(box) {
-        const result = document.createElement("div");
-        result.classList.add("search-result");
-        result.textContent = box.getAttribute("data-title");
-        result.addEventListener("click", function () {
-            openProjectModal(box); // Open the project modal
-        });
-        return result;
-    }
 
+            let hasMatch = false;
 
+            projectBoxes.forEach(box => {
+                const title = box.getAttribute("data-title").toLowerCase();
+                if (title.includes(query)) {
+                    hasMatch = true;
+                    box.style.display = ""; // Show matching project
+                    const result = createSearchResult(box);
+                    searchContent.appendChild(result);
+                } else {
+                    box.style.display = "none"; // Hide non-matching project
+                }
+            });
+
+            if (!hasMatch) {
+                const noResult = document.createElement("div");
+                noResult.classList.add("no-result");
+                noResult.textContent = "No projects match your search.";
+                searchContent.appendChild(noResult);
+            }
+        }
+        // Function to create a result item
+        function createSearchResult(box) {
+            const result = document.createElement("div");
+            result.classList.add("search-result");
+            result.textContent = box.getAttribute("data-title");
+            result.addEventListener("click", function () {
+                openProjectModal(box); // Open the project modal
+            });
+            return result;
+        }
     // Function to open and populate the project detail modal
     function openProjectModal(box) {
         const modal = document.getElementById("projectDetailModal");
