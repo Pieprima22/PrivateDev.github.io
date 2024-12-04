@@ -564,30 +564,29 @@ main {
     justify-content: flex-end; /* Ensures even spacing between links */
     align-items: flex-start; /* Align links to the top */
     gap: 10px; /* Adds consistent spacing between links */
-    margin-top: 15px;
-    height: 20px;
-    bottom: 20px;
+    margin-top: 10px;
+    height: 90px;
     position: relative; /* Allows alignment with .more-info-text */
 }
 
-/* Home Link Styles */
+/* Home Link */
 .home-link {
-    display: block; /* Ensure it's a block element for easier positioning */
+    position: absolute; /* Position independently of other links */
+    top: -2px; /* Align to the top border */
+    left: 2%; /* Align to the left border */
+    transform: rotate(45deg); /* Rotate the element */
+    transform-origin: top left; /* Ensure rotation starts from top-left corner */
     font-weight: bold;
     font-size: 1rem;
-    margin-left: 3px;
-    margin-top: -5px;
-    color: black; /* Default text color */
+    display: inline-block; /* Maintain proper dimensions */
+    color: black; /* Set text color */
     text-decoration: none; /* Remove underline */
-    transform: rotate(90deg); /* Rotate the element 90 degrees */
-    transform-origin: left center; /* Adjust the rotation pivot point */
+    margin: 0; /* Ensure no additional margins */
 }
-
-
 .home-link:hover {
-    color: rgb(255, 0, 0); /* Change text color on hover */
+    color: rgb(255, 0, 0); /* Keep text black on hover */
+    text-decoration: none; /* Prevent underline on hover */
 }
-
 
 .other-links {
     display: flex;
@@ -921,6 +920,7 @@ body.loading {
     font-size: 16px;
     border-radius: 5px;
     font-weight: bold;
+    font-size: 1rem;
     transition: background-color 0.3s ease;
 }
 
