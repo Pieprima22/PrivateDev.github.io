@@ -762,7 +762,7 @@ main {
     position: fixed; /* Keeps the close button in a fixed position relative to the viewport */
     top: 20px; /* Distance from the top of the viewport */
     right: 30px; /* Distance from the right of the viewport */
-    font-size: 35px; /* Adjust the font size */
+    font-size: 27px; /* Adjust the font size */
     color: black; /* Button color */
     cursor: pointer; /* Indicates the button is clickable */
     z-index: 1001; /* Ensures it stays above other elements */
@@ -1061,7 +1061,7 @@ color: rgb(255, 0, 0);}
     position: fixed; /* Make it fixed relative to the viewport */
     top: 10px; /* Adjust distance from the top */
     right: 50px; /* Adjust distance from the right */
-    font-size: 30px; /* Adjust size as needed */
+    font-size: 27px; /* Adjust size as needed */
     cursor: pointer; /* Add a pointer cursor for better UX */
     z-index: 1000; /* Ensure it stays above other modal content */
     background-color: #fff; /* Optional: Background color */

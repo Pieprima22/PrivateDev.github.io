@@ -974,8 +974,10 @@ const containers = {
     epoch: '.epoch-projects',
     alphabetical: '.alphabetical-header',
     programmatic: '.programmatic-projects',
-    scale: '.scale-projects'
+    scale: '.scale-projects',
+    location: '.location-projects' // Add a location container if needed
 };
+
 document.addEventListener("DOMContentLoaded", function () {
     const mainSearchInput = document.getElementById("mainSearchInput");
     const searchContent = document.getElementById("searchContent");
