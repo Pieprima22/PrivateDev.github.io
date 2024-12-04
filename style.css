@@ -565,28 +565,29 @@ main {
     align-items: flex-start; /* Align links to the top */
     gap: 10px; /* Adds consistent spacing between links */
     margin-top: 10px;
-    height: 90px;
+    height: 20px;
+    bottom: 20px;
     position: relative; /* Allows alignment with .more-info-text */
 }
 
-/* Home Link */
+/* Home Link Styles */
 .home-link {
-    position: absolute; /* Position independently of other links */
-    top: 0; /* Align to the top border */
-    left: 2%; /* Align to the left border */
-    transform: rotate(45deg); /* Rotate the element */
-    transform-origin: top left; /* Ensure rotation starts from top-left corner */
+    display: block; /* Ensure it's a block element for easier positioning */
     font-weight: bold;
     font-size: 1rem;
-    display: inline-block; /* Maintain proper dimensions */
-    color: black; /* Set text color */
+    margin-left: 3px;
+    margin-top: 2px;
+    color: black; /* Default text color */
     text-decoration: none; /* Remove underline */
-    margin: 0; /* Ensure no additional margins */
+    transform: rotate(90deg); /* Rotate the element 90 degrees */
+    transform-origin: left center; /* Adjust the rotation pivot point */
 }
+
+
 .home-link:hover {
-    color: rgb(255, 0, 0); /* Keep text black on hover */
-    text-decoration: none; /* Prevent underline on hover */
+    color: rgb(255, 0, 0); /* Change text color on hover */
 }
+
 
 .other-links {
     display: flex;
@@ -864,7 +865,7 @@ body.loading {
 }
 .info-tab {
     position: fixed;
-    bottom: 20px;
+    bottom: 19px;
     left: 20px;
     font-size: 1rem;
     background-color: #fff;

@@ -45,50 +45,33 @@ document.querySelectorAll('.project-box').forEach((box) => {
         projectImage.src = this.querySelector('.hover-image')?.src || 'default-image.png';
 
 // MODIFICATION: Ensure links are correctly set for ALL project types
-        const projectLinksContainer = document.querySelector('.project-links');
-        projectLinksContainer.innerHTML = ''; // Clear any previous links
+const projectLinksContainer = document.querySelector('.project-links');
+if (projectLinksContainer) {
+    projectLinksContainer.innerHTML = ''; // Clear existing links
 
-        const homeLinkContainer = document.createElement('div');
-        homeLinkContainer.className = 'home-link';
-        const otherLinksContainer = document.createElement('div');
-        otherLinksContainer.className = 'other-links';
+    const otherLinksContainer = document.createElement('div');
+    otherLinksContainer.className = 'other-links';
 
-        // Define the links array dynamically from the current project box
-        const links = [
-            { url: "javascript:void(0)", icon: "images.png", action: "close", isHome: true }, // Homepage
-            { url: this.getAttribute('data-3dmodel-link'), icon: this.getAttribute('data-3dmodel-icon') || 'default-3dmodel-icon.png', isHome: false }, // 3D Model
-            { url: this.getAttribute('data-drawings-link'), icon: this.getAttribute('data-drawings-icon') || 'default-drawings-icon.png', isHome: false }, // Drawings
-            { url: this.getAttribute('data-animation-link'), icon: this.getAttribute('data-animation-icon') || 'default-animation-icon.png', isHome: false }, // Animation
-            { url: this.getAttribute('data-visuals-link'), icon: this.getAttribute('data-visuals-icon') || 'default-visuals-icon.png', isHome: false }, // Visuals
-            { url: this.getAttribute('data-presentation-link'), icon: this.getAttribute('data-presentation-icon') || 'default-presentation-icon.png', isHome: false } // Presentation
-        ];
+    const links = [
+        { url: box.getAttribute('data-3dmodel-link'), icon: box.getAttribute('data-3dmodel-icon') || 'default-3dmodel-icon.png' },
+        { url: box.getAttribute('data-drawings-link'), icon: box.getAttribute('data-drawings-icon') || 'default-drawings-icon.png' },
+        { url: box.getAttribute('data-animation-link'), icon: box.getAttribute('data-animation-icon') || 'default-animation-icon.png' },
+        { url: box.getAttribute('data-visuals-link'), icon: box.getAttribute('data-visuals-icon') || 'default-visuals-icon.png' },
+        { url: box.getAttribute('data-presentation-link'), icon: box.getAttribute('data-presentation-icon') || 'default-presentation-icon.png' }
+    ];
 
-        // UPDATED: Ensure links are filtered and added correctly
-        links.forEach(({ url, icon, action, isHome }) => {
-            if (url || action === "close") {
-                const linkElement = document.createElement('a');
-                linkElement.href = url || 'javascript:void(0)';
-                linkElement.target = action === "close" ? "" : "_blank";
+    links.forEach(({ url, icon }) => {
+        if (url) {
+            const linkElement = document.createElement('a');
+            linkElement.href = url;
+            linkElement.target = "_blank";
+            linkElement.innerHTML = `<img src="${icon}" alt="Link Icon">`;
+            otherLinksContainer.appendChild(linkElement);
+        }
+    });
 
-                if (isHome) {
-                    linkElement.textContent = 'HOME';
-                    linkElement.onclick = closeProjectDetail;
-                    linkElement.classList.add('home-link');
-                    homeLinkContainer.appendChild(linkElement);
-                } else {
-                    // Ensure the icon is added only if a URL exists
-                    if (url) {
-                        linkElement.innerHTML = `<img src="${icon}" alt="Link Icon">`;
-                        otherLinksContainer.appendChild(linkElement);
-                    }
-                }
-            }
-        });
-
-        // Append containers and handle display
-        projectLinksContainer.appendChild(homeLinkContainer);
-        projectLinksContainer.appendChild(otherLinksContainer);
-        projectLinksContainer.style.display = projectLinksContainer.childElementCount > 0 ? 'flex' : 'none';
+    projectLinksContainer.appendChild(otherLinksContainer);
+}
 
 
         // Load gallery images
@@ -163,54 +146,34 @@ window.closeProjectDetail = function () {
 function updateProjectLinks(projectBox) {
     // Get project links container
     const projectLinksContainer = document.querySelector('.project-links');
-    if (!projectLinksContainer) return;
-
-    // Clear existing links
-    projectLinksContainer.innerHTML = '';
-
-    // Create containers for home link and other links
-    const homeLinkContainer = document.createElement('div');
-    homeLinkContainer.className = 'home-link';
-    const otherLinksContainer = document.createElement('div');
-    otherLinksContainer.className = 'other-links';
-
-    // Define the links array dynamically from the current project box
-    const links = [
-        { url: "javascript:void(0)", icon: "images.png", action: "close", isHome: true },
-        { url: projectBox.getAttribute('data-3dmodel-link'), icon: projectBox.getAttribute('data-3dmodel-icon') || 'default-3dmodel-icon.png', isHome: false },
-        { url: projectBox.getAttribute('data-drawings-link'), icon: projectBox.getAttribute('data-drawings-icon') || 'default-drawings-icon.png', isHome: false },
-        { url: projectBox.getAttribute('data-animation-link'), icon: projectBox.getAttribute('data-animation-icon') || 'default-animation-icon.png', isHome: false },
-        { url: projectBox.getAttribute('data-visuals-link'), icon: projectBox.getAttribute('data-visuals-icon') || 'default-visuals-icon.png', isHome: false },
-        { url: projectBox.getAttribute('data-presentation-link'), icon: projectBox.getAttribute('data-presentation-icon') || 'default-presentation-icon.png', isHome: false }
-    ];
-
-    // Create and append links
-    links.forEach(({ url, icon, action, isHome }) => {
-        if (url || action === "close") {
-            const linkElement = document.createElement('a');
-            linkElement.href = url || 'javascript:void(0)';
-            linkElement.target = action === "close" ? "" : "_blank";
-
-            if (isHome) {
-                linkElement.textContent = 'HOME';
-                linkElement.onclick = closeProjectDetail;
-                linkElement.classList.add('home-link');
-                homeLinkContainer.appendChild(linkElement);
-            } else {
-                if (url) {
-                    linkElement.innerHTML = `<img src="${icon}" alt="Link Icon">`;
-                    otherLinksContainer.appendChild(linkElement);
-                }
+    if (projectLinksContainer) {
+        projectLinksContainer.innerHTML = ''; // Clear existing links
+    
+        const otherLinksContainer = document.createElement('div');
+        otherLinksContainer.className = 'other-links';
+    
+        const links = [
+            { url: box.getAttribute('data-3dmodel-link'), icon: box.getAttribute('data-3dmodel-icon') || 'default-3dmodel-icon.png' },
+            { url: box.getAttribute('data-drawings-link'), icon: box.getAttribute('data-drawings-icon') || 'default-drawings-icon.png' },
+            { url: box.getAttribute('data-animation-link'), icon: box.getAttribute('data-animation-icon') || 'default-animation-icon.png' },
+            { url: box.getAttribute('data-visuals-link'), icon: box.getAttribute('data-visuals-icon') || 'default-visuals-icon.png' },
+            { url: box.getAttribute('data-presentation-link'), icon: box.getAttribute('data-presentation-icon') || 'default-presentation-icon.png' }
+        ];
+    
+        links.forEach(({ url, icon }) => {
+            if (url) {
+                const linkElement = document.createElement('a');
+                linkElement.href = url;
+                linkElement.target = "_blank";
+                linkElement.innerHTML = `<img src="${icon}" alt="Link Icon">`;
+                otherLinksContainer.appendChild(linkElement);
             }
-        }
-    });
-
-    // Append containers
-    projectLinksContainer.appendChild(homeLinkContainer);
-    projectLinksContainer.appendChild(otherLinksContainer);
-    projectLinksContainer.style.display = projectLinksContainer.childElementCount > 0 ? 'flex' : 'none';
+        });
+    
+        projectLinksContainer.appendChild(otherLinksContainer);
+    }
+    
 }
-
 
 function addClickEventToProjectBox(projectBox) {
     projectBox.addEventListener('click', function () {
@@ -274,52 +237,34 @@ function addClickEventToProjectBox(projectBox) {
                 : 'No team members available.';
         }
 
-        // Update Project Links
         const projectLinksContainer = document.querySelector('.project-links');
         if (projectLinksContainer) {
-            // Clear existing links
-            projectLinksContainer.innerHTML = '';
-
-            // Create containers
-            const homeLinkContainer = document.createElement('div');
-            homeLinkContainer.className = 'home-link';
+            projectLinksContainer.innerHTML = ''; // Clear existing links
+        
             const otherLinksContainer = document.createElement('div');
             otherLinksContainer.className = 'other-links';
-
-            // Define links configuration
+        
             const links = [
-                { url: "javascript:void(0)", icon: "images.png", action: "close", isHome: true },
-                { url: this.getAttribute('data-3dmodel-link'), icon: this.getAttribute('data-3dmodel-icon'), type: "3D Model" },
-                { url: this.getAttribute('data-drawings-link'), icon: this.getAttribute('data-drawings-icon'), type: "Drawings" },
-                { url: this.getAttribute('data-animation-link'), icon: this.getAttribute('data-animation-icon'), type: "Animation" },
-                { url: this.getAttribute('data-visuals-link'), icon: this.getAttribute('data-visuals-icon'), type: "Visuals" },
-                { url: this.getAttribute('data-presentation-link'), icon: this.getAttribute('data-presentation-icon'), type: "Presentation" }
+                { url: box.getAttribute('data-3dmodel-link'), icon: box.getAttribute('data-3dmodel-icon') || 'default-3dmodel-icon.png' },
+                { url: box.getAttribute('data-drawings-link'), icon: box.getAttribute('data-drawings-icon') || 'default-drawings-icon.png' },
+                { url: box.getAttribute('data-animation-link'), icon: box.getAttribute('data-animation-icon') || 'default-animation-icon.png' },
+                { url: box.getAttribute('data-visuals-link'), icon: box.getAttribute('data-visuals-icon') || 'default-visuals-icon.png' },
+                { url: box.getAttribute('data-presentation-link'), icon: box.getAttribute('data-presentation-icon') || 'default-presentation-icon.png' }
             ];
-
-            // Create and append links
-            links.forEach(({ url, icon, action, isHome, type }) => {
-                if (url || action === "close") {
+        
+            links.forEach(({ url, icon }) => {
+                if (url) {
                     const linkElement = document.createElement('a');
-                    linkElement.href = url || 'javascript:void(0)';
-                    linkElement.target = action === "close" ? "" : "_blank";
-
-                    if (isHome) {
-                        linkElement.textContent = 'HOME';
-                        linkElement.onclick = closeProjectDetail;
-                        linkElement.classList.add('home-link');
-                        homeLinkContainer.appendChild(linkElement);
-                    } else if (url) {
-                        linkElement.innerHTML = `<img src="${icon || `default-${type.toLowerCase()}-icon.png`}" alt="${type} Icon">`;
-                        otherLinksContainer.appendChild(linkElement);
-                    }
+                    linkElement.href = url;
+                    linkElement.target = "_blank";
+                    linkElement.innerHTML = `<img src="${icon}" alt="Link Icon">`;
+                    otherLinksContainer.appendChild(linkElement);
                 }
             });
-
-            // Append containers
-            projectLinksContainer.appendChild(homeLinkContainer);
+        
             projectLinksContainer.appendChild(otherLinksContainer);
         }
-
+        
         // Load gallery images
         const imageGallery = document.getElementById('imageGallery');
         imageGallery.innerHTML = '';
@@ -1053,41 +998,30 @@ document.addEventListener("DOMContentLoaded", function () {
         if (projectLinksContainer) {
             projectLinksContainer.innerHTML = ''; // Clear existing links
         
-            const homeLinkContainer = document.createElement('div');
-            homeLinkContainer.className = 'home-link';
             const otherLinksContainer = document.createElement('div');
             otherLinksContainer.className = 'other-links';
         
             const links = [
-                { url: "javascript:void(0)", icon: "images.png", action: "close", isHome: true },
-                { url: box.getAttribute('data-3dmodel-link'), icon: box.getAttribute('data-3dmodel-icon') || 'default-3dmodel-icon.png', isHome: false },
-                { url: box.getAttribute('data-drawings-link'), icon: box.getAttribute('data-drawings-icon') || 'default-drawings-icon.png', isHome: false },
-                { url: box.getAttribute('data-animation-link'), icon: box.getAttribute('data-animation-icon') || 'default-animation-icon.png', isHome: false },
-                { url: box.getAttribute('data-visuals-link'), icon: box.getAttribute('data-visuals-icon') || 'default-visuals-icon.png', isHome: false },
-                { url: box.getAttribute('data-presentation-link'), icon: box.getAttribute('data-presentation-icon') || 'default-presentation-icon.png', isHome: false }
+                { url: box.getAttribute('data-3dmodel-link'), icon: box.getAttribute('data-3dmodel-icon') || 'default-3dmodel-icon.png' },
+                { url: box.getAttribute('data-drawings-link'), icon: box.getAttribute('data-drawings-icon') || 'default-drawings-icon.png' },
+                { url: box.getAttribute('data-animation-link'), icon: box.getAttribute('data-animation-icon') || 'default-animation-icon.png' },
+                { url: box.getAttribute('data-visuals-link'), icon: box.getAttribute('data-visuals-icon') || 'default-visuals-icon.png' },
+                { url: box.getAttribute('data-presentation-link'), icon: box.getAttribute('data-presentation-icon') || 'default-presentation-icon.png' }
             ];
         
-            links.forEach(({ url, icon, action, isHome }) => {
-                if (url || action === "close") {
+            links.forEach(({ url, icon }) => {
+                if (url) {
                     const linkElement = document.createElement('a');
-                    linkElement.href = url || 'javascript:void(0)';
-                    linkElement.target = action === "close" ? "" : "_blank";
-        
-                    if (isHome) {
-                        linkElement.textContent = 'HOME';
-                        linkElement.onclick = closeProjectDetail;
-                        linkElement.classList.add('home-link');
-                        homeLinkContainer.appendChild(linkElement);
-                    } else if (url) {
-                        linkElement.innerHTML = `<img src="${icon}" alt="Link Icon">`;
-                        otherLinksContainer.appendChild(linkElement);
-                    }
+                    linkElement.href = url;
+                    linkElement.target = "_blank";
+                    linkElement.innerHTML = `<img src="${icon}" alt="Link Icon">`;
+                    otherLinksContainer.appendChild(linkElement);
                 }
             });
         
-            projectLinksContainer.appendChild(homeLinkContainer);
             projectLinksContainer.appendChild(otherLinksContainer);
         }
+        
         
         // Update team members
         const teamData = JSON.parse(box.getAttribute("data-team") || '[]');
