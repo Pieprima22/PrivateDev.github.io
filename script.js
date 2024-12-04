@@ -576,43 +576,45 @@ function sortProjects(criteria) {
                     iconDiv.style.cursor = 'pointer';
                     iconDiv.style.zIndex = 1000 + index;
                     iconDiv.classList.add('project-globe-marker');
-                        // Create hover image using the same class
-                    const hoverImageDiv = document.createElement('div');
+                    
+                        // Add the hover image
+                    const hoverImageDiv = document.createElement('img');
+                    const hoverImage = projectBox.querySelector('.hover-image');
+                    if (hoverImage) {
+                        hoverImageDiv.src = hoverImage.src;
+                    }
                     hoverImageDiv.classList.add('hover-image');
-                    hoverImageDiv.style.backgroundImage = `url(${projectBox.getAttribute('data-hover-image')})`;
-
+                    hoverImageDiv.style.position = 'absolute';
+                    hoverImageDiv.style.display = 'none';
+                    hoverImageDiv.style.width = '50px'; // Increased size for better visibility
+                    hoverImageDiv.style.height = '50px';
+                    hoverImageDiv.style.transform = 'translate(-50%, -100%)'; // Position above the icon
+                    hoverImageDiv.style.top = '40px'; // Offset from the icon
+                    hoverImageDiv.style.zIndex = '2000'; // Higher z-index to ensure visibility
                     iconDiv.appendChild(hoverImageDiv);
 
-                    // Create a tooltip element
+                    // Tooltip creation
                     const tooltip = document.createElement('div');
                     tooltip.classList.add('tooltip');
-                    tooltip.textContent = projectBox.getAttribute('data-title') || 'Untitled Project'; // Add project title as tooltip text
+                    tooltip.textContent = projectBox.getAttribute('data-title') || 'Untitled Project';
                     document.body.appendChild(tooltip);
-                
-                    // Show tooltip on hover
+
+                    // Show tooltip and hover image on hover
                     iconDiv.addEventListener('mouseenter', (event) => {
-                        hoverImageDiv.style.display = 'block'; // Show hover image
-
+                        tooltip.textContent = projectBox.getAttribute('data-title') || 'Untitled Project';
                         tooltip.style.display = 'block';
-                        hoverImageDiv.style.display = 'none'; // Hide hover image
-
-                        tooltip.style.left = `${event.pageX + 10}px`; // Position tooltip relative to mouse
-                        tooltip.style.top = `${event.pageY + 10}px`;
+                        hoverImageDiv.style.display = 'block';
                     });
-                
-                    // Move tooltip with the mouse
-                    iconDiv.addEventListener('mousemove', (event) => {
-                        hoverImageDiv.style.display = 'none'; // Hide hover image
 
+                    iconDiv.addEventListener('mousemove', (event) => {
                         tooltip.style.left = `${event.pageX + 10}px`;
                         tooltip.style.top = `${event.pageY + 10}px`;
+                        // Remove the line that hides the hover image
                     });
-                
-                    // Hide tooltip when not hovering
-                    iconDiv.addEventListener('mouseleave', () => {
-                        hoverImageDiv.style.display = 'none'; // Hide hover image
 
+                    iconDiv.addEventListener('mouseleave', () => {
                         tooltip.style.display = 'none';
+                        hoverImageDiv.style.display = 'none';
                     });
                 
                     iconDiv.addEventListener('click', () => projectBox.click());
