@@ -967,62 +967,79 @@ function updateModal(projectBox) {
         console.error('Missing data-new-image for project:', projectBox);
     }
 }
+
+// Get all sorting view containers including location
+const containers = {
+    chronological: '.symbol-grid',
+    epoch: '.epoch-projects',
+    alphabetical: '.alphabetical-header',
+    programmatic: '.programmatic-projects',
+    scale: '.scale-projects',
+    location: '#globe-container'
+};
 document.addEventListener("DOMContentLoaded", function () {
     const mainSearchInput = document.getElementById("mainSearchInput");
     const searchContent = document.getElementById("searchContent");
-    const projectBoxes = document.querySelectorAll(".project-box");
-
-    // Filter projects and display results when typing in the input
-    // Filter projects and display results when typing in the input
+    
     mainSearchInput.addEventListener("input", function () {
         const query = mainSearchInput.value.toLowerCase();
         updateSearchResults(query);
     });
 
-        // Function to update search results
-        function updateSearchResults(query) {
-            searchContent.innerHTML = ""; // Clear previous results
-            searchContent.style.display = query ? "block" : "none"; // Show/hide results
+    function updateSearchResults(query) {
+        searchContent.innerHTML = "";
+        searchContent.style.display = query ? "block" : "none";
 
-            if (!query) {
-                projectBoxes.forEach(box => {
-                    box.style.display = ""; // Show all projects
-                });
-                return; // Exit if query is empty
-            }
-
-            let hasMatch = false;
-
-            projectBoxes.forEach(box => {
-                const title = box.getAttribute("data-title").toLowerCase();
-                if (title.includes(query)) {
-                    hasMatch = true;
-                    box.style.display = ""; // Show matching project
-                    const result = createSearchResult(box);
-                    searchContent.appendChild(result);
-                } else {
-                    box.style.display = "none"; // Hide non-matching project
+        if (!query) {
+            // Show all projects in all views
+            Object.values(containers).forEach(containerSelector => {
+                const container = document.querySelector(containerSelector);
+                if (container) {
+                    container.querySelectorAll('.project-box').forEach(box => {
+                        box.style.display = "";
+                    });
                 }
             });
+            return;
+        }
 
-            if (!hasMatch) {
-                const noResult = document.createElement("div");
-                noResult.classList.add("no-result");
-                noResult.textContent = "No projects match your search.";
-                searchContent.appendChild(noResult);
+        let hasMatch = false;
+
+        // Search in all containers
+        Object.values(containers).forEach(containerSelector => {
+            const container = document.querySelector(containerSelector);
+            if (container) {
+                container.querySelectorAll('.project-box').forEach(box => {
+                    const title = box.getAttribute("data-title").toLowerCase();
+                    if (title.includes(query)) {
+                        hasMatch = true;
+                        box.style.display = "";
+                        const result = createSearchResult(box);
+                        searchContent.appendChild(result);
+                    } else {
+                        box.style.display = "none";
+                    }
+                });
             }
+        });
+
+        if (!hasMatch) {
+            const noResult = document.createElement("div");
+            noResult.classList.add("no-result");
+            noResult.textContent = "No projects match your search.";
+            searchContent.appendChild(noResult);
         }
-        // Function to create a result item
-        function createSearchResult(box) {
-            const result = document.createElement("div");
-            result.classList.add("search-result");
-            result.textContent = box.getAttribute("data-title");
-            result.addEventListener("click", function () {
-                openProjectModal(box); // Open the project modal
-            });
-            return result;
-        }
-    // Function to open and populate the project detail modal
+    }
+
+    function createSearchResult(box) {
+        const result = document.createElement("div");
+        result.classList.add("search-result");
+        result.textContent = box.getAttribute("data-title");
+        result.addEventListener("click", function () {
+            openProjectModal(box);
+        });
+        return result;
+    }
     function openProjectModal(box) {
         const modal = document.getElementById("projectDetailModal");
         
