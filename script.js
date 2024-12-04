@@ -965,52 +965,24 @@ function updateModal(projectBox) {
         console.error('Missing data-new-image for project:', projectBox);
     }
 }
-
 document.addEventListener("DOMContentLoaded", function () {
-    const searchTabLink = document.getElementById("searchTabLink");
-    const searchSectionModal = document.getElementById("searchSectionModal");
-    const closeSearchModal = document.getElementById("closeSearchModal");
-    const searchInput = document.getElementById("searchInput");
+    const mainSearchInput = document.getElementById("mainSearchInput");
     const searchContent = document.getElementById("searchContent");
     const projectBoxes = document.querySelectorAll(".project-box");
 
-    // Initially hide the search modal
-    if (searchSectionModal) {
-        searchSectionModal.style.display = "none";
-    }
-
-    // Show search modal when search tab is clicked
-    searchTabLink.addEventListener("click", function (event) {
-        event.preventDefault();
-        searchSectionModal.style.display = "block";
-        searchInput.value = ""; // Clear previous search input
-        updateSearchResults(""); // Clear previous results
-    });
-
-    // Close modal when close button is clicked
-    closeSearchModal.addEventListener("click", function () {
-        searchSectionModal.style.display = "none";
-    });
-
-    // Close modal when clicking outside
-    window.addEventListener("click", function (event) {
-        if (event.target === searchSectionModal) {
-            searchSectionModal.style.display = "none";
-        }
-    });
-
-    // Filter projects based on search input
-    searchInput.addEventListener("input", function () {
-        const query = searchInput.value.toLowerCase();
+    // Filter projects and display results when typing in the input
+    mainSearchInput.addEventListener("input", function () {
+        const query = mainSearchInput.value.toLowerCase();
         updateSearchResults(query);
     });
 
+
     // Function to update search results
     function updateSearchResults(query) {
-        const existingResults = searchContent.querySelectorAll(".search-result");
-        existingResults.forEach(result => result.remove());
+        searchContent.innerHTML = ""; // Clear previous results
+        searchContent.style.display = query ? "block" : "none"; // Show/hide results
 
-        if (!query) return;
+        if (!query) return; // Exit if query is empty
 
         projectBoxes.forEach(box => {
             const title = box.getAttribute("data-title").toLowerCase();
@@ -1020,19 +992,17 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         });
     }
-
-    // Function to create a search result element
+          // Function to create a result item
     function createSearchResult(box) {
         const result = document.createElement("div");
         result.classList.add("search-result");
         result.textContent = box.getAttribute("data-title");
-
         result.addEventListener("click", function () {
-            openProjectModal(box);
+            openProjectModal(box); // Open the project modal
         });
-
         return result;
     }
+
 
     // Function to open and populate the project detail modal
     function openProjectModal(box) {
@@ -1178,8 +1148,14 @@ document.addEventListener("DOMContentLoaded", function () {
         console.error("Project Detail Modal not found.");
     }
 
+  // Hide the search results and input when clicking outside
+  document.addEventListener("click", function (event) {
+    if (!event.target.closest(".search-tab") && !event.target.closest("#searchContent")) {
+        mainSearchInput.classList.remove("visible");
+        searchContent.style.display = "none";
+    }
 });
-
+});
 
 
 document.addEventListener("DOMContentLoaded", function () {
