@@ -968,14 +968,13 @@ function updateModal(projectBox) {
     }
 }
 
-// Get all sorting view containers including location
+// Get all sorting view containers
 const containers = {
     chronological: '.symbol-grid',
     epoch: '.epoch-projects',
     alphabetical: '.alphabetical-header',
     programmatic: '.programmatic-projects',
-    scale: '.scale-projects',
-    location: '#globe-container'
+    scale: '.scale-projects'
 };
 document.addEventListener("DOMContentLoaded", function () {
     const mainSearchInput = document.getElementById("mainSearchInput");
