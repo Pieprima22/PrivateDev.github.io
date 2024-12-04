@@ -876,7 +876,7 @@ body.loading {
 .left-tab {
     position: fixed;
     top: 10px;
-    left: 10px;
+    left: 20px;
     background-color: #ffffff;
     height: 100%;
     width: 200px;
@@ -906,6 +906,25 @@ body.loading {
 .left-tab-link.active {
     color: red;
 }
+/* Bottom-left Home Link */
+.bottom-left-home-link {
+    position: absolute;
+    bottom: 38px;
+
+}
+
+.home-tab-link {
+    display: inline-block;
+    color: #000000; /* White text */
+    text-decoration: none;
+    font-size: 16px;
+    border-radius: 5px;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+}
+
+.home-tab-link:hover {
+color: rgb(255, 0, 0);}
 
 /* Ensure padding at the bottom of the content container */
 .info-main-content {
@@ -1036,4 +1055,14 @@ body.loading {
     z-index: 1000;
     background-color: #fff;
     color: #333333;
+}
+.close-button {
+    position: fixed; /* Make it fixed relative to the viewport */
+    top: 10px; /* Adjust distance from the top */
+    right: 50px; /* Adjust distance from the right */
+    font-size: 30px; /* Adjust size as needed */
+    cursor: pointer; /* Add a pointer cursor for better UX */
+    z-index: 1000; /* Ensure it stays above other modal content */
+    background-color: #fff; /* Optional: Background color */
+    padding: 5px; /* Optional: Add some padding */
 }
