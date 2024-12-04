@@ -564,7 +564,7 @@ main {
     justify-content: flex-end; /* Ensures even spacing between links */
     align-items: flex-start; /* Align links to the top */
     gap: 10px; /* Adds consistent spacing between links */
-    margin-top: 10px;
+    margin-top: 15px;
     height: 20px;
     bottom: 20px;
     position: relative; /* Allows alignment with .more-info-text */
@@ -576,7 +576,7 @@ main {
     font-weight: bold;
     font-size: 1rem;
     margin-left: 3px;
-    margin-top: 2px;
+    margin-top: -5px;
     color: black; /* Default text color */
     text-decoration: none; /* Remove underline */
     transform: rotate(90deg); /* Rotate the element 90 degrees */
@@ -866,7 +866,7 @@ body.loading {
 .info-tab {
     position: fixed;
     bottom: 19px;
-    left: 20px;
+    left: 15px;
     font-size: 1rem;
     background-color: #fff;
     padding: 8px 25px;
