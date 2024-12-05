@@ -980,53 +980,90 @@ const containers = {
 document.addEventListener("DOMContentLoaded", function () {
     const mainSearchInput = document.getElementById("mainSearchInput");
     const searchContent = document.getElementById("searchContent");
-    
-    mainSearchInput.addEventListener("input", function () {
+
+    // List of predefined keywords for auto-fill
+    const suggestions = ["Highrise", "Award", "Cultural", "Residential", "Hospitality"];
+
+    mainSearchInput.addEventListener("input", function (event) {
         const query = mainSearchInput.value.toLowerCase();
+    
+        // Skip auto-fill for Backspace or Delete keys
+        if (event.inputType === "deleteContentBackward" || event.inputType === "deleteContentForward") {
+            updateSearchResults(query); // Still update the search results
+            return;
+        }
+    
+        const matchingSuggestion = suggestions.find(suggestion =>
+            suggestion.toLowerCase().startsWith(query)
+        );
+    
+        // Auto-fill the input if there's a matching suggestion
+        if (matchingSuggestion && query.length > 0) {
+            mainSearchInput.value = matchingSuggestion;
+            mainSearchInput.setSelectionRange(query.length, matchingSuggestion.length);
+        }
+    
+        // Trigger search with the current query
         updateSearchResults(query);
+    });
+    
+    // Ensure cursor position is correct when typing or using auto-fill
+    mainSearchInput.addEventListener("keydown", function (event) {
+        if (event.key === "Backspace" || event.key === "Delete") {
+            // Allow editing without forcing auto-fill
+            mainSearchInput.setSelectionRange(mainSearchInput.value.length, mainSearchInput.value.length);
+        }
     });
 
     function updateSearchResults(query) {
         searchContent.innerHTML = "";
         searchContent.style.display = query ? "block" : "none";
-    
+
+        // Show all projects if no query is provided
         if (!query) {
-            // Show all projects in the currently active container
             Object.values(containers).forEach(containerSelector => {
                 const container = document.querySelector(containerSelector);
                 if (container) {
-                    container.querySelectorAll('.project-box').forEach(box => {
+                    container.querySelectorAll(".project-box").forEach(box => {
                         box.style.display = "";
                     });
                 }
             });
             return;
         }
-    
+
         let hasMatch = false;
-        const displayedProjects = new Set(); // To avoid duplicates
-    
-        // Search in visible projects only
+        const displayedTitles = new Set(); // Track displayed project titles to avoid duplicates
+
+        // Ensure only visible containers are searched
         Object.values(containers).forEach(containerSelector => {
             const container = document.querySelector(containerSelector);
             if (container && container.style.display !== "none") {
-                container.querySelectorAll('.project-box').forEach(box => {
+                container.querySelectorAll(".project-box").forEach(box => {
                     const title = box.getAttribute("data-title").toLowerCase();
-                    if (title.includes(query)) {
-                        hasMatch = true;
-                        if (!displayedProjects.has(title)) {
-                            displayedProjects.add(title);
+                    const highrise = box.getAttribute("data-highrise")?.toLowerCase() || "";
+                    const award = box.getAttribute("data-award")?.toLowerCase() || "";
+
+                    // Match against title, highrise, or award attributes
+                    if (
+                        title.includes(query) ||
+                        highrise.includes(query) ||
+                        award.includes(query)
+                    ) {
+                        if (!displayedTitles.has(title)) {
+                            hasMatch = true;
+                            displayedTitles.add(title);
                             const result = createSearchResult(box);
                             searchContent.appendChild(result);
                         }
-                        box.style.display = ""; // Ensure the box is visible
+                        box.style.display = ""; // Ensure the project is visible
                     } else {
                         box.style.display = "none"; // Hide non-matching projects
                     }
                 });
             }
         });
-    
+
         if (!hasMatch) {
             const noResult = document.createElement("div");
             noResult.classList.add("no-result");
@@ -1034,7 +1071,6 @@ document.addEventListener("DOMContentLoaded", function () {
             searchContent.appendChild(noResult);
         }
     }
-    
 
     function createSearchResult(box) {
         const result = document.createElement("div");
@@ -1045,6 +1081,8 @@ document.addEventListener("DOMContentLoaded", function () {
         });
         return result;
     }
+
+
     function openProjectModal(box) {
         const modal = document.getElementById("projectDetailModal");
         
