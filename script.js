@@ -991,10 +991,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
     mainSearchInput.addEventListener("input", function (event) {
         const query = mainSearchInput.value.toLowerCase();
-    
-        // Directly update search results without modifying the input field
         updateSearchResults(query);
     });
+
     
     // Ensure cursor position is correct when typing or using auto-fill
     mainSearchInput.addEventListener("keydown", function (event) {
@@ -1011,35 +1010,74 @@ document.addEventListener("DOMContentLoaded", function () {
         const globeContainer = document.getElementById('globe-container');
         const isLocationView = globeContainer && globeContainer.style.display !== 'none';
     
-        // Show all projects if no query is provided
-        if (!query) {
-            if (isLocationView) {
-                document.querySelectorAll('.project-globe-marker').forEach(marker => {
-                    marker.style.display = '';
-                    marker.style.opacity = '1';
-                });
-            } else {
-                Object.values(containers).forEach(containerSelector => {
-                    const container = document.querySelector(containerSelector);
-                    if (container) {
-                        container.querySelectorAll(".project-box").forEach(box => {
-                            box.style.display = "";
-                            box.style.visibility = "visible";
-                            box.style.position = "relative";
-                        });
-                    }
-                });
-            }
-            return;
-        }
-    
         let hasMatch = false;
         const displayedTitles = new Set();
         const displayedKeywords = new Set();
         const matchingProjects = new Set();
     
-        if (isLocationView) {
-            // Handle search in location view
+        // Handle search across all project boxes first
+        document.querySelectorAll('.project-box').forEach(box => {
+            const title = box.getAttribute("data-title")?.toLowerCase() || "";
+            const location = box.getAttribute("data-location")?.toLowerCase() || "";
+            const highrise = box.getAttribute("data-highrise")?.toLowerCase() || "";
+            const award = box.getAttribute("data-award")?.toLowerCase() || "";
+    
+            if (title.includes(query) || 
+                location.includes(query) || 
+                highrise.includes(query) || 
+                award.includes(query)) {
+                
+                matchingProjects.add(box);
+                hasMatch = true;
+    
+                if (!displayedTitles.has(title)) {
+                    displayedTitles.add(title);
+                    const result = createSearchResult(box);
+                    searchContent.appendChild(result);
+                }
+    
+                // Add keyword results
+                if (award.includes(query) && !displayedKeywords.has("AWARD")) {
+                    displayedKeywords.add("AWARD");
+                    const awardResult = createSearchResult(null, "AWARD");
+                    searchContent.appendChild(awardResult);
+                }
+                if (highrise.includes(query) && !displayedKeywords.has("HIGHRISE")) {
+                    displayedKeywords.add("HIGHRISE");
+                    const highriseResult = createSearchResult(null, "HIGHRISE");
+                    searchContent.appendChild(highriseResult);
+                }
+            }
+        });
+    
+        // Update visibility in all views
+        if (!query) {
+            // Show all projects when search is empty
+            document.querySelectorAll('.project-box').forEach(box => {
+                box.style.display = "";
+                box.style.visibility = "visible";
+                box.style.position = "relative";
+            });
+    
+            document.querySelectorAll('.project-globe-marker').forEach(marker => {
+                marker.style.display = '';
+                marker.style.opacity = '1';
+            });
+        } else {
+            // Update visibility in regular views
+            document.querySelectorAll('.project-box').forEach(box => {
+                if (matchingProjects.has(box)) {
+                    box.style.display = "";
+                    box.style.visibility = "visible";
+                    box.style.position = "relative";
+                } else {
+                    box.style.display = "none";
+                    box.style.visibility = "hidden";
+                    box.style.position = "absolute";
+                }
+            });
+    
+            // Update visibility in location view
             document.querySelectorAll('.project-globe-marker').forEach(marker => {
                 const title = marker.getAttribute("data-title")?.toLowerCase() || "";
                 const location = marker.getAttribute("data-location")?.toLowerCase() || "";
@@ -1050,85 +1088,11 @@ document.addEventListener("DOMContentLoaded", function () {
                     location.includes(query) || 
                     highrise.includes(query) || 
                     award.includes(query)) {
-                    
-                    hasMatch = true;
                     marker.style.display = '';
                     marker.style.opacity = '1';
-    
-                    // Add to search results
-                    if (!displayedTitles.has(title)) {
-                        displayedTitles.add(title);
-                        const result = createSearchResult(marker);
-                        searchContent.appendChild(result);
-                    }
-    
-                    // Add keyword results
-                    if (award.includes(query) && !displayedKeywords.has("AWARD")) {
-                        displayedKeywords.add("AWARD");
-                        const awardResult = createSearchResult(null, "AWARD");
-                        searchContent.appendChild(awardResult);
-                    }
-                    if (highrise.includes(query) && !displayedKeywords.has("HIGHRISE")) {
-                        displayedKeywords.add("HIGHRISE");
-                        const highriseResult = createSearchResult(null, "HIGHRISE");
-                        searchContent.appendChild(highriseResult);
-                    }
                 } else {
                     marker.style.display = 'none';
                     marker.style.opacity = '0';
-                }
-            });
-        } else {
-            // Handle search in other views
-            Object.values(containers).forEach(containerSelector => {
-                const container = document.querySelector(containerSelector);
-                if (container && containerSelector !== '#globe-container') {
-                    container.querySelectorAll(".project-box").forEach(box => {
-                        const title = box.getAttribute("data-title")?.toLowerCase() || "";
-                        const highrise = box.getAttribute("data-highrise")?.toLowerCase() || "";
-                        const award = box.getAttribute("data-award")?.toLowerCase() || "";
-    
-                        if (title.includes(query) || highrise.includes(query) || award.includes(query)) {
-                            matchingProjects.add(box);
-                            hasMatch = true;
-    
-                            if (!displayedTitles.has(title)) {
-                                displayedTitles.add(title);
-                                const result = createSearchResult(box);
-                                searchContent.appendChild(result);
-                            }
-    
-                            // Add keyword results
-                            if (award.includes(query) && !displayedKeywords.has("AWARD")) {
-                                displayedKeywords.add("AWARD");
-                                const awardResult = createSearchResult(null, "AWARD");
-                                searchContent.appendChild(awardResult);
-                            }
-                            if (highrise.includes(query) && !displayedKeywords.has("HIGHRISE")) {
-                                displayedKeywords.add("HIGHRISE");
-                                const highriseResult = createSearchResult(null, "HIGHRISE");
-                                searchContent.appendChild(highriseResult);
-                            }
-                        }
-                    });
-                }
-            });
-    
-            // Update visibility for non-location views
-            Object.values(containers).forEach(containerSelector => {
-                const container = document.querySelector(containerSelector);
-                if (container && containerSelector !== '#globe-container') {
-                    container.querySelectorAll(".project-box").forEach(box => {
-                        if (matchingProjects.has(box)) {
-                            box.style.display = "";
-                            box.style.visibility = "visible";
-                            box.style.position = "relative";
-                        } else {
-                            box.style.display = "none";
-                            box.style.visibility = "hidden";
-                            box.style.position = "absolute";
-                        }
-                    });
                 }
             });
         }
@@ -1140,6 +1104,7 @@ document.addEventListener("DOMContentLoaded", function () {
             searchContent.appendChild(noResult);
         }
     }
+    
     function createSearchResult(box, keyword = null) {
         const result = document.createElement("div");
         result.classList.add("search-result");
