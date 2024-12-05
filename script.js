@@ -975,7 +975,6 @@ const containers = {
     alphabetical: '.alphabetical-header',
     programmatic: '.programmatic-projects',
     scale: '.scale-projects',
-    location: '.location-projects' // Add a location container if needed
 };
 
 document.addEventListener("DOMContentLoaded", function () {
@@ -990,9 +989,9 @@ document.addEventListener("DOMContentLoaded", function () {
     function updateSearchResults(query) {
         searchContent.innerHTML = "";
         searchContent.style.display = query ? "block" : "none";
-
+    
         if (!query) {
-            // Show all projects in all views
+            // Show all projects in the currently active container
             Object.values(containers).forEach(containerSelector => {
                 const container = document.querySelector(containerSelector);
                 if (container) {
@@ -1003,27 +1002,31 @@ document.addEventListener("DOMContentLoaded", function () {
             });
             return;
         }
-
+    
         let hasMatch = false;
-
-        // Search in all containers
+        const displayedProjects = new Set(); // To avoid duplicates
+    
+        // Search in visible projects only
         Object.values(containers).forEach(containerSelector => {
             const container = document.querySelector(containerSelector);
-            if (container) {
+            if (container && container.style.display !== "none") {
                 container.querySelectorAll('.project-box').forEach(box => {
                     const title = box.getAttribute("data-title").toLowerCase();
                     if (title.includes(query)) {
                         hasMatch = true;
-                        box.style.display = "";
-                        const result = createSearchResult(box);
-                        searchContent.appendChild(result);
+                        if (!displayedProjects.has(title)) {
+                            displayedProjects.add(title);
+                            const result = createSearchResult(box);
+                            searchContent.appendChild(result);
+                        }
+                        box.style.display = ""; // Ensure the box is visible
                     } else {
-                        box.style.display = "none";
+                        box.style.display = "none"; // Hide non-matching projects
                     }
                 });
             }
         });
-
+    
         if (!hasMatch) {
             const noResult = document.createElement("div");
             noResult.classList.add("no-result");
@@ -1031,6 +1034,7 @@ document.addEventListener("DOMContentLoaded", function () {
             searchContent.appendChild(noResult);
         }
     }
+    
 
     function createSearchResult(box) {
         const result = document.createElement("div");
