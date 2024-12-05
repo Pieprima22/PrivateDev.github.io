@@ -1002,7 +1002,7 @@ document.addEventListener("DOMContentLoaded", function () {
     function updateSearchResults(query) {
         searchContent.innerHTML = "";
         searchContent.style.display = query ? "block" : "none";
-
+    
         // Show all projects if no query is provided
         if (!query) {
             Object.values(containers).forEach(containerSelector => {
@@ -1015,10 +1015,11 @@ document.addEventListener("DOMContentLoaded", function () {
             });
             return;
         }
-
+    
         let hasMatch = false;
         const displayedTitles = new Set(); // Track displayed project titles to avoid duplicates
-
+        const displayedKeywords = new Set(); // Track displayed keywords (AWARD, HIGHRISE)
+    
         // Ensure only visible containers are searched
         Object.values(containers).forEach(containerSelector => {
             const container = document.querySelector(containerSelector);
@@ -1027,19 +1028,37 @@ document.addEventListener("DOMContentLoaded", function () {
                     const title = box.getAttribute("data-title").toLowerCase();
                     const highrise = box.getAttribute("data-highrise")?.toLowerCase() || "";
                     const award = box.getAttribute("data-award")?.toLowerCase() || "";
-
+    
                     // Match against title, highrise, or award attributes
                     if (
                         title.includes(query) ||
                         highrise.includes(query) ||
                         award.includes(query)
                     ) {
+                        // Add the project title if not already displayed
                         if (!displayedTitles.has(title)) {
                             hasMatch = true;
                             displayedTitles.add(title);
                             const result = createSearchResult(box);
                             searchContent.appendChild(result);
                         }
+    
+                        // Add "AWARD" as a separate result
+                        if (award.includes(query) && !displayedKeywords.has("AWARD")) {
+                            hasMatch = true;
+                            displayedKeywords.add("AWARD");
+                            const awardResult = createSearchResult(null, "AWARD");
+                            searchContent.appendChild(awardResult);
+                        }
+    
+                        // Add "HIGHRISE" as a separate result
+                        if (highrise.includes(query) && !displayedKeywords.has("HIGHRISE")) {
+                            hasMatch = true;
+                            displayedKeywords.add("HIGHRISE");
+                            const highriseResult = createSearchResult(null, "HIGHRISE");
+                            searchContent.appendChild(highriseResult);
+                        }
+    
                         box.style.display = ""; // Ensure the project is visible
                     } else {
                         box.style.display = "none"; // Hide non-matching projects
@@ -1047,7 +1066,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 });
             }
         });
-
+    
         if (!hasMatch) {
             const noResult = document.createElement("div");
             noResult.classList.add("no-result");
@@ -1055,18 +1074,27 @@ document.addEventListener("DOMContentLoaded", function () {
             searchContent.appendChild(noResult);
         }
     }
+    
 
-    function createSearchResult(box) {
+    function createSearchResult(box, keyword = null) {
         const result = document.createElement("div");
         result.classList.add("search-result");
-        result.textContent = box.getAttribute("data-title");
-        result.addEventListener("click", function () {
-            openProjectModal(box);
-        });
+    
+        if (keyword) {
+            // Display keyword like "AWARD" or "HIGHRISE"
+            result.textContent = keyword;
+        } else if (box) {
+            // Display project title
+            const title = box.getAttribute("data-title") || "Untitled Project";
+            result.textContent = title;
+            result.addEventListener("click", function () {
+                openProjectModal(box);
+            });
+        }
+    
         return result;
     }
-
-
+    
     function openProjectModal(box) {
         const modal = document.getElementById("projectDetailModal");
         
