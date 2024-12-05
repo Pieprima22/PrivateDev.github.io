@@ -982,28 +982,12 @@ document.addEventListener("DOMContentLoaded", function () {
     const searchContent = document.getElementById("searchContent");
 
     // List of predefined keywords for auto-fill
-    const suggestions = ["Highrise", "Award", "Cultural", "Residential", "Hospitality"];
+    const suggestions = ["HIGHRISE", "AWARD", "CULTURAL", "RESIDENTIAL", "HOSPITALITY"];
 
     mainSearchInput.addEventListener("input", function (event) {
         const query = mainSearchInput.value.toLowerCase();
     
-        // Skip auto-fill for Backspace or Delete keys
-        if (event.inputType === "deleteContentBackward" || event.inputType === "deleteContentForward") {
-            updateSearchResults(query); // Still update the search results
-            return;
-        }
-    
-        const matchingSuggestion = suggestions.find(suggestion =>
-            suggestion.toLowerCase().startsWith(query)
-        );
-    
-        // Auto-fill the input if there's a matching suggestion
-        if (matchingSuggestion && query.length > 0) {
-            mainSearchInput.value = matchingSuggestion;
-            mainSearchInput.setSelectionRange(query.length, matchingSuggestion.length);
-        }
-    
-        // Trigger search with the current query
+        // Directly update search results without modifying the input field
         updateSearchResults(query);
     });
     
