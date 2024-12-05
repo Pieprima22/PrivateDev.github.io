@@ -1148,27 +1148,23 @@ document.addEventListener("DOMContentLoaded", function () {
             // Display keyword like "AWARD" or "HIGHRISE"
             result.textContent = keyword;
             result.addEventListener("click", function() {
-                // Set the search input value to the keyword instead of clearing it
                 mainSearchInput.value = keyword;
-                
                 filterProjectsByKeyword(keyword);
-                // Don't clear the search input anymore
-                // Keep the search results visible
                 searchContent.style.display = "block";
-                
-                // Re-run the search to update the results list
-                // This will show the keyword in results allowing for further filtering
                 updateSearchResults(keyword.toLowerCase());
             });
         } else if (box) {
-            // Display project title (existing code)
+            // Display project title
             const title = box.getAttribute("data-title") || "Untitled Project";
             result.textContent = title;
             result.addEventListener("click", function () {
-                openProjectModal(box);
-                // Clear search when clicking a specific project
-                mainSearchInput.value = "";
+                // Don't clear search input anymore
+                const currentSearchValue = mainSearchInput.value; // Store current search value
+                
+                // Hide search results temporarily while modal is open
                 searchContent.style.display = "none";
+                
+                openProjectModal(box, currentSearchValue); // Pass the current search value
             });
         }
     
