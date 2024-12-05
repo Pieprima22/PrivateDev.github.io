@@ -2705,57 +2705,69 @@
         </section>
 
     </main>
-    <div class="search-tab">
-        <img src="search-286.png" alt="Search Icon" class="search-icon" />
-        <input type="text" id="mainSearchInput" placeholder="SEARCH" autocomplete="off" class="hidden-search-input" />
-    <div id="searchContent"></div>
-<!-- Main Page INFO Tab -->
-<div class="info-tab">
-    <a href="#" id="infoSectionLink" class="info-link">INFO</a>
-</div>
 
-<!-- Full-page Modal for NEWS Section -->
-<div id="infoSectionModal" class="full-page-modal">
-    <span id="closeInfoSectionModal" class="close-button">&times;</span>
-    <div class="modal-content">
-        <!-- Left-Aligned Tabs -->
-        <nav class="left-tab">
-            <a href="#" id="newsTabLink" class="left-tab-link active">ABOUT</a>
-            <a href="#" id="aboutTabLink" class="left-tab-link">ONBOARDING</a>
+
+            <div class="search-tab">
+                <img src="search-286.png" alt="Search Icon" class="search-icon" />
+                <input type="text" id="mainSearchInput" placeholder="SEARCH" autocomplete="off" class="hidden-search-input" />
+            <div id="searchContent"></div>
+
+
+            <!-- Main Page INFO Tab -->
+            <div class="info-tab">
+                <a href="#" id="infoSectionLink" class="info-link">INFO</a>
+            </div>
+
+            <div id="infoSectionModal" class="full-page-modal">
+                <span id="closeInfoSectionModal" class="close-button">&times;</span>
+                <div class="modal-content">
+
+                <!-- Left-Aligned Tabs -->
+                <nav class="left-tab">
+                    <a href="#" id="whatWeDoTabLink" class="left-tab-link active">WHAT WE DO</a> <!-- Renamed from NEWS -->
+                    <a href="#" id="whoWeAreTabLink" class="left-tab-link">WHO WE ARE</a>
+                    <a href="#" id="onboardingTabLink" class="left-tab-link">ONBOARDING</a> <!-- Renamed from ABOUT -->
                     <!-- Bottom-left Home Link -->
-        <div class="bottom-left-home-link">
-            <a href="javascript:void(0)" id="homeTabLink" class="home-tab-link">HOME</a>
-        </div>
-        </nav>
+                    <div class="bottom-left-home-link">
+                        <a href="javascript:void(0)" id="homeTabLink" class="home-tab-link">HOME</a>
+                    </div>
+                </nav>
 
 
-   <!-- NEWS Content -->
-<div id="newsContent" class="info-main-content">
-    <!-- News Image 1 -->
-    <div class="project">
-        <img src="https://aedasme.egnyte.com/opendocument.do?entryId=5bc8943e-f6b4-417e-ac5c-33c658ef5199&forceDownload=false&thumbNail=true&w=1200&h=1200&type=proportional&preview=true" alt="News Image 1" class="project-image">
-        <h3>AEDAS</h3>
-        <p>This news article highlights the latest innovations in architectural design, exploring groundbreaking advancements in building technologies, sustainable materials, and cutting-edge digital tools that are shaping the future of architecture. It covers the integration of artificial intelligence in design processes, the rise of smart buildings, and the innovative approaches being taken to create structures that are both environmentally conscious and aesthetically pleasing. The article also examines the role of urban planning in adapting to climate change, and how architects are responding to the growing demand for more sustainable and resilient buildings.</p>
-    </div>
+        <!-- WHAT WE DO Content -->
+        <div id="whatWeDoContent" class="info-main-content">
 
-    <!-- News Image 2 -->
-    <div class="project">
-        <img src="https://aedasme.egnyte.com/opendocument.do?entryId=543961a4-bab9-4a8c-9833-0fbfb6100dc0&forceDownload=false&thumbNail=true&w=1200&h=1200&type=proportional&preview=true" alt="News Image 2" class="project-image">
-        <h3>AEDAS</h3>
-        <p>This news article highlights the latest innovations in architectural design, exploring groundbreaking advancements in building technologies, sustainable materials, and cutting-edge digital tools that are shaping the future of architecture. It covers the integration of artificial intelligence in design processes, the rise of smart buildings, and the innovative approaches being taken to create structures that are both environmentally conscious and aesthetically pleasing. The article also examines the role of urban planning in adapting to climate change, and how architects are responding to the growing demand for more sustainable and resilient buildings.</p>
-    </div>
-</div>
-
-        <!-- ABOUT Content -->
-        <div id="aboutContent" class="info-main-content" style="display: none;">
             <div class="project">
-                <img src="https://aedasme.egnyte.com/opendocument.do?entryId=5bc8943e-f6b4-417e-ac5c-33c658ef5199&forceDownload=false&thumbNail=true&w=1200&h=1200&type=proportional&preview=true&prefetch=true" alt="About Image" class="project-image">
-                <h3>ONBOARDING</h3>
-                <p>We create designs that inspire, pushing the boundaries of creativity and functionality. Our focus is on innovation, integrating the latest technologies and design trends to craft spaces that are not only visually striking but also highly efficient and user-centric. At the heart of our work is sustainability, ensuring that every project is built with an environmentally conscious approach. From the use of sustainable materials to energy-efficient systems, we strive to minimize the ecological footprint while enhancing the aesthetic value of each design. Our goal is to shape spaces that are timeless, adaptable, and capable of inspiring both those who experience them and the communities they serve.</p>
+                <img src="https://aedasme.egnyte.com/opendocument.do?entryId=5bc8943e-f6b4-417e-ac5c-33c658ef5199&forceDownload=false&thumbNail=true&w=1200&h=1200&type=proportional&preview=true" alt="News Image 1" class="project-image">
+                <h3>AEDAS</h3>
+                <p>This news article highlights the latest innovations in architectural design, exploring groundbreaking advancements in building technologies, sustainable materials, and cutting-edge digital tools that are shaping the future of architecture. It covers the integration of artificial intelligence in design processes, the rise of smart buildings, and the innovative approaches being taken to create structures that are both environmentally conscious and aesthetically pleasing. The article also examines the role of urban planning in adapting to climate change, and how architects are responding to the growing demand for more sustainable and resilient buildings.</p>
+            </div>
+
+            <div class="project">
+                <img src="https://aedasme.egnyte.com/opendocument.do?entryId=543961a4-bab9-4a8c-9833-0fbfb6100dc0&forceDownload=false&thumbNail=true&w=1200&h=1200&type=proportional&preview=true" alt="News Image 2" class="project-image">
+                <h3>AEDAS</h3>
+                <p>This news article highlights the latest innovations in architectural design, exploring groundbreaking advancements in building technologies, sustainable materials, and cutting-edge digital tools that are shaping the future of architecture. It covers the integration of artificial intelligence in design processes, the rise of smart buildings, and the innovative approaches being taken to create structures that are both environmentally conscious and aesthetically pleasing. The article also examines the role of urban planning in adapting to climate change, and how architects are responding to the growing demand for more sustainable and resilient buildings.</p>
             </div>
         </div>
-    </div>
-</div>
+                <!-- WHO WE ARE Content -->
+                <div id="whoWeAreContent" class="info-main-content" style="display: none;">
+                    <div class="project">
+                        <img src="https://aedasme.egnyte.com/opendocument.do?entryId=2a1b6680-8986-416b-9a78-012f48cff7ef&forceDownload=false&thumbNail=true&w=1200&h=1200&type=proportional&preview=true&prefetch=true" alt="Who We Are Image" class="project-image">
+                        <h3>WHO WE ARE</h3>
+                        <p>We are a team of passionate architects and designers dedicated to creating innovative and sustainable solutions. Our mission is to shape spaces that enhance the lives of the people who use them. Collaboration and creativity are at the core of our philosophy, driving us to push boundaries and deliver excellence in every project.</p>
+                    </div>
+                </div>
+
+                <!-- ABOUT Content -->
+                <div id="onboardingContent" class="info-main-content" style="display: none;">
+                    <div class="project">
+                        <img src="https://aedasme.egnyte.com/opendocument.do?entryId=5bc8943e-f6b4-417e-ac5c-33c658ef5199&forceDownload=false&thumbNail=true&w=1200&h=1200&type=proportional&preview=true&prefetch=true" alt="About Image" class="project-image">
+                        <h3>ONBOARDING</h3>
+                        <p>We create designs that inspire, pushing the boundaries of creativity and functionality. Our focus is on innovation, integrating the latest technologies and design trends to craft spaces that are not only visually striking but also highly efficient and user-centric. At the heart of our work is sustainability, ensuring that every project is built with an environmentally conscious approach. From the use of sustainable materials to energy-efficient systems, we strive to minimize the ecological footprint while enhancing the aesthetic value of each design. Our goal is to shape spaces that are timeless, adaptable, and capable of inspiring both those who experience them and the communities they serve.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
 
 <div id="projectDetailModal" class="modal">
     <div class="close-wrapper">

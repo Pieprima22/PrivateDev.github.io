@@ -1224,54 +1224,75 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 document.addEventListener("DOMContentLoaded", function () {
-    // Get tab and content elements
-    
-    const infoSectionLink = document.getElementById("infoSectionLink"); // Main INFO button
-    const newsTabLink = document.getElementById("newsTabLink"); // Modal NEWS tab
-    const aboutTabLink = document.getElementById("aboutTabLink"); // Modal ABOUT tab
-    const newsContent = document.getElementById("newsContent");
-    const aboutContent = document.getElementById("aboutContent");
+    // Existing elements
+    const infoSectionLink = document.getElementById("infoSectionLink");
+    const whatWeDoTabLink = document.getElementById("whatWeDoTabLink"); // Renamed from newsTabLink
+    const onboardingTabLink = document.getElementById("onboardingTabLink"); // Renamed from aboutTabLink
+    const whoWeAreTabLink = document.getElementById("whoWeAreTabLink");
+    const homeTabLink = document.getElementById("homeTabLink");
+    const whatWeDoContent = document.getElementById("whatWeDoContent"); // Renamed from newsContent
+    const onboardingContent = document.getElementById("onboardingContent"); // Renamed from aboutContent
+    const whoWeAreContent = document.getElementById("whoWeAreContent");
     const closeInfoModal = document.getElementById("closeInfoSectionModal");
     const infoSectionModal = document.getElementById("infoSectionModal");
-    const homeTabLink = document.getElementById("homeTabLink");
-    homeTabLink.addEventListener("click", function (event) {
-        event.preventDefault();
-        infoSectionModal.style.display = "none";
-    });
 
     // Main INFO button click handler
     infoSectionLink.addEventListener("click", function (event) {
         event.preventDefault();
         infoSectionModal.style.display = "block"; // Show the modal
-        // Switch to NEWS content
-        newsContent.style.display = "block";
-        aboutContent.style.display = "none";
-        newsTabLink.classList.add("active");
-        aboutTabLink.classList.remove("active");
+        whatWeDoContent.style.display = "block"; // Default to WHAT WE DO
+        whoWeAreContent.style.display = "none";
+        onboardingContent.style.display = "none";
+        whatWeDoTabLink.classList.add("active");
+        whoWeAreTabLink.classList.remove("active");
+        onboardingTabLink.classList.remove("active");
     });
 
-    // Tab switching logic
-    newsTabLink.addEventListener("click", function (event) {
+    // Tab switching logic for WHAT WE DO
+    whatWeDoTabLink.addEventListener("click", function (event) {
         event.preventDefault();
-        newsContent.style.display = "block";
-        aboutContent.style.display = "none";
-        newsTabLink.classList.add("active");
-        aboutTabLink.classList.remove("active");
+        whatWeDoContent.style.display = "block";
+        whoWeAreContent.style.display = "none";
+        onboardingContent.style.display = "none";
+        whatWeDoTabLink.classList.add("active");
+        whoWeAreTabLink.classList.remove("active");
+        onboardingTabLink.classList.remove("active");
     });
 
-    aboutTabLink.addEventListener("click", function (event) {
+    // Tab switching logic for WHO WE ARE
+    whoWeAreTabLink.addEventListener("click", function (event) {
         event.preventDefault();
-        newsContent.style.display = "none";
-        aboutContent.style.display = "block";
-        aboutTabLink.classList.add("active");
-        newsTabLink.classList.remove("active");
+        whatWeDoContent.style.display = "none";
+        whoWeAreContent.style.display = "block";
+        onboardingContent.style.display = "none";
+        whoWeAreTabLink.classList.add("active");
+        whatWeDoTabLink.classList.remove("active");
+        onboardingTabLink.classList.remove("active");
+    });
+
+    // Tab switching logic for ONBOARDING
+    onboardingTabLink.addEventListener("click", function (event) {
+        event.preventDefault();
+        whatWeDoContent.style.display = "none";
+        whoWeAreContent.style.display = "none";
+        onboardingContent.style.display = "block";
+        onboardingTabLink.classList.add("active");
+        whatWeDoTabLink.classList.remove("active");
+        whoWeAreTabLink.classList.remove("active");
     });
 
     // Close modal logic
     closeInfoModal.addEventListener("click", function () {
         infoSectionModal.style.display = "none";
     });
+
+    // Home tab logic
+    homeTabLink.addEventListener("click", function (event) {
+        event.preventDefault();
+        infoSectionModal.style.display = "none";
+    });
 });
+
 
 document.addEventListener("DOMContentLoaded", function () {
     
