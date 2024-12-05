@@ -987,14 +987,13 @@ document.addEventListener("DOMContentLoaded", function () {
     const searchContent = document.getElementById("searchContent");
 
     // List of predefined keywords for auto-fill
-    const suggestions = ["HIGHRISE", "AWARD", "CULTURAL", "RESIDENTIAL", "HOSPITALITY"];
+    const suggestions = ["HIGH-RISE", "AWARDED", "CULTURAL", "RESIDENTIAL", "HOSPITALITY"];
 
     mainSearchInput.addEventListener("input", function (event) {
         const query = mainSearchInput.value.toLowerCase();
         updateSearchResults(query);
     });
 
-    
     // Ensure cursor position is correct when typing or using auto-fill
     mainSearchInput.addEventListener("keydown", function (event) {
         if (event.key === "Backspace" || event.key === "Delete") {
@@ -1003,25 +1002,25 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     });
 
-    function updateSearchResults(query) {
+   function updateSearchResults(query) {
         searchContent.innerHTML = "";
         searchContent.style.display = query ? "block" : "none";
-    
+
         const globeContainer = document.getElementById('globe-container');
         const isLocationView = globeContainer && globeContainer.style.display !== 'none';
-    
+
         let hasMatch = false;
         const displayedTitles = new Set();
         const displayedKeywords = new Set();
         const matchingProjects = new Set();
-    
+
         // Handle search across all project boxes first
         document.querySelectorAll('.project-box').forEach(box => {
             const title = box.getAttribute("data-title")?.toLowerCase() || "";
             const location = box.getAttribute("data-location")?.toLowerCase() || "";
             const highrise = box.getAttribute("data-highrise")?.toLowerCase() || "";
             const award = box.getAttribute("data-award")?.toLowerCase() || "";
-    
+
             if (title.includes(query) || 
                 location.includes(query) || 
                 highrise.includes(query) || 
@@ -1029,27 +1028,27 @@ document.addEventListener("DOMContentLoaded", function () {
                 
                 matchingProjects.add(box);
                 hasMatch = true;
-    
+
                 if (!displayedTitles.has(title)) {
                     displayedTitles.add(title);
                     const result = createSearchResult(box);
                     searchContent.appendChild(result);
                 }
-    
+
                 // Add keyword results
-                if (award.includes(query) && !displayedKeywords.has("AWARD")) {
-                    displayedKeywords.add("AWARD");
-                    const awardResult = createSearchResult(null, "AWARD");
+                if (award.includes(query) && !displayedKeywords.has("AWARDED")) {
+                    displayedKeywords.add("AWARDED");
+                    const awardResult = createSearchResult(null, "AWARDED");
                     searchContent.appendChild(awardResult);
                 }
-                if (highrise.includes(query) && !displayedKeywords.has("HIGHRISE")) {
-                    displayedKeywords.add("HIGHRISE");
-                    const highriseResult = createSearchResult(null, "HIGHRISE");
+                if (highrise.includes(query) && !displayedKeywords.has("HIGH-RISE")) {
+                    displayedKeywords.add("HIGH-RISE");
+                    const highriseResult = createSearchResult(null, "HIGH-RISE");
                     searchContent.appendChild(highriseResult);
                 }
             }
         });
-    
+
         // Update visibility in all views
         if (!query) {
             // Show all projects when search is empty
@@ -1058,7 +1057,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 box.style.visibility = "visible";
                 box.style.position = "relative";
             });
-    
+
             document.querySelectorAll('.project-globe-marker').forEach(marker => {
                 marker.style.display = '';
                 marker.style.opacity = '1';
@@ -1076,14 +1075,14 @@ document.addEventListener("DOMContentLoaded", function () {
                     box.style.position = "absolute";
                 }
             });
-    
+
             // Update visibility in location view
             document.querySelectorAll('.project-globe-marker').forEach(marker => {
                 const title = marker.getAttribute("data-title")?.toLowerCase() || "";
                 const location = marker.getAttribute("data-location")?.toLowerCase() || "";
                 const highrise = marker.getAttribute("data-highrise")?.toLowerCase() || "";
                 const award = marker.getAttribute("data-award")?.toLowerCase() || "";
-    
+
                 if (title.includes(query) || 
                     location.includes(query) || 
                     highrise.includes(query) || 
@@ -1096,7 +1095,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 }
             });
         }
-    
+
         if (!hasMatch) {
             const noResult = document.createElement("div");
             noResult.classList.add("no-result");
@@ -1104,13 +1103,12 @@ document.addEventListener("DOMContentLoaded", function () {
             searchContent.appendChild(noResult);
         }
     }
-    
     function createSearchResult(box, keyword = null) {
         const result = document.createElement("div");
         result.classList.add("search-result");
-    
+
         if (keyword) {
-            // Display keyword like "AWARD" or "HIGHRISE"
+            // Display keyword like "AWARDED" or "HIGH-RISE"
             result.textContent = keyword;
             result.addEventListener("click", function() {
                 mainSearchInput.value = keyword;
@@ -1132,7 +1130,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 openProjectModal(box, currentSearchValue); // Pass the current search value
             });
         }
-    
+
         return result;
     }
 
