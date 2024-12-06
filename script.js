@@ -1353,26 +1353,32 @@ document.addEventListener("DOMContentLoaded", function () {
 document.addEventListener("DOMContentLoaded", function () {
     // Existing elements
     const infoSectionLink = document.getElementById("infoSectionLink");
-    const whatWeDoTabLink = document.getElementById("whatWeDoTabLink"); // Renamed from newsTabLink
-    const onboardingTabLink = document.getElementById("onboardingTabLink"); // Renamed from aboutTabLink
+    const whatWeDoTabLink = document.getElementById("whatWeDoTabLink");
+    const onboardingTabLink = document.getElementById("onboardingTabLink");
     const whoWeAreTabLink = document.getElementById("whoWeAreTabLink");
+    const knowledgeTabLink = document.getElementById("knowledgeTabLink"); // New Tab Link
     const homeTabLink = document.getElementById("homeTabLink");
-    const whatWeDoContent = document.getElementById("whatWeDoContent"); // Renamed from newsContent
-    const onboardingContent = document.getElementById("onboardingContent"); // Renamed from aboutContent
+
+    const whatWeDoContent = document.getElementById("whatWeDoContent");
+    const onboardingContent = document.getElementById("onboardingContent");
     const whoWeAreContent = document.getElementById("whoWeAreContent");
+    const knowledgeContent = document.getElementById("knowledgeContent"); // New Content Section
+
     const closeInfoModal = document.getElementById("closeInfoSectionModal");
     const infoSectionModal = document.getElementById("infoSectionModal");
 
     // Main INFO button click handler
     infoSectionLink.addEventListener("click", function (event) {
         event.preventDefault();
-        infoSectionModal.style.display = "block"; // Show the modal
-        whatWeDoContent.style.display = "block"; // Default to WHAT WE DO
+        infoSectionModal.style.display = "block";
+        whatWeDoContent.style.display = "block";
         whoWeAreContent.style.display = "none";
         onboardingContent.style.display = "none";
+        knowledgeContent.style.display = "none"; // Ensure KNOWLEDGE is hidden initially
         whatWeDoTabLink.classList.add("active");
         whoWeAreTabLink.classList.remove("active");
         onboardingTabLink.classList.remove("active");
+        knowledgeTabLink.classList.remove("active");
     });
 
     // Tab switching logic for WHAT WE DO
@@ -1381,9 +1387,11 @@ document.addEventListener("DOMContentLoaded", function () {
         whatWeDoContent.style.display = "block";
         whoWeAreContent.style.display = "none";
         onboardingContent.style.display = "none";
+        knowledgeContent.style.display = "none";
         whatWeDoTabLink.classList.add("active");
         whoWeAreTabLink.classList.remove("active");
         onboardingTabLink.classList.remove("active");
+        knowledgeTabLink.classList.remove("active");
     });
 
     // Tab switching logic for WHO WE ARE
@@ -1392,9 +1400,11 @@ document.addEventListener("DOMContentLoaded", function () {
         whatWeDoContent.style.display = "none";
         whoWeAreContent.style.display = "block";
         onboardingContent.style.display = "none";
+        knowledgeContent.style.display = "none";
         whoWeAreTabLink.classList.add("active");
         whatWeDoTabLink.classList.remove("active");
         onboardingTabLink.classList.remove("active");
+        knowledgeTabLink.classList.remove("active");
     });
 
     // Tab switching logic for ONBOARDING
@@ -1403,9 +1413,24 @@ document.addEventListener("DOMContentLoaded", function () {
         whatWeDoContent.style.display = "none";
         whoWeAreContent.style.display = "none";
         onboardingContent.style.display = "block";
+        knowledgeContent.style.display = "none";
         onboardingTabLink.classList.add("active");
         whatWeDoTabLink.classList.remove("active");
         whoWeAreTabLink.classList.remove("active");
+        knowledgeTabLink.classList.remove("active");
+    });
+
+    // Tab switching logic for KNOWLEDGE
+    knowledgeTabLink.addEventListener("click", function (event) {
+        event.preventDefault();
+        whatWeDoContent.style.display = "none";
+        whoWeAreContent.style.display = "none";
+        onboardingContent.style.display = "none";
+        knowledgeContent.style.display = "block";
+        knowledgeTabLink.classList.add("active");
+        whatWeDoTabLink.classList.remove("active");
+        whoWeAreTabLink.classList.remove("active");
+        onboardingTabLink.classList.remove("active");
     });
 
     // Close modal logic
@@ -1419,6 +1444,7 @@ document.addEventListener("DOMContentLoaded", function () {
         infoSectionModal.style.display = "none";
     });
 });
+
 
 
 document.addEventListener("DOMContentLoaded", function () {

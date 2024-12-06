@@ -893,7 +893,7 @@ body.loading {
     color: black;
     font-weight: bold;
     font-family: 'AkkuratStd', sans-serif; /* Replace Arial with AkkuratStd */
-    font-size: 1.1rem;
+    font-size: 1rem;
     margin-bottom: 5px;
     display: block;
     width: 100%;
@@ -917,7 +917,6 @@ body.loading {
     display: inline-block;
     color: #000000; /* White text */
     text-decoration: none;
-    font-size: 16px;
     border-radius: 5px;
     font-weight: bold;
     font-size: 1rem;
