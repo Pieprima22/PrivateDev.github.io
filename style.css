@@ -286,6 +286,7 @@ main {
     width: max-content;
     margin-bottom: 23px;
     gap: 15px;
+
 }
 
 .year-column {
@@ -311,8 +312,9 @@ main {
     display: flex;
     align-items: center;
     justify-content: center;
+    
+    
 }
-
 
 .symbol-image {
     display: block;
@@ -388,6 +390,7 @@ main {
     background-color: #ffffff;
     z-index: 1000;
     overflow-y: auto; /* Allow vertical scrolling */
+    
 }
 
 
