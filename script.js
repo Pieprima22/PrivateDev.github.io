@@ -338,6 +338,18 @@ function addClickEventToProjectBox(projectBox) {
         }
     });
 }
+function filterProjects(category) {
+    const projectBoxes = document.querySelectorAll('.project-box');
+
+    projectBoxes.forEach(box => {
+        const tags = box.getAttribute('data-tags').split(',').map(tag => tag.trim());
+        if (tags.includes(category) || category === 'all') {
+            box.classList.remove('hidden');
+        } else {
+            box.classList.add('hidden');
+        }
+    });
+}
 
 
 function sortProjects(criteria) {
