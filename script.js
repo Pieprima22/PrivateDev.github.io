@@ -581,6 +581,8 @@ function sortProjects(criteria) {
                     iconDiv.setAttribute('data-location', projectBox.getAttribute('data-location'));
                     iconDiv.setAttribute('data-highrise', projectBox.getAttribute('data-highrise'));
                     iconDiv.setAttribute('data-award', projectBox.getAttribute('data-award'));
+                    iconDiv.setAttribute('data-interior', projectBox.getAttribute('data-interior')); // Add interior attribute
+
                                         
                         // Add the hover image
                     const hoverImageDiv = document.createElement('img');
@@ -988,7 +990,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const searchContent = document.getElementById("searchContent");
 
     // List of predefined keywords for auto-fill
-    const suggestions = ["HIGH-RISE", "AWARDED", "CULTURAL", "RESIDENTIAL", "HOSPITALITY"];
+    const suggestions = ["HIGH-RISE", "AWARDED", "CULTURAL", "RESIDENTIAL", "HOSPITALITY", "INTERIOR"];
 
     mainSearchInput.addEventListener("input", function (event) {
         const query = mainSearchInput.value.toLowerCase();
@@ -1021,14 +1023,16 @@ document.addEventListener("DOMContentLoaded", function () {
             const location = box.getAttribute("data-location")?.toLowerCase() || "";
             const highrise = box.getAttribute("data-highrise")?.toLowerCase() || "";
             const award = box.getAttribute("data-award")?.toLowerCase() || "";
+            const interior = box.getAttribute("data-interior")?.toLowerCase() || ""; // Include new tagS
 
             if (title.includes(query) || 
-                location.includes(query) || 
-                highrise.includes(query) || 
-                award.includes(query)) {
-                
-                matchingProjects.add(box);
-                hasMatch = true;
+            location.includes(query) || 
+            highrise.includes(query) || 
+            award.includes(query) || 
+            interior.includes(query)) { // Search for `data-interior`
+
+            matchingProjects.add(box);
+            hasMatch = true;
 
                 if (!displayedTitles.has(title)) {
                     displayedTitles.add(title);
@@ -1046,6 +1050,11 @@ document.addEventListener("DOMContentLoaded", function () {
                     displayedKeywords.add("HIGH-RISE");
                     const highriseResult = createSearchResult(null, "HIGH-RISE");
                     searchContent.appendChild(highriseResult);
+                }
+                if (interior.includes(query) && !displayedKeywords.has("INTERIOR")) { // Handle `data-interior`
+                    displayedKeywords.add("INTERIOR");
+                    const interiorResult = createSearchResult(null, "INTERIOR");
+                    searchContent.appendChild(interiorResult);
                 }
             }
         });
@@ -1077,33 +1086,32 @@ document.addEventListener("DOMContentLoaded", function () {
                 }
             });
 
-            // Update visibility in location view
             document.querySelectorAll('.project-globe-marker').forEach(marker => {
                 const title = marker.getAttribute("data-title")?.toLowerCase() || "";
                 const location = marker.getAttribute("data-location")?.toLowerCase() || "";
                 const highrise = marker.getAttribute("data-highrise")?.toLowerCase() || "";
                 const award = marker.getAttribute("data-award")?.toLowerCase() || "";
-
+                const interior = marker.getAttribute("data-interior")?.toLowerCase() || "";
+            
+                console.log("Marker Data:", { title, location, highrise, award, interior });
+                console.log("Query:", query);
+            
                 if (title.includes(query) || 
                     location.includes(query) || 
                     highrise.includes(query) || 
-                    award.includes(query)) {
+                    award.includes(query) || 
+                    interior.includes(query)) {
+                    console.log("Match found for marker:", marker);
                     marker.style.display = '';
                     marker.style.opacity = '1';
                 } else {
+                    console.log("No match for marker:", marker);
                     marker.style.display = 'none';
                     marker.style.opacity = '0';
                 }
             });
-        }
-
-        if (!hasMatch) {
-            const noResult = document.createElement("div");
-            noResult.classList.add("no-result");
-            noResult.textContent = "No projects match your search.";
-            searchContent.appendChild(noResult);
-        }
-    }
+        }            
+    }            
     function createSearchResult(box, keyword = null) {
         const result = document.createElement("div");
         result.classList.add("search-result");
@@ -1143,11 +1151,14 @@ document.addEventListener("DOMContentLoaded", function () {
             const container = document.querySelector(containerSelector);
             if (container) {
                 container.querySelectorAll(".project-box, .project-globe-marker").forEach(box => {
-                    const hasKeyword = keyword === "HIGHRISE" ? 
-                        box.getAttribute("data-highrise") === "HIGHRISE" :
+                    const hasKeyword = 
+                        keyword === "HIGHRISE" ? 
+                            box.getAttribute("data-highrise") === "HIGHRISE" :
                         keyword === "AWARD" ? 
-                        box.getAttribute("data-award") === "AWARD" : 
-                        false;
+                            box.getAttribute("data-award") === "AWARD" : 
+                        keyword === "INTERIOR" ?
+                            box.getAttribute("data-interior") === "INTERIOR" :
+                            false;
     
                     if (hasKeyword) {
                         matchingProjects.add(box);
@@ -1156,6 +1167,7 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         });
     
+        // Rest of the function remains the same...
         // Special handling for globe markers
         const globeContainer = document.getElementById('globe-container');
         if (globeContainer && globeContainer.style.display !== 'none') {
@@ -1178,14 +1190,11 @@ document.addEventListener("DOMContentLoaded", function () {
         Object.values(containers).forEach(containerSelector => {
             const container = document.querySelector(containerSelector);
             if (container && container !== globeContainer) {
-                let hasVisibleProjects = false;
-                
                 container.querySelectorAll(".project-box").forEach(box => {
                     if (matchingProjects.has(box)) {
                         box.style.display = "";
                         box.style.visibility = "visible";
                         box.style.position = "relative";
-                        hasVisibleProjects = true;
                     } else {
                         box.style.display = "none";
                         box.style.visibility = "hidden";
