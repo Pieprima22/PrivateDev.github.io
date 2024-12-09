@@ -100,7 +100,7 @@ main {
 .programmatic-label-container {
     display: grid;
     grid-template-columns: repeat(6, 1fr); /* One column per programmatic label */
-    gap: 14px; /* Maintain gap between programmatic labels */
+    gap: 30px; /* Maintain gap between programmatic labels */
     justify-content: center;
     text-align: center;
     font-weight: bold;
