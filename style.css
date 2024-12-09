@@ -77,7 +77,7 @@ main {
     gap: 7px; /* This is the gap between items inside the label */
     padding: 15px 0; /* Adjust the top and bottom padding for vertical spacing */
     box-sizing: border-box;
-    margin-bottom: 15px; /* Add spacing between each label vertically */
+    margin-bottom: 2px; /* Add spacing between each label vertically */
     font-weight: bold;
     color: black;
     font-size: .8rem;
@@ -87,6 +87,7 @@ main {
     flex-direction: column;
     gap: 15px;
     padding: 20px;
+    margin-bottom: -15px;
 }
 
 .programmatic-projects {
@@ -229,7 +230,7 @@ main {
     font-weight: 800;
     color: black;
     font-size: .8rem;
-    margin-bottom: 10px;
+    margin-bottom: -5px;
 
     padding: 5px;
 }
@@ -271,7 +272,7 @@ main {
     flex-direction: column; /* Stack the projects and labels vertically */
     gap: 5px;
     padding: 20px;
-    margin-bottom: 8px;
+    margin-bottom: -6px;
 }
 
 .epoch-projects {
@@ -323,7 +324,7 @@ main {
     grid-template-columns: repeat(10, minmax(80px, auto));
     width: max-content;
     text-align: center;
-    margin-bottom: 25px;
+    margin-bottom: 10px;
     gap: 25px;
 }
 
