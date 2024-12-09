@@ -362,6 +362,7 @@ function sortProjects(criteria) {
     const scaleHeader = document.querySelector('.scale-header'); // Added scale header reference
     const globeContainerId = 'globe-container';
     
+    
 
         // Enhanced clearDynamicElements function
         function clearDynamicElements() {
