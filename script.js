@@ -355,6 +355,7 @@ function filterProjects(category) {
 function sortProjects(criteria) {
     const gallery = document.querySelector('.symbol-grid');
     const yearColumns = Array.from(gallery.getElementsByClassName('year-column'));
+    const projectBoxes = Array.from(document.querySelectorAll('.project-box'));
     const epochHeader = document.getElementById('epochTimeline'); // Add epoch header reference
     const timelineHeader = document.querySelector('.timeline-header');
     const alphabeticalHeader = document.querySelector('.alphabetical-header');
@@ -362,7 +363,11 @@ function sortProjects(criteria) {
     const scaleHeader = document.querySelector('.scale-header'); // Added scale header reference
     const globeContainerId = 'globe-container';
     
-    
+     // Helper function to get element's position
+     const getPosition = (element) => {
+        const rect = element.getBoundingClientRect();
+        return { top: rect.top, left: rect.left };
+    };
 
         // Enhanced clearDynamicElements function
         function clearDynamicElements() {

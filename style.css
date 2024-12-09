@@ -375,10 +375,17 @@ main {
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: transform 0.5s ease, opacity 0.5s ease; /* Smooth animations */
-
+    transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    transform-origin: center center;
     
 }
+.project-box.no-transition {
+    transition: none;
+  }
+
+  .project-box.animating {
+    pointer-events: none;
+  }
 
 .symbol-image {
     display: block;
