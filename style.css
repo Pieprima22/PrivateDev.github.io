@@ -89,6 +89,7 @@ main {
     gap: 15px;
     padding: 20px;
 }
+
 .programmatic-projects {
     display: grid;
     grid-template-columns: repeat(6, 1fr); /* One column per programmatic category */
@@ -99,7 +100,7 @@ main {
 .programmatic-label-container {
     display: grid;
     grid-template-columns: repeat(6, 1fr); /* One column per programmatic label */
-    gap: 20px;
+    gap: 20px; /* Maintain gap between programmatic labels */
     justify-content: center;
     text-align: center;
     font-weight: bold;
@@ -107,26 +108,33 @@ main {
     padding: 10px;
 }
 
+/* General styling for programmatic labels */
 .programmatic-label {
     display: grid;
     align-self: flex-end;
-    grid-template-columns: repeat(3, 1fr); /* Three subcolumns per category */
-    gap: 15px;
+    grid-template-columns: repeat(4, 1fr); /* Three subcolumns per category */
     font-weight: bold;
     justify-content: center;
     padding: 1px;
-
 }
 
+/* Custom styling for Residential */
+.programmatic-label[data-category="Residential"] {
+    grid-template-columns: repeat(4, 1fr); /* Four subcolumns for Residential */
+    margin-left: 20px; /* Add space to the left of Residential */
+    margin-right: 20px; /* Add space to the right of Residential */
+    gap: 5px; /* Unique gap for Residential subcolumns */
+}
 
+/* Label text styling */
 .programmatic-label-text {
     text-transform: uppercase;
     font-weight: 800;
     color: black;
-    font-size: .8rem;
-
+    font-size: 0.8rem;
 }
 
+/* Styling for project boxes */
 .programmatic-label .project-box {
     display: flex;
     flex-direction: column;
