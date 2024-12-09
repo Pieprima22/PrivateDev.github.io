@@ -815,63 +815,56 @@ function sortProjects(criteria) {
     
             if (!categoryLabel || addedProjects.has(projectId)) return; // Skip duplicates
     
-            if (projectCategory === 'Residential') {
-                let targetSubColumn;
+           // When handling residential projects
+if (projectCategory === 'Residential') {
+    let targetSubColumn;
     
-                if (projectEpoch === 'Past') {
-                    targetSubColumn = categoryLabel.querySelector('.sub-column[data-category-sub="1"]');
-                } else if (projectEpoch === 'Present') {
-                    // Dynamically handle multiple subcolumns for 'Present'
-                    let subColumns = categoryLabel.querySelectorAll('.sub-column[data-category-sub="2"]');
-                    targetSubColumn = Array.from(subColumns).find(subColumn => subColumn.children.length < 9);
-    
-                    if (!targetSubColumn && subColumns.length < 4) {
-                        // Create a new sub-column if all existing ones are full and less than 4 exist
-                        const newSubColumn = document.createElement('div');
-                        newSubColumn.classList.add('sub-column');
-                        newSubColumn.setAttribute('data-category-sub', '2');
-                        categoryLabel.appendChild(newSubColumn);
-                        targetSubColumn = newSubColumn;
-                    }
-                } else if (projectEpoch === 'Future') {
-                    targetSubColumn = categoryLabel.querySelector('.sub-column[data-category-sub="3"]');
-                }
-    
-                if (targetSubColumn) {
-                    // Clone the project box and append it
-                    const clonedProject = projectBox.cloneNode(true);
-                    targetSubColumn.appendChild(clonedProject);
-    
-                    // Add to Set to prevent duplication
-                    addedProjects.add(projectId);
-    
-                    // Reattach hover and click events
-                    addClickEventToProjectBox(clonedProject);
-                }
-            } else {
-                // Default handling for other categories and epochs
-                let targetSubColumn;
-    
-                if (projectEpoch === 'Past') {
-                    targetSubColumn = categoryLabel.querySelector('.sub-column[data-category-sub="1"]');
-                } else if (projectEpoch === 'Present') {
-                    targetSubColumn = categoryLabel.querySelector('.sub-column[data-category-sub="2"]');
-                } else if (projectEpoch === 'Future') {
-                    targetSubColumn = categoryLabel.querySelector('.sub-column[data-category-sub="3"]');
-                }
-    
-                if (targetSubColumn) {
-                    // Clone the project box and append it
-                    const clonedProject = projectBox.cloneNode(true);
-                    targetSubColumn.appendChild(clonedProject);
-    
-                    // Add to Set to prevent duplication
-                    addedProjects.add(projectId);
-    
-                    // Reattach hover and click events
-                    addClickEventToProjectBox(clonedProject);
-                }
+    if (projectEpoch === 'Past') {
+        targetSubColumn = categoryLabel.querySelector('.sub-column[data-category-sub="1"]');
+    } else if (projectEpoch === 'Present') {
+        targetSubColumn = categoryLabel.querySelector('.sub-column[data-category-sub="2"]');
+        // Add a second "Present" column if needed
+        if (targetSubColumn && targetSubColumn.children.length >= 9) {
+            targetSubColumn = categoryLabel.querySelector('.sub-column[data-category-sub="2b"]');
+            if (!targetSubColumn) {
+                // Create an additional column for Present
+                targetSubColumn = document.createElement('div');
+                targetSubColumn.classList.add('sub-column');
+                targetSubColumn.setAttribute('data-category-sub', '2b');
+                // Insert it after the first Present column
+                const firstPresentColumn = categoryLabel.querySelector('.sub-column[data-category-sub="2"]');
+                firstPresentColumn.insertAdjacentElement('afterend', targetSubColumn);
             }
+        }
+    } else if (projectEpoch === 'Future') {
+        targetSubColumn = categoryLabel.querySelector('.sub-column[data-category-sub="3"]');
+    }
+
+    if (targetSubColumn) {
+        const clonedProject = projectBox.cloneNode(true);
+        targetSubColumn.appendChild(clonedProject);
+        addedProjects.add(projectId);
+        addClickEventToProjectBox(clonedProject);
+    }
+} else {
+    // Default handling for other categories (3 columns)
+    let targetSubColumn;
+    
+    if (projectEpoch === 'Past') {
+        targetSubColumn = categoryLabel.querySelector('.sub-column[data-category-sub="1"]');
+    } else if (projectEpoch === 'Present') {
+        targetSubColumn = categoryLabel.querySelector('.sub-column[data-category-sub="2"]');
+    } else if (projectEpoch === 'Future') {
+        targetSubColumn = categoryLabel.querySelector('.sub-column[data-category-sub="3"]');
+    }
+
+    if (targetSubColumn) {
+        const clonedProject = projectBox.cloneNode(true);
+        targetSubColumn.appendChild(clonedProject);
+        addedProjects.add(projectId);
+        addClickEventToProjectBox(clonedProject);
+    }
+}
         });
     
         // Reattach tooltips or any additional events
