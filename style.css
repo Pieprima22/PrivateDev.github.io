@@ -82,58 +82,105 @@ main {
     color: black;
     font-size: .8rem;
 }
-
 .programmatic-header {
     display: flex;
-    flex-direction: column; /* Stack projects and labels vertically */
+    flex-direction: column;
     gap: 15px;
     padding: 20px;
 }
 
 .programmatic-projects {
     display: grid;
-    grid-template-columns: repeat(6, 1fr); /* One column per programmatic category */
+    grid-template-columns: repeat(6, 1fr);
     gap: 5px;
     justify-content: center;
 }
 
 .programmatic-label-container {
     display: grid;
-    grid-template-columns: repeat(6, 1fr); /* One column per programmatic label */
-    gap: 30px; /* Maintain gap between programmatic labels */
+    grid-template-columns: repeat(6, 1fr);
+    gap: 20px;
     justify-content: center;
     text-align: center;
     font-weight: bold;
     font-size: 1rem;
     padding: 10px;
 }
+
 /* General styling for programmatic labels */
 .programmatic-label {
     display: grid;
     align-self: flex-end;
-    grid-template-columns: repeat(3, 1fr); /* Three subcolumns per category */
+    grid-template-columns: repeat(3, 1fr);
     font-weight: bold;
     justify-content: center;
     padding: 1px;
 }
 
-/* Set default gap for all non-residential labels */
-.programmatic-label[data-category="Masterplan"],
-.programmatic-label[data-category="Hospitality"],
-.programmatic-label[data-category="Others"],
-.programmatic-label[data-category="Transportation"],
-.programmatic-label[data-category="Office"] {
+/* Individual label alignments */
+.programmatic-label[data-category="Masterplan"] {
+    margin-right: -60px;
+    margin-left: 140px;
+    gap: 15px;
+}
+
+.programmatic-label[data-category="Hospitality"] {
+    margin-left: 70px;
+    gap: 1px;
+    margin-right: -20px;
+}
+
+.programmatic-label[data-category="Others"] {
     margin-left: 20px;
-    margin-right: 20px;
+    gap: 1px;
+    margin-right: 30px;
+
+}
+
+.programmatic-label[data-category="Transportation"] {
+    margin-left: -30px;
+    gap: 1px;
+    margin-right: 80px;
+}
+
+.programmatic-label[data-category="Residential"] {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 15px;
+    margin-left: -72px;
+    margin-right: 80px;
+}
+
+.programmatic-label[data-category="Office"] {
+    margin-left: -75px;
+    margin-right: 120px;
     gap: 2px;
 }
 
-/* Specific styling for Residential */
-.programmatic-label[data-category="Residential"] {
-    grid-template-columns: repeat(4, 1fr);
-    gap: 15px; /* Your desired gap for residential */
-
+/* Individual text alignments */
+.programmatic-label-text:nth-child(1) {
+    margin-right: -210px;
 }
+
+.programmatic-label-text:nth-child(2) {
+    margin-left: 120px;
+}
+
+.programmatic-label-text:nth-child(3) {
+    margin-left: 20px;
+}
+
+.programmatic-label-text:nth-child(4) {
+    margin-right: 80px;
+}
+
+.programmatic-label-text:nth-child(5) {
+    margin-right: 120px;
+}
+
+.programmatic-label-text:nth-child(6) {
+    margin-right: 170px;
+}
+
 /* Label text styling */
 .programmatic-label-text {
     text-transform: uppercase;
@@ -150,7 +197,6 @@ main {
     position: relative;
     top: 5px;
 }
-
 .scale-header {
     display: flex;
     flex-direction: column; /* Stack the projects and labels vertically */
