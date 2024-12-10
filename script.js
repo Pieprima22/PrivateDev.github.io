@@ -5,6 +5,7 @@ import { OrbitControls } from "https://cdn.skypack.dev/three@0.136.0/examples/js
 
 
 // Get modal elements
+
 var projectDetailModal = document.getElementById("projectDetailModal");
 var projectIcon = document.getElementById("projectIcon");
 var projectTitle = document.getElementById("projectTitle");
@@ -353,6 +354,7 @@ function filterProjects(category) {
 
 
 function sortProjects(criteria) {
+    
     const gallery = document.querySelector('.symbol-grid');
     const yearColumns = Array.from(gallery.getElementsByClassName('year-column'));
     const projectBoxes = Array.from(gallery.querySelectorAll('.project-box'));
@@ -604,7 +606,8 @@ function sortProjects(criteria) {
                     iconDiv.setAttribute('data-location', projectBox.getAttribute('data-location'));
                     iconDiv.setAttribute('data-highrise', projectBox.getAttribute('data-highrise'));
                     iconDiv.setAttribute('data-award', projectBox.getAttribute('data-award'));
-                    iconDiv.setAttribute('data-interior', projectBox.getAttribute('data-interior')); // Add interior attribute
+                    iconDiv.setAttribute('data-interior', projectBox.getAttribute('data-interior')); 
+                    iconDiv.setAttribute('data-built', projectBox.getAttribute('data-built'));// Add interior attribute
 
                                         
                         // Add the hover image
@@ -1041,7 +1044,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const searchContent = document.getElementById("searchContent");
 
     // List of predefined keywords for auto-fill
-    const suggestions = ["HIGH-RISE", "AWARDED", "CULTURAL", "RESIDENTIAL", "HOSPITALITY", "INTERIOR"];
+    const suggestions = ["HIGH-RISE", "AWARDED", "CULTURAL", "RESIDENTIAL", "HOSPITALITY", "INTERIOR", "BUILT"];
 
     mainSearchInput.addEventListener("input", function (event) {
         const query = mainSearchInput.value.toLowerCase();
@@ -1075,12 +1078,13 @@ document.addEventListener("DOMContentLoaded", function () {
             const highrise = box.getAttribute("data-highrise")?.toLowerCase() || "";
             const award = box.getAttribute("data-award")?.toLowerCase() || "";
             const interior = box.getAttribute("data-interior")?.toLowerCase() || ""; // Include new tagS
-
+            const built = box.getAttribute("data-built")?.toLowerCase() || ""; // Add BUILT attribute
             if (title.includes(query) || 
             location.includes(query) || 
             highrise.includes(query) || 
             award.includes(query) || 
-            interior.includes(query)) { // Search for `data-interior`
+            interior.includes(query) ||
+            built.includes(query)) { // Include built in search
 
             matchingProjects.add(box);
             hasMatch = true;
@@ -1106,6 +1110,11 @@ document.addEventListener("DOMContentLoaded", function () {
                     displayedKeywords.add("INTERIOR");
                     const interiorResult = createSearchResult(null, "INTERIOR");
                     searchContent.appendChild(interiorResult);
+                }
+                if (built.includes(query) && !displayedKeywords.has("BUILT")) {
+                    displayedKeywords.add("BUILT");
+                    const builtResult = createSearchResult(null, "BUILT");
+                    searchContent.appendChild(builtResult);
                 }
             }
         });
@@ -1143,18 +1152,18 @@ document.addEventListener("DOMContentLoaded", function () {
                 const highrise = marker.getAttribute("data-highrise")?.toLowerCase() || "";
                 const award = marker.getAttribute("data-award")?.toLowerCase() || "";
                 const interior = marker.getAttribute("data-interior")?.toLowerCase() || "";
-            
+                const built = marker.getAttribute("data-built")?.toLowerCase() || ""; // Add BUILT attribute
+
                 console.log("Marker Data:", { title, location, highrise, award, interior });
                 console.log("Query:", query);
-            
                 if (title.includes(query) || 
-                    location.includes(query) || 
-                    highrise.includes(query) || 
-                    award.includes(query) || 
-                    interior.includes(query)) {
-                    console.log("Match found for marker:", marker);
-                    marker.style.display = '';
-                    marker.style.opacity = '1';
+                location.includes(query) || 
+                highrise.includes(query) || 
+                award.includes(query) || 
+                interior.includes(query) ||
+                built.includes(query)) { // Include built in search
+                marker.style.display = '';
+                marker.style.opacity = '1';
                 } else {
                     console.log("No match for marker:", marker);
                     marker.style.display = 'none';
@@ -1209,6 +1218,8 @@ document.addEventListener("DOMContentLoaded", function () {
                             box.getAttribute("data-award") === "AWARD" : 
                         keyword === "INTERIOR" ?
                             box.getAttribute("data-interior") === "INTERIOR" :
+                        keyword === "BUILT" ?
+                            box.getAttribute("data-built") === "BUILT" :
                             false;
     
                     if (hasKeyword) {
@@ -1218,7 +1229,6 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         });
     
-        // Rest of the function remains the same...
         // Special handling for globe markers
         const globeContainer = document.getElementById('globe-container');
         if (globeContainer && globeContainer.style.display !== 'none') {
@@ -1505,7 +1515,6 @@ document.addEventListener("DOMContentLoaded", function () {
         infoSectionModal.style.display = "none";
     });
 });
-
 
 
 document.addEventListener("DOMContentLoaded", function () {

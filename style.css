@@ -65,6 +65,8 @@ main {
     margin-bottom: 3px;
     position: relative;
     top: -15px;
+    transition: all 0.4s ease-out;
+
     
 }
 .alphabet-label {
@@ -197,6 +199,8 @@ main {
     align-items: center;
     position: relative;
     top: 5px;
+    transition: all 0.4s ease-out;
+
 }
 .scale-header {
     display: flex;
@@ -252,6 +256,8 @@ main {
     align-items: center;
     position: relative;
     top: -1px;
+    transition: all 0.4s ease-out;
+
 
     
 }
@@ -266,6 +272,8 @@ main {
     align-items: center; /* Center-align items vertically */
     justify-content: center; /* Center-align items horizontally */
     gap: 0; /* Remove any additional spacing */
+    transition: all 0.4s ease-out;
+
 }
 .epoch-header {
     display: flex;
@@ -316,6 +324,8 @@ main {
     align-items: center;
     position: relative;
     top: -7px;
+    transition: all 0.4s ease-out;
+
 
 }
 /* Timeline Header */
@@ -375,7 +385,8 @@ main {
     display: flex;
     align-items: center;
     justify-content: center;
-    
+    transition: all 0.4s ease-out;
+
     
 }
 
