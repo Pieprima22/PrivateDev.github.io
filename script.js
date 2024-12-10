@@ -351,30 +351,62 @@ function filterProjects(category) {
         }
     });
 }
+function animateSortingTransition() {
+    const projectBoxes = document.querySelectorAll('.project-box');
+    const gallery = document.querySelector('.symbol-grid');
+    
+    // Capture current positions
+    const initialPositions = new Map();
+    projectBoxes.forEach(box => {
+        const rect = box.getBoundingClientRect();
+        initialPositions.set(box, { left: rect.left, top: rect.top });
+    });
+
+    // Trigger reordering (e.g., sort/filter)
+    // Ensure your sorting/filtering logic is implemented here
+
+    gallery.classList.add('transitioning'); // Optional: Add a class for visual indication
+    setTimeout(() => {
+        // Capture new positions
+        projectBoxes.forEach(box => {
+            const rect = box.getBoundingClientRect();
+            const initial = initialPositions.get(box);
+            const dx = initial.left - rect.left;
+            const dy = initial.top - rect.top;
+
+            // Apply transform to simulate movement
+            box.style.transform = `translate(${dx}px, ${dy}px)`;
+        });
+
+        // Trigger reflow and set transition
+        requestAnimationFrame(() => {
+            projectBoxes.forEach(box => {
+                box.style.transition = 'transform 0.5s cubic-bezier(0.4, 0, 0.2, 1)';
+                box.style.transform = '';
+            });
+
+            // Cleanup after transition
+            setTimeout(() => {
+                projectBoxes.forEach(box => {
+                    box.style.transition = '';
+                });
+                gallery.classList.remove('transitioning');
+            }, 500); // Duration matches the transition
+        });
+    }, 0);
+}
 
 
 function sortProjects(criteria) {
     
     const gallery = document.querySelector('.symbol-grid');
     const yearColumns = Array.from(gallery.getElementsByClassName('year-column'));
-    const projectBoxes = Array.from(gallery.querySelectorAll('.project-box'));
-
     const epochHeader = document.getElementById('epochTimeline'); // Add epoch header reference
     const timelineHeader = document.querySelector('.timeline-header');
     const alphabeticalHeader = document.querySelector('.alphabetical-header');
     const programmaticHeader = document.querySelector('.programmatic-header');
     const scaleHeader = document.querySelector('.scale-header'); // Added scale header reference
     const globeContainerId = 'globe-container';
-    // Step 1: Save current positions
-    const positions = projectBoxes.map(box => {
-        const rect = box.getBoundingClientRect();
-        return {
-            element: box,
-            top: rect.top,
-            left: rect.left
-        };
-    });
-    
 
         // Enhanced clearDynamicElements function
         function clearDynamicElements() {
@@ -725,7 +757,6 @@ function sortProjects(criteria) {
             renderer.setSize(newWidth, newHeight);
         });
     }
-
     else if (criteria === 'epoch') {
             // Hide other headers
             timelineHeader.style.display = 'none';
@@ -788,7 +819,6 @@ function sortProjects(criteria) {
             sortAndDistributeEpochProjects();
 
     }
-  
     else if (criteria === 'programmatic') {
         // Show the programmatic header and hide others
         timelineHeader.style.display = 'none';
@@ -884,8 +914,6 @@ if (projectCategory === 'Residential') {
         // Reattach tooltips or any additional events
         reattachTooltipEvents();
     }
-    
-        
      else if (criteria === 'scale') {
         // Hide other headers
         timelineHeader.style.display = 'none';
@@ -945,7 +973,6 @@ if (projectCategory === 'Residential') {
 
     
     }
-    
     else {
             // Show only the timeline header
             timelineHeader.style.display = 'grid';
@@ -965,8 +992,7 @@ if (projectCategory === 'Residential') {
             if (globeContainer) {
                 globeContainer.style.display = 'none';
             }
-    }
-        
+    } 
      };
 
 
