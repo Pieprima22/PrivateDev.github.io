@@ -396,7 +396,117 @@ function animateSortingTransition() {
     }, 0);
 }
 
+document.getElementById("whoWeAreTabLink").addEventListener("click", () => {
+    const globeContainer = document.getElementById("globeContainer");
+    if (!globeContainer.hasChildNodes()) {
+        initGlobe();
+    }
+});
 
+function initializeWhoWeAreGlobe() {
+    const globeContainer = document.getElementById('globeContainer');
+    if (!globeContainer) return;
+
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(75, globeContainer.clientWidth / globeContainer.clientHeight, 0.1, 1000);
+    camera.position.z = 16;
+
+    const renderer = new THREE.WebGLRenderer({ alpha: true });
+    renderer.setSize(globeContainer.clientWidth, globeContainer.clientHeight);
+    globeContainer.appendChild(renderer.domElement);
+
+    // Create globe
+    const geometry = new THREE.SphereGeometry(8, 64, 64);
+    const textureLoader = new THREE.TextureLoader();
+    const globeTexture = textureLoader.load('./Map_lighten.png');
+    const material = new THREE.MeshBasicMaterial({ map: globeTexture });
+    const globe = new THREE.Mesh(geometry, material);
+    scene.add(globe);
+
+    // Add OrbitControls
+    const controls = new OrbitControls(camera, renderer.domElement);
+    controls.enableDamping = true;
+    controls.dampingFactor = 0.008;
+    controls.enableZoom = true;
+    controls.minDistance = 15.5;
+    controls.maxDistance = 16;
+
+    // Location data with image URLs
+    const locations = [
+        { name: "Philippines", lat: 13, lon: 122, imageUrl: "/PH.png" },
+        { name: "Thailand", lat: 15, lon: 101, imageUrl: "/TH.png" },
+        { name: "Dubai, UAE", lat: 25.276987, lon: 55.296249, imageUrl: "/UAE.png" }
+    ];
+
+    function latLonToCartesian(lat, lon, radius) {
+        const phi = (90 - lat) * (Math.PI / 180);
+        const theta = (lon + 180) * (Math.PI / 180);
+        const x = -(radius * Math.sin(phi) * Math.cos(theta));
+        const z = radius * Math.sin(phi) * Math.sin(theta);
+        const y = radius * Math.cos(phi);
+        return { x, y, z };
+    }
+
+    // Create markers and add them directly to the globe
+    locations.forEach(location => {
+        const position = latLonToCartesian(location.lat, location.lon, 8.1);
+        
+        const markerGeometry = new THREE.PlaneGeometry(0.6, 0.7);
+        const markerMaterial = new THREE.MeshBasicMaterial({ 
+            map: textureLoader.load(location.imageUrl),
+            transparent: true,
+            side: THREE.DoubleSide,
+            depthTest: true
+        });
+        const marker = new THREE.Mesh(markerGeometry, markerMaterial);
+        
+        marker.position.set(position.x, position.y, position.z);
+        
+        // Make marker face outward from the globe center
+        marker.lookAt(0, 0, 0);
+        marker.rotateY(Math.PI);
+        
+        // Add marker to the globe instead of the scene
+        globe.add(marker);
+    });
+
+    // Animation loop - only for controls update
+    function animate() {
+        requestAnimationFrame(animate);
+        controls.update();
+        renderer.render(scene, camera);
+    }
+    animate();
+
+    // Handle window resize
+    window.addEventListener('resize', () => {
+        const newWidth = globeContainer.clientWidth;
+        const newHeight = globeContainer.clientHeight;
+        camera.aspect = newWidth / newHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(newWidth, newHeight);
+    });
+}
+// Initialize globe when Who We Are section is shown
+document.addEventListener('DOMContentLoaded', () => {
+    const whoWeAreContent = document.getElementById('whoWeAreContent');
+    if (whoWeAreContent) {
+        const observer = new MutationObserver((mutations) => {
+            mutations.forEach((mutation) => {
+                if (mutation.type === 'attributes' && mutation.attributeName === 'style') {
+                    const displayStyle = window.getComputedStyle(whoWeAreContent).display;
+                    if (displayStyle !== 'none') {
+                        initializeWhoWeAreGlobe();
+                    }
+                }
+            });
+        });
+
+        observer.observe(whoWeAreContent, {
+            attributes: true
+        });
+    }
+});
 function sortProjects(criteria) {
     
     const gallery = document.querySelector('.symbol-grid');
@@ -1491,18 +1601,26 @@ document.addEventListener("DOMContentLoaded", function () {
         knowledgeTabLink.classList.remove("active");
     });
 
-    // Tab switching logic for WHO WE ARE
-    whoWeAreTabLink.addEventListener("click", function (event) {
-        event.preventDefault();
-        whatWeDoContent.style.display = "none";
-        whoWeAreContent.style.display = "block";
-        onboardingContent.style.display = "none";
-        knowledgeContent.style.display = "none";
-        whoWeAreTabLink.classList.add("active");
-        whatWeDoTabLink.classList.remove("active");
-        onboardingTabLink.classList.remove("active");
-        knowledgeTabLink.classList.remove("active");
-    });
+// Modify the event listener for WHO WE ARE tab
+whoWeAreTabLink.addEventListener("click", function (event) {
+    event.preventDefault();
+    whatWeDoContent.style.display = 'none';
+    whoWeAreContent.style.display = 'block';
+    onboardingContent.style.display = 'none';
+    knowledgeContent.style.display = 'none';
+    whoWeAreTabLink.classList.add('active');
+    whatWeDoTabLink.classList.remove('active');
+    onboardingTabLink.classList.remove('active');
+    knowledgeTabLink.classList.remove('active');
+    
+    // Add a small delay before initializing the globe
+    setTimeout(() => {
+        const globeContainer = document.getElementById("globeContainer");
+        if (globeContainer && !globeContainer.hasChildNodes()) {
+            initGlobe();
+        }
+    }, 100);
+});
 
     // Tab switching logic for ONBOARDING
     onboardingTabLink.addEventListener("click", function (event) {
