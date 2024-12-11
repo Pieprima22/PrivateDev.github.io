@@ -404,6 +404,40 @@ function initializeWhoWeAreGlobe() {
     const globeContainer = document.getElementById('globeContainer');
     if (!globeContainer) return;
 
+    // Create tooltip element with updated styling
+    const tooltip = document.createElement('div');
+    tooltip.className = 'marker-tooltip';
+    tooltip.style.cssText = `
+        position: fixed;
+        color: black;
+        padding: 10px 15px;
+        font-size: 14px;
+        pointer-events: none;
+        display: none;
+        z-index: 1000;
+        text-align: center;
+    `;
+
+    // Create two paragraphs inside tooltip
+    const countryNameP = document.createElement('p');
+    countryNameP.style.cssText = `
+        margin: 0;
+        padding: 0;
+        margin-bottom: 5px;
+    `;
+    
+    const workerCountP = document.createElement('p');
+    workerCountP.style.cssText = `
+        margin: 0;
+        padding: 0;
+        font-weight: 800;
+        font-size: 13px;
+    `;
+
+    tooltip.appendChild(countryNameP);
+    tooltip.appendChild(workerCountP);
+    globeContainer.appendChild(tooltip);
+
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(75, globeContainer.clientWidth / globeContainer.clientHeight, 0.1, 1000);
     camera.position.z = 16;
@@ -442,7 +476,7 @@ function initializeWhoWeAreGlobe() {
     markerGeometry.translate(0, 0.35, 0);
 
     // Function to create and position marker
-    function createMarker(lat, lon, imagePath) {
+    function createMarker(lat, lon, imagePath, countryName, workerCount) {
         const position = latLonToCartesian(lat, lon, 8);
         const material = new THREE.MeshBasicMaterial({
             map: textureLoader.load(imagePath),
@@ -463,54 +497,88 @@ function initializeWhoWeAreGlobe() {
         );
         
         marker.position.copy(finalPosition);
-        // Store the original position for visibility calculations
         marker.userData.originalPosition = finalPosition.clone();
+        marker.userData.countryName = countryName;
+        marker.userData.workerCount = workerCount;
         return marker;
     }
 
-// Create markers
-const markers = [
-    // Southeast Asia
-    createMarker(13, 122, './PH.png'),            // Philippines (Manila)
-    createMarker(15, 101, './TH.png'),            // Thailand (Bangkok)
-    
-    // Middle East & West Asia
-    createMarker(25.276987, 55.296249, './UAE.png'),      // UAE (Dubai)
-    createMarker(15.369445, 44.191006, './YEMEN.png'),    // Yemen (Sanaa)
-    createMarker(24.713552, 46.675296, './SAUDI.png'),    // Saudi Arabia (Riyadh)
-    createMarker(33.513807, 36.276528, './SYRIA.png'),    // Syria (Damascus)
-    createMarker(33.888629, 35.495479, './LEBANON.png'),  // Lebanon (Beirut)
-    createMarker(35.715298, 51.404343, './IRAN.png'),     // Iran (Tehran)
-    createMarker(40.409264, 49.867092, './AZBJ.png'),     // Azerbaijan (Baku)
-    
-    // South Asia
-    createMarker(28.613939, 77.209021, './INDIA.png'),    // India (New Delhi)
-    
-    // Europe
-    createMarker(51.507351, -0.127758, './UK.png'),       // UK (London)
-    createMarker(40.416775, -3.703790, './SPAIN.png'),    // Spain (Madrid)
-    createMarker(38.722252, -9.139337, './Portugal.png'), // Portugal (Lisbon)
-    createMarker(41.902784, 12.496366, './ITALY.png'),    // Italy (Rome)
-    createMarker(53.349805, -6.260310, './IRELAND.png'),  // Ireland (Dublin)
-    createMarker(37.983810, 23.727539, './GREECE.png'),   // Greece (Athens)
-    
-    // Africa
-    createMarker(30.033333, 31.233334, './EGYPT.png'),    // Egypt (Cairo)
-    createMarker(-25.746111, 28.188056, './SOUNTHAFRI.png'), // South Africa (Pretoria)
-    
-    // Oceania
-    createMarker(-35.280937, 149.130005, './AUS.png'),    // Australia (Canberra)
-    
-    // North America
-    createMarker(38.907192, -77.036871, './US.png'),     // USA (Washington D.C.)
-    createMarker(45.424721, -75.695000, './CAN.png'),     // Canada (Ottawa)
-    
-    // South America
-    createMarker(-33.448890, -70.669265, './CHILE.png'),  // Chile (Santiago)
-    createMarker(-34.603684, -58.381559, './AGTN.png'),   // Argentina (Buenos Aires)
-    createMarker(-15.826691, -47.921822, './BRZ.png')     // Brazil (Brasilia)
-];
+    // Create markers with country names and worker counts
+    const markers = [
+        // Southeast Asia
+        createMarker(13, 122, './PH.png', 'Philippines', 150),            
+        createMarker(15, 101, './TH.png', 'Thailand', 120),            
+        
+        // Middle East & West Asia
+        createMarker(25.276987, 55.296249, './UAE.png', 'United Arab Emirates', 200),      
+        createMarker(15.369445, 44.191006, './YEMEN.png', 'Yemen', 80),    
+        createMarker(24.713552, 46.675296, './SAUDI.png', 'Saudi Arabia', 180),    
+        createMarker(33.513807, 36.276528, './SYRIA.png', 'Syria', 75),    
+        createMarker(33.888629, 35.495479, './LEBANON.png', 'Lebanon', 90),  
+        createMarker(35.715298, 51.404343, './IRAN.png', 'Iran', 160),     
+        createMarker(40.409264, 49.867092, './AZBJ.png', 'Azerbaijan', 110),     
+        
+        // South Asia
+        createMarker(28.613939, 77.209021, './INDIA.png', 'India', 250),    
+        
+        // Europe
+        createMarker(51.507351, -0.127758, './UK.png', 'United Kingdom', 180),       
+        createMarker(40.416775, -3.703790, './SPAIN.png', 'Spain', 140),    
+        createMarker(38.722252, -9.139337, './Portugal.png', 'Portugal', 95), 
+        createMarker(41.902784, 12.496366, './ITALY.png', 'Italy', 170),    
+        createMarker(53.349805, -6.260310, './IRELAND.png', 'Ireland', 85),  
+        createMarker(37.983810, 23.727539, './GREECE.png', 'Greece', 100),   
+        
+        // Africa
+        createMarker(30.033333, 31.233334, './EGYPT.png', 'Egypt', 190),    
+        createMarker(-25.746111, 28.188056, './SOUNTHAFRI.png', 'South Africa', 160), 
+        
+        // Oceania
+        createMarker(-35.280937, 149.130005, './AUS.png', 'Australia', 220),    
+        
+        // North America
+        createMarker(38.907192, -77.036871, './US.png', 'United States', 300),     
+        createMarker(45.424721, -75.695000, './CAN.png', 'Canada', 180),     
+        
+        // South America
+        createMarker(-33.448890, -70.669265, './CHILE.png', 'Chile', 130),  
+        createMarker(-34.603684, -58.381559, './AGTN.png', 'Argentina', 145),   
+        createMarker(-15.826691, -47.921822, './BRZ.png', 'Brazil', 210)     
+    ];
     markers.forEach(marker => scene.add(marker));
+
+    // Raycaster for hover detection
+    const raycaster = new THREE.Raycaster();
+    const mouse = new THREE.Vector2();
+    let hoveredMarker = null;
+
+    // Mouse move handler
+    function onMouseMove(event) {
+        const rect = renderer.domElement.getBoundingClientRect();
+        mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+        mouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
+
+        raycaster.setFromCamera(mouse, camera);
+        const intersects = raycaster.intersectObjects(markers);
+
+        if (intersects.length > 0) {
+            hoveredMarker = intersects[0].object;
+            
+            // Update tooltip content
+            countryNameP.textContent = hoveredMarker.userData.countryName.toUpperCase();
+            workerCountP.textContent = hoveredMarker.userData.workerCount;
+
+            // Position tooltip at mouse cursor with offset
+            tooltip.style.display = 'block';
+            tooltip.style.left = `${event.clientX + 15}px`;
+            tooltip.style.top = `${event.clientY - 10}px`;
+        } else {
+            hoveredMarker = null;
+            tooltip.style.display = 'none';
+        }
+    }
+
+    renderer.domElement.addEventListener('mousemove', onMouseMove);
 
     // Create vector for visibility calculations
     const cameraDirection = new THREE.Vector3();
@@ -520,21 +588,18 @@ const markers = [
         requestAnimationFrame(animate);
         controls.update();
 
-        // Get camera direction
         camera.getWorldDirection(cameraDirection);
 
         markers.forEach(marker => {
-            // Make markers face the camera
             marker.quaternion.copy(camera.quaternion);
-
-            // Calculate direction from camera to marker
             markerDirection.copy(marker.userData.originalPosition).normalize();
-            
-            // Calculate dot product to determine if marker is facing camera
             const dotProduct = markerDirection.dot(cameraDirection);
-            
-            // If dot product is positive, marker is on the far side
             marker.material.opacity = dotProduct > 0 ? 0 : 1;
+
+            // Hide tooltip if marker is on far side
+            if (hoveredMarker === marker && dotProduct > 0) {
+                tooltip.style.display = 'none';
+            }
         });
 
         renderer.render(scene, camera);
