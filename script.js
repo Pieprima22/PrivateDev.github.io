@@ -396,10 +396,10 @@ function animateSortingTransition() {
     }, 0);
 }
 
-let isGlobeInitialized = false; // State flag to track initialization
+let isGlobeInitialized = false;
 
 function initializeWhoWeAreGlobe() {
-    if (isGlobeInitialized) return; // Prevent duplicate initialization
+    if (isGlobeInitialized) return;
     isGlobeInitialized = true;
 
     const globeContainer = document.getElementById('globeContainer');
@@ -429,11 +429,10 @@ function initializeWhoWeAreGlobe() {
     controls.minDistance = 15.5;
     controls.maxDistance = 16;
 
-    // Location data with image URLs
     const locations = [
-        { name: "Philippines", lat: 13, lon: 122, imageUrl: "/PH.png" },
-        { name: "Thailand", lat: 15, lon: 101, imageUrl: "/TH.png" },
-        { name: "Dubai, UAE", lat: 25.276987, lon: 55.296249, imageUrl: "/UAE.png" }
+        { name: "Philippines", lat: 13, lon: 122, imageUrl: './PH.png' },
+        { name: "Thailand", lat: 15, lon: 101, imageUrl: './TH.png' },
+        { name: "Dubai, UAE", lat: 25.276987, lon: 55.296249, imageUrl: './UAE.png' }
     ];
 
     function latLonToCartesian(lat, lon, radius) {
@@ -460,15 +459,12 @@ function initializeWhoWeAreGlobe() {
         
         marker.position.set(position.x, position.y, position.z);
         
-        // Make marker face outward from the globe center
         marker.lookAt(0, 0, 0);
         marker.rotateY(Math.PI);
         
-        // Add marker to the globe instead of the scene
         globe.add(marker);
     });
 
-    // Animation loop - only for controls update
     function animate() {
         requestAnimationFrame(animate);
         controls.update();
@@ -476,7 +472,6 @@ function initializeWhoWeAreGlobe() {
     }
     animate();
 
-    // Handle window resize
     window.addEventListener('resize', () => {
         const newWidth = globeContainer.clientWidth;
         const newHeight = globeContainer.clientHeight;
@@ -486,7 +481,6 @@ function initializeWhoWeAreGlobe() {
     });
 }
 
-// Consolidated initialization logic
 document.getElementById("whoWeAreTabLink").addEventListener("click", () => {
     const whoWeAreContent = document.getElementById("whoWeAreContent");
     if (whoWeAreContent && window.getComputedStyle(whoWeAreContent).display !== 'none') {
