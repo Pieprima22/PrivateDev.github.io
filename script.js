@@ -439,52 +439,76 @@ function initializeWhoWeAreGlobe() {
 
     // Create marker geometry (reused for all markers)
     const markerGeometry = new THREE.PlaneGeometry(0.6, 0.7);
+    markerGeometry.translate(0, 0.35, 0); // Move geometry up by half its height
 
-    // Philippines marker
-    const philippinesPosition = latLonToCartesian(13, 122, 8.1);
-    const philippinesMaterial = new THREE.MeshBasicMaterial({
-        map: textureLoader.load('./PH.png'),
-        transparent: true,
-        side: THREE.DoubleSide,
-        depthTest: true
-    });
-    const philippinesMarker = new THREE.Mesh(markerGeometry, philippinesMaterial);
-    philippinesMarker.position.set(philippinesPosition.x, philippinesPosition.y, philippinesPosition.z);
-    philippinesMarker.lookAt(0, 0, 0);
-    philippinesMarker.rotateY(Math.PI);
-    globe.add(philippinesMarker);
+    // Function to create and position marker
+    function createMarker(lat, lon, imagePath) {
+        const position = latLonToCartesian(lat, lon, 8);
+        const material = new THREE.MeshBasicMaterial({
+            map: textureLoader.load(imagePath),
+            transparent: true,
+            side: THREE.DoubleSide,
+            depthTest: true  // Enable depth testing
+        });
+        const marker = new THREE.Mesh(markerGeometry, material);
+        
+        // Calculate direction from center to marker
+        const direction = new THREE.Vector3(position.x, position.y, position.z).normalize();
+        
+        // Move marker slightly outward along this direction
+        const finalPosition = new THREE.Vector3(
+            position.x + direction.x * 0.2,
+            position.y + direction.y * 0.2,
+            position.z + direction.z * 0.2
+        );
+        
+        marker.position.copy(finalPosition);
+        
+        // Store the original position for visibility checking
+        marker.userData.direction = direction;
+        
+        return marker;
+    }
 
-    // Thailand marker
-    const thailandPosition = latLonToCartesian(15, 101, 8.1);
-    const thailandMaterial = new THREE.MeshBasicMaterial({
-        map: textureLoader.load('./TH.png'),
-        transparent: true,
-        side: THREE.DoubleSide,
-        depthTest: true
-    });
-    const thailandMarker = new THREE.Mesh(markerGeometry, thailandMaterial);
-    thailandMarker.position.set(thailandPosition.x, thailandPosition.y, thailandPosition.z);
-    thailandMarker.lookAt(0, 0, 0);
-    thailandMarker.rotateY(Math.PI);
-    globe.add(thailandMarker);
+    // Create markers
+    const markers = [
+        createMarker(13, 122, './PH.png'),
+        createMarker(15, 101, './TH.png'),
+        createMarker(25.276987, 55.296249, './UAE.png')
+    ];
 
-    // Dubai marker
-    const dubaiPosition = latLonToCartesian(25.276987, 55.296249, 8.1);
-    const dubaiMaterial = new THREE.MeshBasicMaterial({
-        map: textureLoader.load('./UAE.png'),
-        transparent: true,
-        side: THREE.DoubleSide,
-        depthTest: true
-    });
-    const dubaiMarker = new THREE.Mesh(markerGeometry, dubaiMaterial);
-    dubaiMarker.position.set(dubaiPosition.x, dubaiPosition.y, dubaiPosition.z);
-    dubaiMarker.lookAt(0, 0, 0);
-    dubaiMarker.rotateY(Math.PI);
-    globe.add(dubaiMarker);
+    // Add markers to globe
+    markers.forEach(marker => globe.add(marker));
 
     function animate() {
         requestAnimationFrame(animate);
         controls.update();
+
+        // Update marker visibility and orientation
+        markers.forEach(marker => {
+            // Get direction to camera
+            const directionToCamera = new THREE.Vector3();
+            marker.getWorldPosition(directionToCamera);
+            directionToCamera.sub(camera.position).normalize();
+
+            // Calculate dot product to determine if marker is facing camera
+            const dotProduct = marker.userData.direction.dot(directionToCamera);
+
+            // Show/hide marker based on visibility
+            marker.visible = dotProduct < 0;
+
+            // Update marker orientation to always face up relative to globe surface
+            if (marker.visible) {
+                const up = marker.userData.direction.clone();
+                const right = new THREE.Vector3().crossVectors(up, camera.position).normalize();
+                const forward = new THREE.Vector3().crossVectors(right, up);
+                
+                const rotationMatrix = new THREE.Matrix4();
+                rotationMatrix.makeBasis(right, up, forward);
+                marker.quaternion.setFromRotationMatrix(rotationMatrix);
+            }
+        });
+
         renderer.render(scene, camera);
     }
     animate();
