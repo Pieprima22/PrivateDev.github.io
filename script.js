@@ -552,56 +552,74 @@ function initializeWhoWeAreGlobe() {
     const mouse = new THREE.Vector2();
     let hoveredMarker = null;
 
-    // Mouse move handler
-    function onMouseMove(event) {
-        const rect = renderer.domElement.getBoundingClientRect();
-        mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
-        mouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
+    let previousHoveredMarker = null;
+    
+// Then modify your onMouseMove function to handle scaling:
+function onMouseMove(event) {
+    const rect = renderer.domElement.getBoundingClientRect();
+    mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+    mouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
 
-        raycaster.setFromCamera(mouse, camera);
-        const intersects = raycaster.intersectObjects(markers);
+    raycaster.setFromCamera(mouse, camera);
+    const intersects = raycaster.intersectObjects(markers);
 
-        if (intersects.length > 0) {
-            hoveredMarker = intersects[0].object;
-            
-            // Update tooltip content
-            countryNameP.textContent = hoveredMarker.userData.countryName.toUpperCase();
-            workerCountP.textContent = hoveredMarker.userData.workerCount;
-
-            // Position tooltip at mouse cursor with offset
-            tooltip.style.display = 'block';
-            tooltip.style.left = `${event.clientX + 15}px`;
-            tooltip.style.top = `${event.clientY - 10}px`;
-        } else {
-            hoveredMarker = null;
-            tooltip.style.display = 'none';
-        }
+    // Reset previous marker's scale
+    if (previousHoveredMarker && (!intersects.length || intersects[0].object !== previousHoveredMarker)) {
+        previousHoveredMarker.scale.set(1, 1, 1);
+        previousHoveredMarker = null;
     }
+
+    if (intersects.length > 0) {
+        hoveredMarker = intersects[0].object;
+        
+        // Scale up new hovered marker
+        if (hoveredMarker !== previousHoveredMarker) {
+            hoveredMarker.scale.set(1.15, 1.15, 1.15);            
+            previousHoveredMarker = hoveredMarker;
+        }
+        
+        // Update tooltip content
+        countryNameP.textContent = hoveredMarker.userData.countryName.toUpperCase();
+        workerCountP.textContent = hoveredMarker.userData.workerCount;
+
+        // Position tooltip at mouse cursor with offset
+        tooltip.style.display = 'block';
+        tooltip.style.left = `${event.clientX + 10}px`;
+        tooltip.style.top = `${event.clientY - 10}px`;
+    } else {
+        hoveredMarker = null;
+        tooltip.style.display = 'none';
+    }
+}
+
 
     renderer.domElement.addEventListener('mousemove', onMouseMove);
 
     // Create vector for visibility calculations
     const cameraDirection = new THREE.Vector3();
     const markerDirection = new THREE.Vector3();
+// Modify your animate function to handle scale reset when marker is on far side
+function animate() {
+    requestAnimationFrame(animate);
+    controls.update();
 
-    function animate() {
-        requestAnimationFrame(animate);
-        controls.update();
+    camera.getWorldDirection(cameraDirection);
 
-        camera.getWorldDirection(cameraDirection);
+    markers.forEach(marker => {
+        marker.quaternion.copy(camera.quaternion);
+        markerDirection.copy(marker.userData.originalPosition).normalize();
+        const dotProduct = markerDirection.dot(cameraDirection);
+        marker.material.opacity = dotProduct > 0 ? 0 : 1;
 
-        markers.forEach(marker => {
-            marker.quaternion.copy(camera.quaternion);
-            markerDirection.copy(marker.userData.originalPosition).normalize();
-            const dotProduct = markerDirection.dot(cameraDirection);
-            marker.material.opacity = dotProduct > 0 ? 0 : 1;
-
-            // Hide tooltip if marker is on far side
-            if (hoveredMarker === marker && dotProduct > 0) {
-                tooltip.style.display = 'none';
+        // Hide tooltip and reset scale if marker is on far side
+        if (hoveredMarker === marker && dotProduct > 0) {
+            tooltip.style.display = 'none';
+            if (marker === previousHoveredMarker) {
+                marker.scale.set(1, 1, 1);
+                previousHoveredMarker = null;
             }
-        });
-
+        }
+    });
         renderer.render(scene, camera);
     }
     animate();
