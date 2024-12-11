@@ -469,6 +469,7 @@ function initializeWhoWeAreGlobe() {
     }
 
 // Create markers with web-based images
+// Create markers with local PNG files
 const markers = [
     // Southeast Asia Region
     createMarker(
