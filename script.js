@@ -1565,18 +1565,17 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 document.addEventListener("DOMContentLoaded", function () {
-    // Existing elements
     const infoSectionLink = document.getElementById("infoSectionLink");
     const whatWeDoTabLink = document.getElementById("whatWeDoTabLink");
-    const onboardingTabLink = document.getElementById("onboardingTabLink");
+    const howWeWorkTabLink = document.getElementById("howWeWorkTabLink");
     const whoWeAreTabLink = document.getElementById("whoWeAreTabLink");
-    const knowledgeTabLink = document.getElementById("knowledgeTabLink"); // New Tab Link
+    const knowledgeTabLink = document.getElementById("knowledgeTabLink");
     const homeTabLink = document.getElementById("homeTabLink");
 
     const whatWeDoContent = document.getElementById("whatWeDoContent");
-    const onboardingContent = document.getElementById("onboardingContent");
+    const howWeWorkContent = document.getElementById("howWeWorkContent");
     const whoWeAreContent = document.getElementById("whoWeAreContent");
-    const knowledgeContent = document.getElementById("knowledgeContent"); // New Content Section
+    const knowledgeContent = document.getElementById("knowledgeContent");
 
     const closeInfoModal = document.getElementById("closeInfoSectionModal");
     const infoSectionModal = document.getElementById("infoSectionModal");
@@ -1587,11 +1586,11 @@ document.addEventListener("DOMContentLoaded", function () {
         infoSectionModal.style.display = "block";
         whatWeDoContent.style.display = "block";
         whoWeAreContent.style.display = "none";
-        onboardingContent.style.display = "none";
-        knowledgeContent.style.display = "none"; // Ensure KNOWLEDGE is hidden initially
+        howWeWorkContent.style.display = "none";
+        knowledgeContent.style.display = "none";
         whatWeDoTabLink.classList.add("active");
         whoWeAreTabLink.classList.remove("active");
-        onboardingTabLink.classList.remove("active");
+        howWeWorkTabLink.classList.remove("active");
         knowledgeTabLink.classList.remove("active");
     });
 
@@ -1600,43 +1599,42 @@ document.addEventListener("DOMContentLoaded", function () {
         event.preventDefault();
         whatWeDoContent.style.display = "block";
         whoWeAreContent.style.display = "none";
-        onboardingContent.style.display = "none";
+        howWeWorkContent.style.display = "none";
         knowledgeContent.style.display = "none";
         whatWeDoTabLink.classList.add("active");
         whoWeAreTabLink.classList.remove("active");
-        onboardingTabLink.classList.remove("active");
+        howWeWorkTabLink.classList.remove("active");
         knowledgeTabLink.classList.remove("active");
     });
 
-// Modify the event listener for WHO WE ARE tab
-whoWeAreTabLink.addEventListener("click", function (event) {
-    event.preventDefault();
-    whatWeDoContent.style.display = 'none';
-    whoWeAreContent.style.display = 'block';
-    onboardingContent.style.display = 'none';
-    knowledgeContent.style.display = 'none';
-    whoWeAreTabLink.classList.add('active');
-    whatWeDoTabLink.classList.remove('active');
-    onboardingTabLink.classList.remove('active');
-    knowledgeTabLink.classList.remove('active');
-    
-    // Add a small delay before initializing the globe
-    setTimeout(() => {
-        const globeContainer = document.getElementById("globeContainer");
-        if (globeContainer && !globeContainer.hasChildNodes()) {
-            initGlobe();
-        }
-    }, 100);
-});
+    // Tab switching logic for WHO WE ARE
+    whoWeAreTabLink.addEventListener("click", function (event) {
+        event.preventDefault();
+        whatWeDoContent.style.display = "none";
+        whoWeAreContent.style.display = "block";
+        howWeWorkContent.style.display = "none";
+        knowledgeContent.style.display = "none";
+        whoWeAreTabLink.classList.add("active");
+        whatWeDoTabLink.classList.remove("active");
+        howWeWorkTabLink.classList.remove("active");
+        knowledgeTabLink.classList.remove("active");
 
-    // Tab switching logic for ONBOARDING
-    onboardingTabLink.addEventListener("click", function (event) {
+        setTimeout(() => {
+            const globeContainer = document.getElementById("globeContainer");
+            if (globeContainer && !globeContainer.hasChildNodes()) {
+                initGlobe();
+            }
+        }, 100);
+    });
+
+    // Tab switching logic for HOW WE WORK
+    howWeWorkTabLink.addEventListener("click", function (event) {
         event.preventDefault();
         whatWeDoContent.style.display = "none";
         whoWeAreContent.style.display = "none";
-        onboardingContent.style.display = "block";
+        howWeWorkContent.style.display = "block";
         knowledgeContent.style.display = "none";
-        onboardingTabLink.classList.add("active");
+        howWeWorkTabLink.classList.add("active");
         whatWeDoTabLink.classList.remove("active");
         whoWeAreTabLink.classList.remove("active");
         knowledgeTabLink.classList.remove("active");
@@ -1647,12 +1645,12 @@ whoWeAreTabLink.addEventListener("click", function (event) {
         event.preventDefault();
         whatWeDoContent.style.display = "none";
         whoWeAreContent.style.display = "none";
-        onboardingContent.style.display = "none";
+        howWeWorkContent.style.display = "none";
         knowledgeContent.style.display = "block";
         knowledgeTabLink.classList.add("active");
         whatWeDoTabLink.classList.remove("active");
         whoWeAreTabLink.classList.remove("active");
-        onboardingTabLink.classList.remove("active");
+        howWeWorkTabLink.classList.remove("active");
     });
 
     // Close modal logic
