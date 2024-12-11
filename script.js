@@ -468,97 +468,12 @@ function initializeWhoWeAreGlobe() {
         return marker;
     }
 
-// Create markers with web-based images
-// Create markers with local PNG files
-const markers = [
-    // Southeast Asia Region
-    createMarker(
-        13, 
-        122, 
-        'PH.png',
-        'Philippines'
-    ),
-    createMarker(
-        15, 
-        101, 
-        'TH.png',
-        'Thailand'
-    ),
-    
-    // Middle East
-    createMarker(
-        25.276987, 
-        55.296249, 
-        'UAE.png',
-        'United Arab Emirates'
-    ),
-    createMarker(
-        40.409264, 
-        49.867092, 
-        'AZBJ.png',
-        'Azerbaijan'
-    ),
-    
-    // South Asia
-    createMarker(
-        28.613939, 
-        77.209021, 
-        'INDIA.png',
-        'India'
-    ),
-    
-    // Oceania
-    createMarker(
-        -35.280937, 
-        149.130005, 
-        'AUS.png',
-        'Australia'
-    ),
-    
-    // Europe
-    createMarker(
-        37.983810, 
-        23.727539, 
-        'GREECE.png',
-        'Greece'
-    ),
-    
-    // Africa
-    createMarker(
-        30.033333, 
-        31.233334, 
-        'EGYPT.png',
-        'Egypt'
-    ),
-    
-    // South America
-    createMarker(
-        -33.448890, 
-        -70.669265, 
-        'CHILE.png',
-        'Chile'
-    ),
-    createMarker(
-        -34.603684, 
-        -58.381559, 
-        'AGTN.png',
-        'Argentina'
-    ),
-    createMarker(
-        -15.826691, 
-        -47.921822, 
-        'BRZ.png',
-        'Brazil'
-    ),
-    
-    // North America
-    createMarker(
-        45.424721, 
-        -75.695000, 
-        'CAN.png',
-        'Canada'
-    )
-];
+    // Create markers
+    const markers = [
+        createMarker(13, 122, './PH.png'),
+        createMarker(15, 101, './TH.png'),
+        createMarker(25.276987, 55.296249, './UAE.png')
+    ];
 
     markers.forEach(marker => scene.add(marker));
 
