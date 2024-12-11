@@ -396,14 +396,12 @@ function animateSortingTransition() {
     }, 0);
 }
 
-document.getElementById("whoWeAreTabLink").addEventListener("click", () => {
-    const globeContainer = document.getElementById("globeContainer");
-    if (!globeContainer.hasChildNodes()) {
-        initGlobe();
-    }
-});
+let isGlobeInitialized = false; // State flag to track initialization
 
 function initializeWhoWeAreGlobe() {
+    if (isGlobeInitialized) return; // Prevent duplicate initialization
+    isGlobeInitialized = true;
+
     const globeContainer = document.getElementById('globeContainer');
     if (!globeContainer) return;
 
@@ -487,6 +485,15 @@ function initializeWhoWeAreGlobe() {
         renderer.setSize(newWidth, newHeight);
     });
 }
+
+// Consolidated initialization logic
+document.getElementById("whoWeAreTabLink").addEventListener("click", () => {
+    const whoWeAreContent = document.getElementById("whoWeAreContent");
+    if (whoWeAreContent && window.getComputedStyle(whoWeAreContent).display !== 'none') {
+        initializeWhoWeAreGlobe();
+    }
+});
+
 // Initialize globe when Who We Are section is shown
 document.addEventListener('DOMContentLoaded', () => {
     const whoWeAreContent = document.getElementById('whoWeAreContent');
