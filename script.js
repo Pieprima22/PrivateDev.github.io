@@ -468,13 +468,48 @@ function initializeWhoWeAreGlobe() {
         return marker;
     }
 
-    // Create markers
-    const markers = [
-        createMarker(13, 122, './PH.png'),
-        createMarker(15, 101, './TH.png'),
-        createMarker(25.276987, 55.296249, './UAE.png')
-    ];
-
+// Create markers
+const markers = [
+    // Southeast Asia
+    createMarker(13, 122, './PH.png'),            // Philippines (Manila)
+    createMarker(15, 101, './TH.png'),            // Thailand (Bangkok)
+    
+    // Middle East & West Asia
+    createMarker(25.276987, 55.296249, './UAE.png'),      // UAE (Dubai)
+    createMarker(15.369445, 44.191006, './YEMEN.png'),    // Yemen (Sanaa)
+    createMarker(24.713552, 46.675296, './SAUDI.png'),    // Saudi Arabia (Riyadh)
+    createMarker(33.513807, 36.276528, './SYRIA.png'),    // Syria (Damascus)
+    createMarker(33.888629, 35.495479, './LEBANON.png'),  // Lebanon (Beirut)
+    createMarker(35.715298, 51.404343, './IRAN.png'),     // Iran (Tehran)
+    createMarker(40.409264, 49.867092, './AZBJ.png'),     // Azerbaijan (Baku)
+    
+    // South Asia
+    createMarker(28.613939, 77.209021, './INDIA.png'),    // India (New Delhi)
+    
+    // Europe
+    createMarker(51.507351, -0.127758, './UK.png'),       // UK (London)
+    createMarker(40.416775, -3.703790, './SPAIN.png'),    // Spain (Madrid)
+    createMarker(38.722252, -9.139337, './Portugal.png'), // Portugal (Lisbon)
+    createMarker(41.902784, 12.496366, './ITALY.png'),    // Italy (Rome)
+    createMarker(53.349805, -6.260310, './IRELAND.png'),  // Ireland (Dublin)
+    createMarker(37.983810, 23.727539, './GREECE.png'),   // Greece (Athens)
+    
+    // Africa
+    createMarker(30.033333, 31.233334, './EGYPT.png'),    // Egypt (Cairo)
+    createMarker(-25.746111, 28.188056, './SOUNTHAFRI.png'), // South Africa (Pretoria)
+    
+    // Oceania
+    createMarker(-35.280937, 149.130005, './AUS.png'),    // Australia (Canberra)
+    
+    // North America
+    createMarker(38.907192, -77.036871, './US.png'),     // USA (Washington D.C.)
+    createMarker(45.424721, -75.695000, './CAN.png'),     // Canada (Ottawa)
+    
+    // South America
+    createMarker(-33.448890, -70.669265, './CHILE.png'),  // Chile (Santiago)
+    createMarker(-34.603684, -58.381559, './AGTN.png'),   // Argentina (Buenos Aires)
+    createMarker(-15.826691, -47.921822, './BRZ.png')     // Brazil (Brasilia)
+];
     markers.forEach(marker => scene.add(marker));
 
     // Create vector for visibility calculations
