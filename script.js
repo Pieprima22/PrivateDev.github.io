@@ -395,7 +395,6 @@ function animateSortingTransition() {
         });
     }, 0);
 }
-
 let isGlobeInitialized = false;
 
 function initializeWhoWeAreGlobe() {
@@ -429,12 +428,6 @@ function initializeWhoWeAreGlobe() {
     controls.minDistance = 15.5;
     controls.maxDistance = 16;
 
-    const locations = [
-        { name: "Philippines", lat: 13, lon: 122, imageUrl: './PH.png' },
-        { name: "Thailand", lat: 15, lon: 101, imageUrl: './TH.png' },
-        { name: "Dubai, UAE", lat: 25.276987, lon: 55.296249, imageUrl: './UAE.png' }
-    ];
-
     function latLonToCartesian(lat, lon, radius) {
         const phi = (90 - lat) * (Math.PI / 180);
         const theta = (lon + 180) * (Math.PI / 180);
@@ -444,26 +437,50 @@ function initializeWhoWeAreGlobe() {
         return { x, y, z };
     }
 
-    // Create markers and add them directly to the globe
-    locations.forEach(location => {
-        const position = latLonToCartesian(location.lat, location.lon, 8.1);
-        
-        const markerGeometry = new THREE.PlaneGeometry(0.6, 0.7);
-        const markerMaterial = new THREE.MeshBasicMaterial({ 
-            map: textureLoader.load(location.imageUrl),
-            transparent: true,
-            side: THREE.DoubleSide,
-            depthTest: true
-        });
-        const marker = new THREE.Mesh(markerGeometry, markerMaterial);
-        
-        marker.position.set(position.x, position.y, position.z);
-        
-        marker.lookAt(0, 0, 0);
-        marker.rotateY(Math.PI);
-        
-        globe.add(marker);
+    // Create marker geometry (reused for all markers)
+    const markerGeometry = new THREE.PlaneGeometry(0.6, 0.7);
+
+    // Philippines marker
+    const philippinesPosition = latLonToCartesian(13, 122, 8.1);
+    const philippinesMaterial = new THREE.MeshBasicMaterial({
+        map: textureLoader.load('./PH.png'),
+        transparent: true,
+        side: THREE.DoubleSide,
+        depthTest: true
     });
+    const philippinesMarker = new THREE.Mesh(markerGeometry, philippinesMaterial);
+    philippinesMarker.position.set(philippinesPosition.x, philippinesPosition.y, philippinesPosition.z);
+    philippinesMarker.lookAt(0, 0, 0);
+    philippinesMarker.rotateY(Math.PI);
+    globe.add(philippinesMarker);
+
+    // Thailand marker
+    const thailandPosition = latLonToCartesian(15, 101, 8.1);
+    const thailandMaterial = new THREE.MeshBasicMaterial({
+        map: textureLoader.load('./TH.png'),
+        transparent: true,
+        side: THREE.DoubleSide,
+        depthTest: true
+    });
+    const thailandMarker = new THREE.Mesh(markerGeometry, thailandMaterial);
+    thailandMarker.position.set(thailandPosition.x, thailandPosition.y, thailandPosition.z);
+    thailandMarker.lookAt(0, 0, 0);
+    thailandMarker.rotateY(Math.PI);
+    globe.add(thailandMarker);
+
+    // Dubai marker
+    const dubaiPosition = latLonToCartesian(25.276987, 55.296249, 8.1);
+    const dubaiMaterial = new THREE.MeshBasicMaterial({
+        map: textureLoader.load('./UAE.png'),
+        transparent: true,
+        side: THREE.DoubleSide,
+        depthTest: true
+    });
+    const dubaiMarker = new THREE.Mesh(markerGeometry, dubaiMaterial);
+    dubaiMarker.position.set(dubaiPosition.x, dubaiPosition.y, dubaiPosition.z);
+    dubaiMarker.lookAt(0, 0, 0);
+    dubaiMarker.rotateY(Math.PI);
+    globe.add(dubaiMarker);
 
     function animate() {
         requestAnimationFrame(animate);
@@ -487,7 +504,6 @@ document.getElementById("whoWeAreTabLink").addEventListener("click", () => {
         initializeWhoWeAreGlobe();
     }
 });
-
 // Initialize globe when Who We Are section is shown
 document.addEventListener('DOMContentLoaded', () => {
     const whoWeAreContent = document.getElementById('whoWeAreContent');
