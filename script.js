@@ -513,7 +513,7 @@ function initializeWhoWeAreGlobe() {
         createMarker(25.276987, 55.296249, './UAE.png', 'United Arab Emirates', 200),      
         createMarker(15.369445, 44.191006, './YEMEN.png', 'Yemen', 80),    
         createMarker(24.713552, 46.675296, './SAUDI.png', 'Saudi Arabia', 180),    
-        createMarker(33.513807, 36.276528, './SYRIA.png', 'Syria', 75),    
+        createMarker(33.513807, 42.276528, './SYRIA.png', 'Syria', 75),    
         createMarker(33.888629, 35.495479, './LEBANON.png', 'Lebanon', 90),  
         createMarker(35.715298, 51.404343, './IRAN.png', 'Iran', 160),     
         createMarker(40.409264, 49.867092, './AZBJ.png', 'Azerbaijan', 110),     
