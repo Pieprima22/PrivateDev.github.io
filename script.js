@@ -439,7 +439,7 @@ function initializeWhoWeAreGlobe() {
 
     // Create marker geometry (reused for all markers)
     const markerGeometry = new THREE.PlaneGeometry(0.6, 0.7);
-    markerGeometry.translate(0, 0.35, 0); // Move geometry up by half its height
+    markerGeometry.translate(0, 0.35, 0);
 
     // Function to create and position marker
     function createMarker(lat, lon, imagePath) {
@@ -448,7 +448,7 @@ function initializeWhoWeAreGlobe() {
             map: textureLoader.load(imagePath),
             transparent: true,
             side: THREE.DoubleSide,
-            depthTest: true  // Enable depth testing
+            depthTest: false
         });
         const marker = new THREE.Mesh(markerGeometry, material);
         
@@ -463,10 +463,8 @@ function initializeWhoWeAreGlobe() {
         );
         
         marker.position.copy(finalPosition);
-        
-        // Store the original position for visibility checking
-        marker.userData.direction = direction;
-        
+        // Store the original position for visibility calculations
+        marker.userData.originalPosition = finalPosition.clone();
         return marker;
     }
 
@@ -477,36 +475,31 @@ function initializeWhoWeAreGlobe() {
         createMarker(25.276987, 55.296249, './UAE.png')
     ];
 
-    // Add markers to globe
-    markers.forEach(marker => globe.add(marker));
+    markers.forEach(marker => scene.add(marker));
+
+    // Create vector for visibility calculations
+    const cameraDirection = new THREE.Vector3();
+    const markerDirection = new THREE.Vector3();
 
     function animate() {
         requestAnimationFrame(animate);
         controls.update();
 
-        // Update marker visibility and orientation
+        // Get camera direction
+        camera.getWorldDirection(cameraDirection);
+
         markers.forEach(marker => {
-            // Get direction to camera
-            const directionToCamera = new THREE.Vector3();
-            marker.getWorldPosition(directionToCamera);
-            directionToCamera.sub(camera.position).normalize();
+            // Make markers face the camera
+            marker.quaternion.copy(camera.quaternion);
 
+            // Calculate direction from camera to marker
+            markerDirection.copy(marker.userData.originalPosition).normalize();
+            
             // Calculate dot product to determine if marker is facing camera
-            const dotProduct = marker.userData.direction.dot(directionToCamera);
-
-            // Show/hide marker based on visibility
-            marker.visible = dotProduct < 0;
-
-            // Update marker orientation to always face up relative to globe surface
-            if (marker.visible) {
-                const up = marker.userData.direction.clone();
-                const right = new THREE.Vector3().crossVectors(up, camera.position).normalize();
-                const forward = new THREE.Vector3().crossVectors(right, up);
-                
-                const rotationMatrix = new THREE.Matrix4();
-                rotationMatrix.makeBasis(right, up, forward);
-                marker.quaternion.setFromRotationMatrix(rotationMatrix);
-            }
+            const dotProduct = markerDirection.dot(cameraDirection);
+            
+            // If dot product is positive, marker is on the far side
+            marker.material.opacity = dotProduct > 0 ? 0 : 1;
         });
 
         renderer.render(scene, camera);
