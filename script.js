@@ -422,7 +422,6 @@ function initializeWhoWeAreGlobe() {
     countryNameP.style.cssText = `
         margin: 0;
         padding: 0;
-        margin-bottom: 2px;
     `;
     
     const workerCountP = document.createElement('p');
@@ -430,7 +429,8 @@ function initializeWhoWeAreGlobe() {
         margin: 0;
         padding: 0;
         font-weight: 800;
-        font-size: 16px;
+        font-size: 18px;
+        text-align: left;
     `;
 
     tooltip.appendChild(countryNameP);
@@ -470,9 +470,9 @@ function initializeWhoWeAreGlobe() {
         return { x, y, z };
     }
 
-    // Create marker geometry (reused for all markers)
-    const markerGeometry = new THREE.PlaneGeometry(0.6, 0.7);
-    markerGeometry.translate(0, 0.35, 0);
+    // Create marker geometry (reduced size)
+    const markerGeometry = new THREE.PlaneGeometry(0.4, 0.5);  // Reduced from 0.6, 0.7
+    markerGeometry.translate(0, 0.175, 0);  // Adjusted translation to half of height
 
     // Function to create and position marker
     function createMarker(lat, lon, imagePath, countryName, workerCount) {
@@ -550,75 +550,72 @@ function initializeWhoWeAreGlobe() {
     const raycaster = new THREE.Raycaster();
     const mouse = new THREE.Vector2();
     let hoveredMarker = null;
-
     let previousHoveredMarker = null;
-    
-// Then modify your onMouseMove function to handle scaling:
-function onMouseMove(event) {
-    const rect = renderer.domElement.getBoundingClientRect();
-    mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
-    mouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
 
-    raycaster.setFromCamera(mouse, camera);
-    const intersects = raycaster.intersectObjects(markers);
+    function onMouseMove(event) {
+        const rect = renderer.domElement.getBoundingClientRect();
+        mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+        mouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
 
-    // Reset previous marker's scale
-    if (previousHoveredMarker && (!intersects.length || intersects[0].object !== previousHoveredMarker)) {
-        previousHoveredMarker.scale.set(1, 1, 1);
-        previousHoveredMarker = null;
-    }
+        raycaster.setFromCamera(mouse, camera);
+        const intersects = raycaster.intersectObjects(markers);
 
-    if (intersects.length > 0) {
-        hoveredMarker = intersects[0].object;
-        
-        // Scale up new hovered marker
-        if (hoveredMarker !== previousHoveredMarker) {
-            hoveredMarker.scale.set(1.15, 1.15, 1.15);            
-            previousHoveredMarker = hoveredMarker;
+        // Reset previous marker's scale
+        if (previousHoveredMarker && (!intersects.length || intersects[0].object !== previousHoveredMarker)) {
+            previousHoveredMarker.scale.set(1, 1, 1);
+            previousHoveredMarker = null;
         }
-        
-        // Update tooltip content
-        countryNameP.textContent = hoveredMarker.userData.countryName.toUpperCase();
-        workerCountP.textContent = hoveredMarker.userData.workerCount;
 
-        // Position tooltip at mouse cursor with offset
-        tooltip.style.display = 'block';
-        tooltip.style.left = `${event.clientX + 10}px`;
-        tooltip.style.top = `${event.clientY - 10}px`;
-    } else {
-        hoveredMarker = null;
-        tooltip.style.display = 'none';
+        if (intersects.length > 0) {
+            hoveredMarker = intersects[0].object;
+            
+            // Scale up new hovered marker (kept at 1.5)
+            if (hoveredMarker !== previousHoveredMarker) {
+                hoveredMarker.scale.set(1.6, 1.6, 1.6);            
+                previousHoveredMarker = hoveredMarker;
+            }
+            
+            // Update tooltip content
+            countryNameP.textContent = hoveredMarker.userData.countryName.toUpperCase();
+            workerCountP.textContent = hoveredMarker.userData.workerCount;
+
+            // Position tooltip at mouse cursor with offset
+            tooltip.style.display = 'block';
+            tooltip.style.left = `${event.clientX + 10}px`;
+            tooltip.style.top = `${event.clientY - 10}px`;
+        } else {
+            hoveredMarker = null;
+            tooltip.style.display = 'none';
+        }
     }
-}
-
 
     renderer.domElement.addEventListener('mousemove', onMouseMove);
 
     // Create vector for visibility calculations
     const cameraDirection = new THREE.Vector3();
     const markerDirection = new THREE.Vector3();
-// Modify your animate function to handle scale reset when marker is on far side
-function animate() {
-    requestAnimationFrame(animate);
-    controls.update();
 
-    camera.getWorldDirection(cameraDirection);
+    function animate() {
+        requestAnimationFrame(animate);
+        controls.update();
 
-    markers.forEach(marker => {
-        marker.quaternion.copy(camera.quaternion);
-        markerDirection.copy(marker.userData.originalPosition).normalize();
-        const dotProduct = markerDirection.dot(cameraDirection);
-        marker.material.opacity = dotProduct > 0 ? 0 : 1;
+        camera.getWorldDirection(cameraDirection);
 
-        // Hide tooltip and reset scale if marker is on far side
-        if (hoveredMarker === marker && dotProduct > 0) {
-            tooltip.style.display = 'none';
-            if (marker === previousHoveredMarker) {
-                marker.scale.set(1, 1, 1);
-                previousHoveredMarker = null;
+        markers.forEach(marker => {
+            marker.quaternion.copy(camera.quaternion);
+            markerDirection.copy(marker.userData.originalPosition).normalize();
+            const dotProduct = markerDirection.dot(cameraDirection);
+            marker.material.opacity = dotProduct > 0 ? 0 : 1;
+
+            // Hide tooltip and reset scale if marker is on far side
+            if (hoveredMarker === marker && dotProduct > 0) {
+                tooltip.style.display = 'none';
+                if (marker === previousHoveredMarker) {
+                    marker.scale.set(1, 1, 1);
+                    previousHoveredMarker = null;
+                }
             }
-        }
-    });
+        });
         renderer.render(scene, camera);
     }
     animate();
